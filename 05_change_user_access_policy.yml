@@ -1,0 +1,16 @@
+---
+- hosts: cftest.intersect.org.au
+  tasks:
+   - name: Change user access policy for local connections
+     replace:
+       backup: yes
+       dest: /etc/postgresql/9.5/main/pg_hba.conf
+       regexp: '^(local\s+all\s+all\s+)peer$'
+       replace: '\1trust'
+     become: true
+
+   - name: Restart postgresql
+     service:
+       name: postgresql
+       state: restarted
+     become: true

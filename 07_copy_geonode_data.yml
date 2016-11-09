@@ -1,0 +1,22 @@
+---
+- hosts: cftest.intersect.org.au
+  tasks:
+   - name: Install pexpect for ansible expect module
+     apt:
+       pkg: python-pexpect
+       state: installed
+       update_cache: yes
+     become: true
+
+   - name: Copy GeoNode data to be served by Apache
+     expect:
+       command: python /home/geonode/geonode/manage.py collectstatic
+       responses:
+         'Type .yes. to continue, or .no. to cancel:': 'yes'
+     become: true
+
+   - name: Restart Apache
+     service:
+       name: apache2
+       state: restarted
+     become: true

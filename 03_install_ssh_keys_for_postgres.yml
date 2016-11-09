@@ -1,0 +1,15 @@
+---
+- hosts: cftest.intersect.org.au
+  tasks:
+   - name: Create postgres .ssh directory
+     file:
+       path: /var/lib/postgresql/.ssh
+       state: directory
+       owner: postgres
+     become: true
+
+   - name: Install ssh keys for postgres
+     copy:
+       src: /home/{{ ansible_env.USER }}/.ssh/id_rsa.pub
+       dest: /var/lib/postgresql/.ssh/authorized_keys
+     become: true

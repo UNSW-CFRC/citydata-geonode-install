@@ -1,0 +1,34 @@
+---
+- hosts: cftest.intersect.org.au
+  tasks:
+   - name: Create geonode user
+     user:
+       name: geonode
+     become: true
+
+   - name: Clone geonode
+     git:
+       clone: yes
+       repo: https://github.com/GeoNode/geonode.git
+       dest: /home/geonode/geonode
+       version: 2.4.x
+     become: true
+
+#   - name: Move geonode repo to geonode user home
+#     command: mv geonode /home/{{ ansible_env.USER }}/geonode /home/geonode/
+#     become: true
+
+   - name: Install pip
+     action: apt pkg=python-pip state=installed update_cache=yes
+     become: true
+
+   - name: Install geonode
+     pip:
+       name: /home/geonode/geonode
+     become: true
+
+   - name: Download GeoServer web archive
+     command: paver setup
+     args:
+       chdir: /home/geonode/geonode
+     become: true
