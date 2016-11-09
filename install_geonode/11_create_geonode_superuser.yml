@@ -1,0 +1,10 @@
+---
+tasks:
+ - name: Create GeoNode Superuser
+   expect:
+     command: python /home/geonode/geonode/manage.py createsuperuser
+     responses:
+       Username: admin
+       Email address: j.doig@unsw.edu.au
+       Password: {{ admin_pass }}
+       Password (again): {{ admin_pass }}

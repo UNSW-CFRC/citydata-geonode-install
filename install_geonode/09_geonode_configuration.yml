@@ -1,0 +1,7 @@
+---
+tasks:
+ - name: Add apache geonode config
+   copy:
+     src: 09_local_settings.py
+     dest: /home/geonode/geonode/geonode/local_settings.py
+   become: true

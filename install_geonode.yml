@@ -1,0 +1,21 @@
+---
+- hosts: {{ host }}.intersect.org.au
+  tasks:
+    - include: install_geonode/01_packages_installation.yml
+    - include: install_geonode/02_geonode_setup.yml
+    - include: install_geonode/03_install_ssh_keys_for_postgres.yml
+    - include: install_geonode/04_create_geonode_db.yml
+    - include: install_geonode/05_change_user_access_policy.yml
+    - include: install_geonode/06_geonode.conf
+    - include: install_geonode/06_setup_httpd.yml
+    - include: install_geonode/07_copy_geonode_data.yml
+    - include: install_geonode/08_install_geoserver_application.yml
+    - include: install_geonode/09_geonode_configuration.yml
+    - include: install_geonode/09_local_settings.py
+    - include: install_geonode/10_initialize_the_database.yml
+    - include: install_geonode/11_create_geonode_superuser.yml
+    - include: install_geonode/12_restart.yml
+    # - debug: msg='Installation complete.'
+    # - debug: msg='Now login to {{ host }}, cd to /home/geonode/geonode and run manage.py createsuperuser'
+    # - debug: msg="then restart Apache ('sudo service apache2 restart')"
+    - debug: msg='Installation complete. Geonode should now be running on http://{{ host }}.intersect.org.au'
