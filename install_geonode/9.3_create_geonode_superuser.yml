@@ -1,0 +1,11 @@
+---
+- hosts: '{{ host }}'
+  tasks:
+   - name: Create GeoNode Superuser
+     expect:
+       command: python /home/geonode/geonode/manage.py createsuperuser
+       responses:
+         Username: admin
+         Email address: {{ admin_email }}
+         Password: {{ admin_pass }}
+         Password (again): {{ admin_pass }}

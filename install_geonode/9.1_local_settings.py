@@ -73,3 +73,6 @@ CATALOGUE = {
 
 # Default preview library
 #LAYER_PREVIEW_LIBRARY = 'geoext'
+
+# Add Register link and allow users to invite other users
+REGISTRATION_OPEN = True
