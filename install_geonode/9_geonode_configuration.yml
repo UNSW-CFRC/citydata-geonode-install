@@ -1,0 +1,25 @@
+---
+tasks:
+ - name: Add apache geonode config
+   copy:
+     src: 9_local_settings.py
+     dest: /home/geonode/geonode/geonode/local_settings.py
+   become: true
+
+ - name: Initialize the Database
+   command: python /home/geonode/geonode/manage.py syncdb --noinput
+
+ - name: Create GeoNode Superuser
+   expect:
+     command: python /home/geonode/geonode/manage.py createsuperuser
+     responses:
+       Username: admin
+       Email address: {{ admin_email }}
+       Password: {{ admin_pass }}
+       Password (again): {{ admin_pass }}
+
+ - name: Restart Apache
+   service:
+     name: apache2
+     state: restarted
+   become: true
