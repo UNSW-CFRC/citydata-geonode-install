@@ -1,41 +1,42 @@
 ---
-tasks:
- - name: Stop Tomcat
-   service:
-     name: tomcat7
-     state: stopped
-   become: true
+- hosts: '{{ host }}'
+  tasks:
+   - name: Stop Tomcat
+     service:
+       name: tomcat7
+       state: stopped
+     become: true
 
- - name: Copy Geoserver war to Tomcat
-   command: cp /home/geonode/geonode/downloaded/geoserver.war /var/lib/tomcat7/webapps/
-   become: true
+   - name: Copy Geoserver war to Tomcat
+     command: cp /home/geonode/geonode/downloaded/geoserver.war /var/lib/tomcat7/webapps/
+     become: true
 
- - name: Restart Tomcat to deploy Geoserver
-   service:
-     name: tomcat7
-     state: restarted
-   become: true
+   - name: Restart Tomcat to deploy Geoserver
+     service:
+       name: tomcat7
+       state: restarted
+     become: true
 
- - name: Stop Tomcat again
-   service:
-     name: tomcat7
-     state: stopped
-   become: true
+   - name: Stop Tomcat again
+     service:
+       name: tomcat7
+       state: stopped
+     become: true
 
- - name: Add GeoNode base url to geoserver config
-   blockinfile:
-     dest: /var/lib/tomcat7/webapps/geoserver/WEB-INF/web.xml
-     marker: '<!-- {mark} ANSIBLE MANAGED BLOCK -->'
-     insertafter: '</context-param>'
-     block: |
-       <context-param>
-       <param-name>GEONODE_BASE_URL</param-name>
-       <param-value>http://localhost/</param-value>
-       </context-param>
-   become: true
+   - name: Add GeoNode base url to geoserver config
+     blockinfile:
+       dest: /var/lib/tomcat7/webapps/geoserver/WEB-INF/web.xml
+       marker: '<!-- {mark} ANSIBLE MANAGED BLOCK -->'
+       insertafter: '</context-param>'
+       block: |
+         <context-param>
+         <param-name>GEONODE_BASE_URL</param-name>
+         <param-value>http://localhost/</param-value>
+         </context-param>
+     become: true
 
- - name: Restart Tomcat
-   service:
-     name: tomcat7
-     state: restarted
-   become: true
+   - name: Restart Tomcat
+     service:
+       name: tomcat7
+       state: restarted
+     become: true
