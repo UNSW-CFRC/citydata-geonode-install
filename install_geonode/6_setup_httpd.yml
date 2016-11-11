@@ -25,7 +25,7 @@
      file:
        path: /home/geonode/geonode/geonode/uploaded/{{item}}
        state: directory
-       mode: 777
+       mode: a=rwx
      with_items: 
       - thumbs
       - layers
