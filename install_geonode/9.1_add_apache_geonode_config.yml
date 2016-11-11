@@ -6,3 +6,10 @@
        src: 9.1_local_settings.py
        dest: /home/geonode/geonode/geonode/local_settings.py
      become: true
+
+   - name: Set public location
+     lineinfile:
+       dest: /home/geonode/geonode/geonode/local_settings.py
+       regexp: "^.*PUBLIC_LOCATION.*$"
+       line: "        'PUBLIC_LOCATION' : 'http://{{ host }}/geoserver/',"
+     become: true
