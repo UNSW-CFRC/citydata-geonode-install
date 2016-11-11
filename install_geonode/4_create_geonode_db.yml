@@ -2,7 +2,6 @@
 - hosts: '{{ host }}'
   remote_user: postgres
   tasks:
-   - include: 
    - include: 4.1_create_geonode_db_user.yml
    - include: 4.2_create_geonode_db.yml
    - include: 4.3_create_geonode_data_db.yml
