@@ -1,0 +1,6 @@
+---
+- hosts: '{{ host }}'
+  remote_user: postgres
+  tasks:
+   - name: Create postgis extension
+     postgresql_ext: name=postgis db=geonode_data

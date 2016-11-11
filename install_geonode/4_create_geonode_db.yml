@@ -2,32 +2,10 @@
 - hosts: '{{ host }}'
   remote_user: postgres
   tasks:
-   - name: Create geonode DB user
-     postgresql_user: name=geonode password=geonode
-
-   - name: Create geonode database
-     postgresql_db: name=geonode owner=geonode
-
-   - name: Create geonode_data database
-     postgresql_db: name=geonode_data owner=geonode
-
-   - name: Create postgis extension
-     postgresql_ext: name=postgis db=geonode_data
-
-   - name: Grant public access to geometry columns
-     postgresql_privs:
-       database: geonode_data
-       state: present
-       privs: ALL
-       type: table
-       objs: geometry_columns
-       roles: public
-
-   - name: Grant public access to spatial reference system table
-     postgresql_privs:
-       database: geonode_data
-       state: present
-       privs: ALL
-       type: table
-       objs: spatial_ref_sys
-       roles: public
+   - include: 
+   - include: 4.1_create_geonode_db_user.yml
+   - include: 4.2_create_geonode_db.yml
+   - include: 4.3_create_geonode_data_db.yml
+   - include: 4.4_create_postgis_extension.yml
+   - include: 4.5_grant_access_to_geomcol.yml
+   - include: 4.6_grant_access_to_spatial_ref.yml

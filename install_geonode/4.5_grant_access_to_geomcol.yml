@@ -1,0 +1,12 @@
+---
+- hosts: '{{ host }}'
+  remote_user: postgres
+  tasks:
+   - name: Grant public access to geometry columns
+     postgresql_privs:
+       database: geonode_data
+       state: present
+       privs: ALL
+       type: table
+       objs: geometry_columns
+       roles: public

@@ -1,0 +1,6 @@
+---
+- hosts: '{{ host }}'
+  remote_user: postgres
+  tasks:
+   - name: Create geonode database
+     postgresql_db: name=geonode owner=geonode
