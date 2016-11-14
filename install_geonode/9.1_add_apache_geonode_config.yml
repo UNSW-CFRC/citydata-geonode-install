@@ -10,7 +10,7 @@
    - name: Set siteurl
      lineinfile:
        dest: /home/geonode/geonode/geonode/local_settings.py
-       regexp: 'SITEURL\s*=\s*'
+       regexp: '^\s*SITEURL\s*='
        line: 'SITEURL = "http://{{ host }}/"'
      become: true
 
