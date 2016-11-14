@@ -23,6 +23,15 @@
        state: stopped
      become: true
 
+   - name: Increase JVM memory
+     # In response to 'OutOfMemoryError: Java heap space error' on uploading large layer
+     # See: http://docs.geonode.org/en/master/tutorials/advanced/geonode_production/adv_gsconfig/gsproduction.html#configuring-your-container-for-production
+     lineinfile:
+       dest: /etc/default/tomcat7
+       regexp: '^\s*JAVA_OPTS\s*=.*$'
+       line: 'JAVA_OPTS="-Djava.awt.headless=true -Xms2048m -Xmx2048M -XX:+UseConcMarkSweepGC"'
+     become: true
+
    - name: Add GeoNode base url to geoserver config
      blockinfile:
        dest: /var/lib/tomcat7/webapps/geoserver/WEB-INF/web.xml
