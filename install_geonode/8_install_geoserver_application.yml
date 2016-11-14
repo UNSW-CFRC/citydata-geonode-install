@@ -49,3 +49,9 @@
        name: tomcat7
        state: restarted
      become: true
+
+   - name: Remove masterpw.info file to remove security risk warning (but password in the file is not used anyway)
+     file:
+       path: /var/lib/tomcat7/webapps/geoserver/data/security/masterpw.info
+       state: absent
+     become: true
