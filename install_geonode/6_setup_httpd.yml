@@ -21,7 +21,7 @@
      command: a2ensite geonode
      become: true
 
-   - name: Create world-writable thumbs and layers directories
+   - name: Create world-writable thumbs, layers and documents directories
      file:
        path: /home/geonode/geonode/geonode/uploaded/{{item}}
        state: directory
@@ -29,6 +29,7 @@
      with_items: 
       - thumbs
       - layers
+      - documents
      become: true
 
    - name: Change owner of geonode home to geonode
