@@ -2,13 +2,6 @@
 - hosts: '{{ host }}'
   tasks:
    - name: Create GeoNode Superuser
-     # Oddly this reports 'OK' even when the account already exists. Never mind, no damage.
-     expect:
-       command: python /home/geonode/geonode/manage.py createsuperuser
-       responses:
-         Username: admin
-         Email address: '{{ admin_email }}'
-         Password: '{{ admin_pass }}'
-         Password (again): '{{ admin_pass }}'
-     register: result
-     failed_when: "'Error' in result"
+     command: python /home/geonode/geonode/manage.py createsuperuser --noinput --username=admin --email='{{ admin_email }}'
+     ignore_errors: yes
+     no_log: true

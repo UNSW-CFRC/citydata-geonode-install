@@ -36,7 +36,9 @@ OGC_SERVER = {
     'default' : {
         'BACKEND' : 'geonode.geoserver',
         'LOCATION' : 'http://localhost/geoserver/',
-        'PUBLIC_LOCATION' : 'http://localhost/geoserver/',
+        # Public location must have actual site name, otherwise WMS calls in layer map fails
+        # 'PUBLIC_LOCATION' : 'http://localhost/geoserver/',
+        'PUBLIC_LOCATION' : '%sgeoserver/' % SITEURL,
         'USER' : 'admin',
         'PASSWORD' : 'geoserver',
         'MAPFISH_PRINT_ENABLED' : True,
