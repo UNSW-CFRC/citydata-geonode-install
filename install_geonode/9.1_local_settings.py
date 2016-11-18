@@ -3,6 +3,7 @@ import os
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
 SITEURL = "http://localhost/"
+SITENAME = ""
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '::1']
 PROXY_ALLOWED_HOSTS = ("127.0.0.1", 'localhost', '::1')

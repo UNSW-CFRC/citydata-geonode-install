@@ -14,6 +14,16 @@
        line: 'SITEURL = "http://{{ host }}/"'
      become: true
 
+   - name: Set sitename
+     lineinfile:
+       dest: /home/geonode/geonode/geonode/local_settings.py
+       regexp: '^\s*SITENAME\s*='
+       line: 'SITENAME = "{{ sitename }}"'
+     become: true
+
+   - name: Fix sitename
+     command: python /home/geonode/geonode/manage.py fixsitename
+
    - name: Set admin password for OGC_SERVER to match password in geonode and geoserver accounts
      # Otherwise the default password still works for admin login: a blatant security risk
      replace:
