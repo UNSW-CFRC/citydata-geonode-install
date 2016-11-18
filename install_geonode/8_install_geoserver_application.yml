@@ -44,13 +44,21 @@
          </context-param>
      become: true
 
+   - name: Set digest password encoding
+     # To remove warning message: The default user/group service should use digest password encoding.
+     lineinfile:
+       dest: /var/lib/tomcat7/webapps/geoserver/data/security/usergroup/default/config.xml
+       regexp: '\s*<passwordEncoderName>.*'
+       line: '  <passwordEncoderName>digestPasswordEncoder</passwordEncoderName>'
+     become: true
+
    - name: Restart Tomcat
      service:
        name: tomcat7
        state: restarted
      become: true
 
-   - name: Remove masterpw.info file to remove security risk warning (but password in the file is not used anyway)
+   - name: Remove masterpw.info file to remove security risk warning
      file:
        path: /var/lib/tomcat7/webapps/geoserver/data/security/masterpw.info
        state: absent
