@@ -3,7 +3,7 @@
   tasks:
    - name: Create postgres .ssh directory
      file:
-       path: /var/lib/postgresql/.ssh
+       path: ~postgres/.ssh
        state: directory
        owner: postgres
      become: true
@@ -11,5 +11,5 @@
    - name: Install ssh keys for postgres
      copy:
        src: /home/{{ ansible_env.USER }}/.ssh/id_rsa.pub
-       dest: /var/lib/postgresql/.ssh/authorized_keys
+       dest: ~postgres/.ssh/authorized_keys
      become: true
