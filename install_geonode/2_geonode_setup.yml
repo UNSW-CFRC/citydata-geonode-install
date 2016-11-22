@@ -9,6 +9,7 @@
    - name: Clone geonode
      git:
        clone: yes
+       force: yes
        repo: https://github.com/GeoNode/geonode.git
        dest: /home/geonode/geonode
        version: 2.4.x
