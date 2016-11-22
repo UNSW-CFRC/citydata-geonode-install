@@ -58,6 +58,16 @@
        state: restarted
      become: true
 
+   - name: Check for masterpw.info file
+     stat:
+       path: /var/lib/tomcat7/webapps/geoserver/data/security/masterpw.info
+     register: masterpw_file
+
+   - name: Save Geoserver master password
+     command: grep 'master password is' /var/lib/tomcat7/webapps/geoserver/data/security/masterpw.info
+     register: masterpw
+     when: masterpw_file.stat.exists == True
+ 
    - name: Remove masterpw.info file to remove security risk warning
      file:
        path: /var/lib/tomcat7/webapps/geoserver/data/security/masterpw.info
