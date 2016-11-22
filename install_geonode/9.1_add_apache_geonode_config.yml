@@ -21,6 +21,14 @@
        line: 'SITENAME = "{{ sitename }}"'
      become: true
 
+   - name: Upgrade beautifulsoup
+     # To avoid bug when running /manage.py fixsitename
+     # See https://bugs.launchpad.net/beautifulsoup/+bug/1603299
+     pip:
+       name: beautifulsoup4
+       version: 4.5.1
+     become: true
+
    - name: Fix sitename
      command: python /home/geonode/geonode/manage.py fixsitename
 
