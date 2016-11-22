@@ -1,9 +1,8 @@
 ---
-remote_user: postgres
-tasks:
 - include: 4.1_create_geonode_db_user.yml
 - include: 4.2_create_geonode_db.yml
 - include: 4.3_create_geonode_data_db.yml
 - include: 4.4_create_postgis_extension.yml
 - include: 4.5_grant_access_to_geomcol.yml
 - include: 4.6_grant_access_to_spatial_ref.yml
+
