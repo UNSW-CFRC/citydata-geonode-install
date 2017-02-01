@@ -7,6 +7,14 @@
        dest: /etc/apache2/sites-available/geonode.conf
      become: true
    
+   - name: Set geonode home dir in apache geonode config
+     replace:
+       backup: yes
+       dest: /etc/apache2/sites-available/geonode.conf
+       regexp: 'GEONODE_HOME'
+       replace: '{{ home }}'
+     become: true
+
    - name:  Enable proxy_http
      apache2_module:
        state: present
@@ -23,7 +31,7 @@
 
    - name: Create world-writable thumbs, layers and documents directories
      file:
-       path: /home/geonode/geonode/geonode/uploaded/{{item}}
+       path: '{{ home }}'/geonode/geonode/uploaded/{{item}}
        state: directory
        mode: a=rwx
      with_items: 
@@ -34,7 +42,7 @@
 
    - name: Change owner of geonode home to geonode
      file:
-       path: /home/geonode/geonode
+       path: '{{ home }}'/geonode
        state: directory
        owner: geonode
        recurse: yes
@@ -42,7 +50,7 @@
 
    - name: Change owner and group of static and uploaded directories
      file:
-       path: /home/geonode/geonode/geonode/{{item}}
+       path: '{{ home }}'/geonode/geonode/{{item}}
        state: directory
        owner: geonode
        group: www-data
@@ -53,7 +61,7 @@
 
    - name: Change owner and group of static_root directory
      file:
-       path: /home/geonode/geonode/geonode/static_root
+       path: '{{ home }}'/geonode/geonode/static_root
        state: directory
        owner: www-data
        group: www-data

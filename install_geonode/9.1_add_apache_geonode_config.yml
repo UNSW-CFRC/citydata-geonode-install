@@ -4,19 +4,19 @@
    - name: Add apache geonode config
      copy:
        src: 9.1_local_settings.py
-       dest: /home/geonode/geonode/geonode/local_settings.py
+       dest: '{{ home }}'/geonode/geonode/local_settings.py
      become: true
 
    - name: Set siteurl
      lineinfile:
-       dest: /home/geonode/geonode/geonode/local_settings.py
+       dest: '{{ home }}'/geonode/geonode/local_settings.py
        regexp: '^\s*SITEURL\s*='
        line: 'SITEURL = "http://{{ host }}/"'
      become: true
 
    - name: Set sitename
      lineinfile:
-       dest: /home/geonode/geonode/geonode/local_settings.py
+       dest: '{{ home }}'/geonode/geonode/local_settings.py
        regexp: '^\s*SITENAME\s*='
        line: 'SITENAME = "{{ sitename }}"'
      become: true
@@ -30,12 +30,12 @@
      become: true
 
    - name: Fix sitename
-     command: python /home/geonode/geonode/manage.py fixsitename
+     command: python '{{ home }}'/geonode/manage.py fixsitename
 
    - name: Set admin password for OGC_SERVER to match password in geonode and geoserver accounts
      # Otherwise the default password still works for admin login: a blatant security risk
      replace:
-       dest: /home/geonode/geonode/geonode/local_settings.py
+       dest: '{{ home }}'/geonode/geonode/local_settings.py
        regexp: '(^\s*OGC_SERVER\s*=[^\}]*^\s*\047PASSWORD\047\s*:\s*\047)[^\047]*'
        replace: '\1{{ admin_pass }}'
      become: true

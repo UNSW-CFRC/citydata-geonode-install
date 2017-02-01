@@ -4,6 +4,7 @@
    - name: Create geonode user
      user:
        name: geonode
+       home: '{{ home }}'
      become: true
 
    - name: Clone geonode
@@ -11,7 +12,7 @@
        clone: yes
        force: yes
        repo: https://github.com/GeoNode/geonode.git
-       dest: /home/geonode/geonode
+       dest: '{{ home }}'/geonode
        version: 2.4.x
      become: true
 
@@ -21,11 +22,11 @@
 
    - name: Install geonode
      pip:
-       name: /home/geonode/geonode
+       name: '{{ home }}'/geonode
      become: true
 
    - name: Download GeoServer web archive
      command: paver setup
      args:
-       chdir: /home/geonode/geonode
+       chdir: '{{ home }}'/geonode
      become: true
