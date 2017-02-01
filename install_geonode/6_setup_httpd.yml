@@ -28,7 +28,9 @@
    - name: Enable geonode apache site
      command: a2ensite geonode
      become: true
-
+     notify:
+     - Restart Apache
+    
    - name: Create world-writable thumbs, layers and documents directories
      file:
        path: '{{ home }}'/geonode/geonode/uploaded/{{item}}
@@ -65,4 +67,11 @@
        state: directory
        owner: www-data
        group: www-data
+     become: true
+
+  handlers:
+   - name: Restart Apache
+     service:
+       name: apache2
+       state: restarted
      become: true
