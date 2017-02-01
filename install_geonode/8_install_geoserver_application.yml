@@ -8,7 +8,7 @@
      become: true
 
    - name: Copy Geoserver war to Tomcat
-     command: cp '{{ home }}'/geonode/downloaded/geoserver.war /var/lib/tomcat7/webapps/
+     command: cp '{{ home }}/geonode/downloaded/geoserver.war' /var/lib/tomcat7/webapps/
      become: true
 
    - name: Restart Tomcat to deploy Geoserver

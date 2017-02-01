@@ -2,4 +2,4 @@
 - hosts: '{{ host }}'
   tasks:
    - name: Initialize the Database
-     command: python '{{ home }}'/geonode/manage.py syncdb --noinput
+     command: python '{{ home }}/geonode/manage.py' syncdb --noinput
