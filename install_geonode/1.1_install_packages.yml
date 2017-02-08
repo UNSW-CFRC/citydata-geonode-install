@@ -2,7 +2,11 @@
 - hosts: '{{ host }}'
   tasks:
    - name: Install packages
-     action: apt pkg={{item}} state=installed update_cache=yes
+#     action: apt pkg= state=installed update_cache=yes
+     apt:
+       name: '{{item}}'
+       state: installed
+       update_cache: yes
      with_items:
       - python-virtualenv
       - build-essential

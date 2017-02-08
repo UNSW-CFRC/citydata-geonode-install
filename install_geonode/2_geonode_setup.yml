@@ -16,8 +16,12 @@
        version: 2.4.x
      become: true
 
-   - name: Install pip
-     action: apt pkg=python-pip state=installed update_cache=yes
+   - name: Install latest pip
+#     action: apt pkg=python-pip state=installed update_cache=yes
+     apt:
+       name: python-pip
+       state: latest
+       update_cache: yes
      become: true
 
    - name: Install geonode
