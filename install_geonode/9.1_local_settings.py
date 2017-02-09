@@ -81,6 +81,7 @@ CATALOGUE = {
 # Default preview library
 #LAYER_PREVIEW_LIBRARY = 'geoext'
 
+# Enable upload of KML, CSV, geoJSON and Zip (?) - according to static/geonode/js/upload/FileTypes.js 
 UPLOADER = {
     'BACKEND': 'geonode.importer',
     'OPTIONS': {
