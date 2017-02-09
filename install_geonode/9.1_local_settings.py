@@ -80,3 +80,11 @@ CATALOGUE = {
 
 # Default preview library
 #LAYER_PREVIEW_LIBRARY = 'geoext'
+
+UPLOADER = {
+    'BACKEND': 'geonode.importer',
+    'OPTIONS': {
+        'TIME_ENABLED': False,
+        'GEOGIG_ENABLED': False,
+    }
+}
