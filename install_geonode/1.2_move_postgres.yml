@@ -11,7 +11,7 @@
      lineinfile:
        dest: /etc/postgresql/9.5/main/postgresql.conf
        regexp: '^\s*data_directory\s*='
-       line: "data_directory = '/mnt/data/postgresql/9.5/main'"
+       line: "data_directory = '{ dbhome }/postgresql/9.5/main'"
      become: true
 
    - name: Check old data dir exists
