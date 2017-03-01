@@ -17,6 +17,9 @@ POSTGIS_VERSION = (2, 2, 1)
 ALLOWED_DOCUMENT_TYPES = ['3ws', 'csv', 'doc', 'docx', 'fbx', 'gif', 'jpg', 'pdf', 'png',
                           'ppt', 'pptx', 'txt', 'xls', 'xlsx', 'zip']
 
+# Email for users to contact admins.
+THEME_ACCOUNT_CONTACT_EMAIL = "admin@example.com"
+
 DATABASES = {
     'default': {
          'ENGINE': 'django.db.backends.postgresql_psycopg2',

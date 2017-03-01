@@ -21,6 +21,13 @@
        line: 'SITENAME = "{{ sitename }}"'
      become: true
 
+   - name: Set admin email for contact us links
+     lineinfile:
+       dest: '{{ home }}/geonode/geonode/local_settings.py'
+       regexp: '^\s*THEME_ACCOUNT_CONTACT_EMAIL\s*='
+       line: 'THEME_ACCOUNT_CONTACT_EMAIL = "{{ admin_email }}"'
+     become: true
+
    - name: Upgrade beautifulsoup
      # To avoid bug when running /manage.py fixsitename
      # See https://bugs.launchpad.net/beautifulsoup/+bug/1603299
