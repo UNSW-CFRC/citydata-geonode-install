@@ -10,8 +10,12 @@ PROXY_ALLOWED_HOSTS = ("127.0.0.1", 'localhost', '::1')
 POSTGIS_VERSION = (2, 2, 1)
 
 # Add csv to default document types for upload
-ALLOWED_DOCUMENT_TYPES = ['csv', 'doc', 'docx', 'gif', 'gz', 'jpeg', 'jpg', 'odp', 'ods', 'odt', 'pdf', 'png',
-                          'ppt', 'pptx', 'rar', 'sld', 'tif', 'tiff', 'txt', 'xls', 'xlsx', 'xml', 'zip']
+# Also 3ws and fbx (3D file formats)
+# Remove entries we don't need as the list is getting unwieldy
+#ALLOWED_DOCUMENT_TYPES = ['3ws', 'csv', 'doc', 'docx', 'fbx', 'gif', 'gz', 'jpeg', 'jpg', 'odp', 'ods', 'odt', 'pdf', 'png',
+#                          'ppt', 'pptx', 'rar', 'sld', 'tif', 'tiff', 'txt', 'xls', 'xlsx', 'xml', 'zip']
+ALLOWED_DOCUMENT_TYPES = ['3ws', 'csv', 'doc', 'docx', 'fbx', 'gif', 'jpg', 'pdf', 'png',
+                          'ppt', 'pptx', 'txt', 'xls', 'xlsx', 'zip']
 
 DATABASES = {
     'default': {
