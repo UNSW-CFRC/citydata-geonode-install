@@ -42,6 +42,7 @@
       - tomcat7
       - unzip
       - zip
+      - ncdu
      become: true
 
    - name: Check if python-support is installed
