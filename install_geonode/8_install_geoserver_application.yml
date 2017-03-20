@@ -32,12 +32,15 @@
        line: 'JAVA_OPTS="-Djava.awt.headless=true -Xms2048m -Xmx2048M -XX:+UseConcMarkSweepGC"'
      become: true
 
-   - name: Set Geoserver data directory
-     replace:
-       dest: /var/lib/tomcat7/webapps/geoserver/WEB-INF/web.xml
-       regexp: '^\s*(<!--)?[\s\n]*<context-param>[\s\n]*<param-name>GEOSERVER_DATA_DIR</param-name>[\s\n]*<param-value>[^<]*</param-value>[\s\n]*</context-param>[\s\n]*(-->)?'
-       replace: '    <context-param>\n       <param-name>GEOSERVER_DATA_DIR</param-name>\n        <param-value>{{home}}/geonode/geoserver/data</param-value>\n    </context-param>
-'
+   - name: Move Geoserver data directory to data disk
+     command: mv /var/lib/tomcat7/webapps/geoserver/data '{{ gsdata }}'
+     become: true
+
+   - name: Link Geoserver data directory
+     file:
+       src: '{{ gsdata }}'
+       path: /var/lib/tomcat7/webapps/geoserver/data
+       state: link
      become: true
 
    - name: Add GeoNode base url to geoserver config
