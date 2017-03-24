@@ -1,0 +1,24 @@
+---
+- hosts: '{{ host }}'
+  tasks:
+   - name: Create folder tmp on big disk with attributes like /tmp
+     file:
+       path: '{{ tmp }}'
+       owner: root
+       group: root
+       mode: u=rwx,g=rwx,o=rwx,g+s
+       state: directory
+     become: true
+
+   - name: Remove /tmp
+     file:
+       path: /tmp
+       state: absent
+     become: true
+
+   - name: Link back from big disk to /tmp
+     file:
+       src: '{{ tmp }}'
+       dest: /tmp
+       state: link
+     become: true

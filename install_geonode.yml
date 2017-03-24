@@ -1,4 +1,5 @@
 ---
+- include: install_geonode/0_mv_tmp_to_big_disk.yml
 - include: install_geonode/1_packages_installation.yml
 - include: install_geonode/2_geonode_setup.yml
 - include: install_geonode/3_install_ssh_keys_for_postgres.yml
