@@ -28,6 +28,20 @@
        line: 'THEME_ACCOUNT_CONTACT_EMAIL = "{{ admin_email }}"'
      become: true
 
+   - name: Hide uploaded data by default
+     lineinfile:
+       dest: '{{ home }}/geonode/geonode/local_settings.py'
+       regexp: '^\s*DEFAULT_ANONYMOUS_VIEW_PERMISSION\s*='
+       line: 'DEFAULT_ANONYMOUS_VIEW_PERMISSION = False'
+     become: true
+
+   - name: Prevent download of uploaded data by default
+     lineinfile:
+       dest: '{{ home }}/geonode/geonode/local_settings.py'
+       regexp: '^\s*DEFAULT_ANONYMOUS_DOWNLOAD_PERMISSION\s*='
+       line: 'DEFAULT_ANONYMOUS_DOWNLOAD_PERMISSION = False'
+     become: true
+
    - name: Upgrade beautifulsoup
      # To avoid bug when running /manage.py fixsitename
      # See https://bugs.launchpad.net/beautifulsoup/+bug/1603299
