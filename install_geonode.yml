@@ -9,6 +9,7 @@
 - include: install_geonode/07_copy_geonode_data.yml
 - include: install_geonode/08_install_geoserver_application.yml
 - include: install_geonode/09_geonode_configuration.yml
+- include: install_geonode/10_encrypt_with_ssl.yml
 
 - hosts: '{{ host }}'
   tasks:
