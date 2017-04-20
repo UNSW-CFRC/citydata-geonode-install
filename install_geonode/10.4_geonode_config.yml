@@ -1,0 +1,10 @@
+---
+- hosts: '{{ host }}'
+  tasks:
+
+   - name: 
+     replace:
+       dest: '{{ home }}/geonode/geonode/local_settings.py'
+       regexp: '(^\s*SITEURL\s*=\s*.?)http:'
+       replace: '\1https:'
+     become: true
