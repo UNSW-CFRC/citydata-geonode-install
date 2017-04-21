@@ -61,7 +61,7 @@
      register: cacerts_stat
 
    - name: Append to cacerts.txt if it exists
-     shell: cat server.crt >> /usr/lib/python2.7/dist-packages/httplib2/cacerts.txtml
+     shell: cat server.crt >> /usr/lib/python2.7/dist-packages/httplib2/cacerts.txt
      when: cacerts_stat.stat.exists
      become: true
 
