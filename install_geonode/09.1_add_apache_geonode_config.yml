@@ -60,3 +60,10 @@
        regexp: '(^\s*OGC_SERVER\s*=[^\}]*^\s*\047PASSWORD\047\s*:\s*\047)[^\047]*'
        replace: '\1{{ admin_pass }}'
      become: true
+
+   - name: Set time zone
+     lineinfile:
+       dest: '{{ home }}/geonode/geonode/local_settings.py'
+       regexp: '^\s*TIME_ZONE\s*='
+       line: 'TIME_ZONE = "Australia/Sydney"'
+     become: true
