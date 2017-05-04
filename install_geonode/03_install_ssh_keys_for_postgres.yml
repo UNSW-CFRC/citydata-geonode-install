@@ -10,6 +10,6 @@
 
    - name: Install ssh keys for postgres
      copy:
-       src: /home/{{ ansible_env.USER }}/.ssh/id_rsa.pub
+       src: "{{ ansible_env.HOME}}/.ssh/id_rsa.pub"
        dest: ~postgres/.ssh/authorized_keys
      become: true

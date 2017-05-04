@@ -4,7 +4,7 @@
    - name: Install packages
 #     action: apt pkg= state=installed update_cache=yes
      apt:
-       name: '{{item}}'
+       name: '{{ item }}'
        state: installed
        update_cache: yes
      with_items:
@@ -54,10 +54,10 @@
    - name: Download python-support
      get_url:
        url: http://launchpadlibrarian.net/109052632/python-support_1.0.15_all.deb
-       dest: /home/{{ ansible_env.USER }}/python-support_1.0.15_all.deb
+       dest: "{{ ansible_env.HOME }}/python-support_1.0.15_all.deb"
      when: check_deb.rc == 1
 
    - name: Install python-support
-     apt: deb="/home/{{ ansible_env.USER }}/python-support_1.0.15_all.deb"
+     apt: deb="{{ ansible_env.HOME }}/python-support_1.0.15_all.deb"
      become: true
      when: check_deb.rc == 1
