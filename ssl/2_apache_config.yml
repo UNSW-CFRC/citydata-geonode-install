@@ -57,4 +57,7 @@
          <VirtualHost  *:80>
              Redirect permanent / https://{{ host }}/
          </VirtualHost>
+         <VirtualHost  *:8080>
+             Redirect permanent / https:8080//{{ host }}/
+         </VirtualHost>
      become: true

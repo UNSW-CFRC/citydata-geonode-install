@@ -1,0 +1,56 @@
+---
+- hosts: '{{ host }}'
+  tasks:
+
+   - name: Check for existing request
+     stat:
+       path: server.csr
+     register: csr_file
+    
+#   - name: Encrypt the site with Apache Secure Sockets Layer (SSL)
+#     become: true
+
+# The first step is to generate a DES key.:
+# for CommonName use GeoNode domain name or ip address as specified in GeoNode's SITEURL
+# genrsa superceded by genpkey. - https://linux.die.net/man/1/openssl
+#
+# openssl genpkey -des3 -out server.key 1024
+
+   - name: Generate a private key
+     openssl_privatekey:
+       path: server.key
+       force: True
+       size: 2048
+       type: RSA
+     when: csr_file.stat.exists == False
+
+# openssl req -new -key server.key -out server.csr
+# The ansible module 'openssl_csr' is not recognised as a command :/ 
+#   - name: Generate a certificate signing request
+#     openssl_csr:
+#       path: server.csr
+#       privatekey_path: server.key
+#       commonName: '{{ host }}'
+#       countryName: AU
+#       organizationName: '{{ orgname }}'
+#       emailAddress: '{{ admin_email }}'
+#     become: true
+
+   - name: Copy config file
+     copy:
+       src: 10.1_openssl.conf
+       dest: openssl.conf
+     become: true
+     when: csr_file.stat.exists == False
+
+   - name: Generate a certificate signing request
+     command: openssl req -new -key server.key -out server.csr -config openssl.conf
+     when: csr_file.stat.exists == False
+
+   - name: Rename key file
+     command: mv server.key server.key.tmp 
+     when: csr_file.stat.exists == False
+
+   - name: Generate new server.key without challenge password
+     command: openssl rsa -in server.key.tmp -out server.key
+     when: csr_file.stat.exists == False

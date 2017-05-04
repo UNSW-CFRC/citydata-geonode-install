@@ -1,0 +1,40 @@
+---
+- hosts: '{{ host }}'
+  tasks:
+#   - name: Encrypt the site with Apache Secure Sockets Layer (SSL)
+#     become: true
+
+#   - name: Generate self-signed certificate
+#     command: openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
+     
+   - name: Copy certificate to standard location
+     command: cp server.crt /etc/ssl/certs/geonode.crt
+     become: true
+
+   - name: Copy key to standard location
+     command: cp server.key /etc/ssl/private/geonode.key
+     become: true
+     
+   - name: Check cacerts.txt exists
+     stat: path=/usr/lib/python2.7/dist-packages/httplib2/cacerts.txt
+     register: cacerts_stat
+
+   - name: Append to cacerts.txt if it exists
+     shell: cat server.crt >> /usr/lib/python2.7/dist-packages/httplib2/cacerts.txt
+     when: cacerts_stat.stat.exists
+     become: true
+
+   - name: Write new cacerts.txt file
+     command: cp server.crt /usr/lib/python2.7/dist-packages/httplib2/cacerts.txt
+     when: cacerts_stat.stat.exists == False
+     become: true
+
+     # sudo keytool -import -alias geonodessl -keystore /etc/ssl/certs/java/cacerts -file server.crt
+     #
+   - name: Import key
+     java_cert: 
+       cert_alias: geonodessl
+       keystore_path: /etc/ssl/certs/java/cacerts
+       keystore_pass: changeit
+       cert_path: server.crt
+     become: true
