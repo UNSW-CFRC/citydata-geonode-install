@@ -3,7 +3,7 @@
   tasks:
    - name: Add apache geonode config
      copy:
-       src: 6_geonode.conf
+       src: 06_geonode.conf
        dest: /etc/apache2/sites-available/geonode.conf
      become: true
    

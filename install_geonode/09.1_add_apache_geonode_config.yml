@@ -1,9 +1,9 @@
 ---
 - hosts: '{{ host }}'
   tasks:
-   - name: Add apache geonode config
+   - name: Copy local settings
      copy:
-       src: 9.1_local_settings.py
+       src: 09.1_local_settings.py
        dest: '{{ home }}/geonode/geonode/local_settings.py'
      become: true
 
