@@ -4,7 +4,7 @@
 
    - name: Check for existing request
      stat:
-       path: server.csr
+       path: "{{ ansible_env.HOME }}/{{ host }}.csr"
      register: csr_file
     
 #   - name: Encrypt the site with Apache Secure Sockets Layer (SSL)
@@ -18,7 +18,7 @@
 
    - name: Generate a private key
      openssl_privatekey:
-       path: server.key
+       path: "{{ ansible_env.HOME }}/{{ host }}.key"
        force: True
        size: 2048
        type: RSA
@@ -36,21 +36,27 @@
 #       emailAddress: '{{ admin_email }}'
 #     become: true
 
-   - name: Copy config file
-     copy:
-       src: 10.1_openssl.conf
-       dest: openssl.conf
+   - name: Copy config file, substituting server variables
+     template:
+       src: 10_openssl.conf.j2
+       dest: "{{ ansible_env.HOME }}/openssl.conf"
      become: true
      when: csr_file.stat.exists == False
 
    - name: Generate a certificate signing request
-     command: openssl req -new -key server.key -out server.csr -config openssl.conf
+     command: openssl req -new -key {{ host }}.key -out {{ host }}.csr -config openssl.conf
+     args:
+       chdir: "{{ ansible_env.HOME }}"
      when: csr_file.stat.exists == False
 
    - name: Rename key file
-     command: mv server.key server.key.tmp 
+     command: mv {{ host }}.key {{ host }}.key.tmp 
+     args:
+       chdir: "{{ ansible_env.HOME }}"
      when: csr_file.stat.exists == False
 
-   - name: Generate new server.key without challenge password
-     command: openssl rsa -in server.key.tmp -out server.key
+   - name: Generate new server key without challenge password
+     command: openssl rsa -in {{ host }}.key.tmp -out {{ host }}.key
+     args:
+       chdir: "{{ ansible_env.HOME }}"
      when: csr_file.stat.exists == False
