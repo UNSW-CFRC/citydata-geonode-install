@@ -2,9 +2,22 @@
 - hosts: '{{ host }}'
   tasks:
 
-   - name: 
+   - name: Set siteurl to use https
      replace:
        dest: '{{ home }}/geonode/geonode/local_settings.py'
        regexp: '(^\s*SITEURL\s*=\s*.?)http:'
        replace: '\1https:'
+     become: true
+     
+   - name: Set OGC server to use https
+     replace:
+       dest: '{{ home }}/geonode/geonode/local_settings.py'
+       regexp: '(^\s*\047LOCATION\047\s*:\s*\047)http:'
+       replace: '\1https:'
+     become: true
+
+   - name: Call gravatar with https
+     lineinfile:
+       dest: '{{ home }}/geonode/geonode/local_settings.py'
+       line: 'AVATAR_GRAVATAR_SSL = True'
      become: true
