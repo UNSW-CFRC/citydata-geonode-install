@@ -8,25 +8,29 @@
 #     command: openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
      
    - name: Copy certificate to standard location
-     command: cp server.crt /etc/ssl/certs/geonode.crt
+     command: cp {{ host }}.crt /etc/ssl/certs/geonode.crt
      become: true
 
    - name: Copy key to standard location
-     command: cp server.key /etc/ssl/private/geonode.key
+     command: cp {{ host }}.key /etc/ssl/private/geonode.key
      become: true
      
+   - name: Check httplib2 installed
+     stat: path=/usr/lib/python2.7/dist-packages/httplib2
+     register: httplib2_stat
+
    - name: Check cacerts.txt exists
      stat: path=/usr/lib/python2.7/dist-packages/httplib2/cacerts.txt
      register: cacerts_stat
-
+     
    - name: Append to cacerts.txt if it exists
-     shell: cat server.crt >> /usr/lib/python2.7/dist-packages/httplib2/cacerts.txt
+     shell: cat {{ host }}.crt >> /usr/lib/python2.7/dist-packages/httplib2/cacerts.txt
      when: cacerts_stat.stat.exists
      become: true
 
    - name: Write new cacerts.txt file
-     command: cp server.crt /usr/lib/python2.7/dist-packages/httplib2/cacerts.txt
-     when: cacerts_stat.stat.exists == False
+     command: cp {{ host }}.crt /usr/lib/python2.7/dist-packages/httplib2/cacerts.txt
+     when: httplib2_stat.stat.exists and cacerts_stat.stat.exists == False
      become: true
 
      # sudo keytool -import -alias geonodessl -keystore /etc/ssl/certs/java/cacerts -file server.crt
@@ -36,5 +40,5 @@
        cert_alias: geonodessl
        keystore_path: /etc/ssl/certs/java/cacerts
        keystore_pass: changeit
-       cert_path: server.crt
+       cert_path: "{{ host }}.crt"
      become: true
