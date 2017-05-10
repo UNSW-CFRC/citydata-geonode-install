@@ -16,20 +16,20 @@
      become: true
      
    - name: Check httplib2 installed
-     stat: path=/usr/lib/python2.7/dist-packages/httplib2
+     stat: path={{ python_lib }}/dist-packages/httplib2
      register: httplib2_stat
 
    - name: Check cacerts.txt exists
-     stat: path=/usr/lib/python2.7/dist-packages/httplib2/cacerts.txt
+     stat: path={{ python_lib }}/dist-packages/httplib2/cacerts.txt
      register: cacerts_stat
      
    - name: Append to cacerts.txt if it exists
-     shell: cat {{ host }}.crt >> /usr/lib/python2.7/dist-packages/httplib2/cacerts.txt
+     shell: cat {{ host }}.crt >> {{ python_lib }}/dist-packages/httplib2/cacerts.txt
      when: cacerts_stat.stat.exists
      become: true
 
    - name: Write new cacerts.txt file
-     command: cp {{ host }}.crt /usr/lib/python2.7/dist-packages/httplib2/cacerts.txt
+     command: cp {{ host }}.crt {{ python_lib }}/dist-packages/httplib2/cacerts.txt
      when: httplib2_stat.stat.exists and cacerts_stat.stat.exists == False
      become: true
 
