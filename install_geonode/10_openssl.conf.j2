@@ -8,4 +8,8 @@ countryName            = {{country}}
 organizationalUnitName = '{{orgname}}'
 emailAddress	       = {{admin_email}}
 commonName             = {{host}}
-subjectAltName         = '{{host}}, {{target_host}}'
+subjectAltName         = @alt_names
+
+[alt_names]
+DNS.1 = {{host}}
+DNS.2 = {{target_host}}
