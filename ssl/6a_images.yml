@@ -1,0 +1,10 @@
+---
+- hosts: '{{ host }}'
+  tasks:
+
+   - name: Request banner with http
+     replace:
+       path: "{{ home }}/geonode/geonode/templates/site_index.html"
+       regexp: "(background-image: url.')https:"
+       replace: '\1http:'
+     become: true

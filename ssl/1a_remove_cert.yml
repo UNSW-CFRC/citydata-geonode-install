@@ -1,0 +1,16 @@
+---
+- hosts: '{{ host }}'
+  tasks:
+   - name: Remove certificate from standard location
+     file:
+       path: /etc/ssl/certs/geonode.crt
+       state: absent
+     become: true
+
+   - name: Remove key from standard location
+     file:
+       path: /etc/ssl/private/geonode.key
+       state: absent
+     become: true
+     
+     # Leave certificate in the python (httplib2) and java libs

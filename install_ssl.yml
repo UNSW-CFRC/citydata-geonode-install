@@ -8,4 +8,5 @@
 - include: ssl/3_tomcat_config.yml
 - include: ssl/4_geonode_config.yml
 - include: ssl/5_geoserver_config.yml
-- include: ssl/6_restart.yml
+- include: ssl/6_images.yml
+- include: ssl/7_restart.yml
