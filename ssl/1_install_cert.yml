@@ -7,31 +7,59 @@
 #   - name: Generate self-signed certificate
 #     command: openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
      
-   - name: Copy certificate to standard location
-     command: cp {{ host }}.crt /etc/ssl/certs/geonode.crt
+   - name: Copy server certificate to standard location
+     copy:
+       src: certs/{{ host }}.crt
+       dest: /etc/ssl/certs/geonode.crt
+     become: true
+
+   - name: Copy root certificate to server
+     copy:
+       src: certs/root.crt
+       dest: "{{ ansible_env.HOME }}/root.crt"
+     become: true
+
+   - name: Copy intermediate certificate to server
+     copy:
+       src: certs/intermediate.crt
+       dest: "{{ ansible_env.HOME }}/intermediate.crt"
+     become: true
+
+   - name: Bundle root, intermediate and server certificates
+     shell: |
+       cat root.crt intermediate.crt /etc/ssl/certs/geonode.crt \
+         > /etc/ssl/certs/geonode-chain.crt
      become: true
 
    - name: Copy key to standard location
      command: cp {{ host }}.key /etc/ssl/private/geonode.key
      become: true
      
-   - name: Check httplib2 installed
-     stat: path={{ python_lib }}/dist-packages/httplib2
-     register: httplib2_stat
-
-   - name: Check cacerts.txt exists
-     stat: path={{ python_lib }}/dist-packages/httplib2/cacerts.txt
-     register: cacerts_stat
-     
-   - name: Append to cacerts.txt if it exists
-     shell: cat {{ host }}.crt >> {{ python_lib }}/dist-packages/httplib2/cacerts.txt
-     when: cacerts_stat.stat.exists
+#   - name: Check httplib2 installed
+#     stat: path={{ python_lib }}/dist-packages/httplib2
+#     register: httplib2_stat
+#
+#   - name: Check cacerts.txt exists
+#     stat: path={{ python_lib }}/dist-packages/httplib2/cacerts.txt
+#     register: cacerts_stat
+#     
+   - name: Backup cacerts.txt
+     command: cp cacerts.txt cacerts.txt.bak-ansible
+     args:
+       chdir: "{{ python_lib }}/dist-packages/httplib2"
      become: true
 
-   - name: Write new cacerts.txt file
-     command: cp {{ host }}.crt {{ python_lib }}/dist-packages/httplib2/cacerts.txt
-     when: httplib2_stat.stat.exists and cacerts_stat.stat.exists == False
+   - name: Append to cacerts.txt
+     shell: |
+       cat root.crt /etc/ssl/certs/geonode.crt \
+         >> {{ python_lib }}/dist-packages/httplib2/cacerts.txt
+#     when: cacerts_stat.stat.exists
      become: true
+
+#   - name: Write new cacerts.txt file
+#     command: cp {{ host }}.crt {{ python_lib }}/dist-packages/httplib2/cacerts.txt
+#     when: httplib2_stat.stat.exists and cacerts_stat.stat.exists == False
+#     become: true
 
      # sudo keytool -import -alias geonodessl -keystore /etc/ssl/certs/java/cacerts -file server.crt
      #

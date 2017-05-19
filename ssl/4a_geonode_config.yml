@@ -9,11 +9,11 @@
        replace: '\1http:'
      become: true
      
-   - name: Set OGC server to use http
+   - name: Reset OGC server to use http and localhost
      replace:
        dest: '{{ home }}/geonode/geonode/local_settings.py'
-       regexp: '(^\s*\047LOCATION\047\s*:\s*\047)https:'
-       replace: '\1http:'
+       regexp: '(^\s*\047LOCATION\047\s*:\s*\047)https:\/\/[^\/]+/geoserver'
+       replace: '\1http://localhost/geoserver'
      become: true
 
    - name: Call gravatar with http

@@ -4,4 +4,4 @@ printf "ansible-playbook install_ssl.yml --extra-vars \"host=HOSTNAME home=GEONO
 printf "\n"
 printf "ansible-playbook install_backup.yml --extra-vars \"host=HOSTNAME backup_exclude=\'{path1,path2}\' backup_from_dir=FROM_FOLDER backup_to_server=SERVER_NAME backup_to_dir=TO_FOLDER\" \n"
 printf "\n"
-printf "ansible-playbook remove_ssl.yml --extra-vars \"host=HOSTNAME home=GEONODE_HOME_DIR gsdata=GEOSERVER_DATA_DIR\" --step --start-at-task=\"FIRST_TASK\" \n"
+printf "ansible-playbook remove_ssl.yml --extra-vars \"host=HOSTNAME home=GEONODE_HOME_DIR gsdata=GEOSERVER_DATA_DIR python_lib=PYTHON_LIB_PATH\" --step --start-at-task=\"FIRST_TASK\" \n"

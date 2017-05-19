@@ -26,11 +26,12 @@
      blockinfile:
        path: /etc/apache2/sites-available/geonode.conf
        insertbefore: '^\s*\</VirtualHost'
-       marker: '#   {mark} ANSIBLE BLOCK 1 from by install_geonode/10.2_apache_config.yml'
+       marker: '#   {mark} ANSIBLE BLOCK 1 from by install_geonode/ssl/2_apache_config.yml'
        block: |
          blockinfile_deletethisline
              SSLEngine on
-             SSLCertificateFile    /etc/ssl/certs/geonode.crt
+             SSLCertificateFile /etc/ssl/certs/geonode.crt
+             SSLCertificateChainFile /etc/ssl/certs/geonode-chain.crt
              SSLCertificateKeyFile /etc/ssl/private/geonode.key
              BrowserMatch "MSIE [2-6]" \
                nokeepalive ssl-unclean-shutdown \
