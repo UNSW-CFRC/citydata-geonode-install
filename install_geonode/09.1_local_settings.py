@@ -96,3 +96,122 @@ UPLOADER = {
         'GEOGIG_ENABLED': False,
     }
 }
+
+# Stamen base layers - see https://gis.stackexchange.com/questions/206286/adding-stamen-global-terrain-maps-to-geonode
+
+STAMEN_ATTR = ('Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a'
+               ' href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</'
+               'a> &mdash; Map data &copy; <a href="http://www.openstreetmap.o'
+               'rg/copyright">OpenStreetMap</a>')
+
+GOOGLE_API_KEY = "AIzaSyDD2vgGXTnLr53NeeC0h2_JErwG9KL92fU"
+BING_API_KEY = "AirNFUX63U0RgdpDPrc6jrTWGce1I-QOF-Z2GeCJ3q558EZXDt8Eh4VcdTxHYjEW"
+
+MAP_BASELAYERS = [
+{
+    "source": {"ptype": "gxp_olsource"},
+    "type": "OpenLayers.Layer",
+    "args": ["No background"],
+    "visibility": False,
+    "fixed": True,
+    "group":"background"
+}, {
+    "source": {"ptype": "gxp_olsource"},
+    "type": "OpenLayers.Layer.XYZ",
+    "args": [
+        'Stamen Watercolor',
+        'https://stamen-tiles-a.a.ssl.fastly.net/watercolor/${z}/${x}/${y}.png',
+        {
+            'transitionEffect': 'resize',
+            'attribution': '%s' % STAMEN_ATTR,
+        }
+    ],
+    "visibility": False,
+    "fixed": True,
+    "group": "background"
+}, {
+    "source": {"ptype": "gxp_olsource"},
+    "type": "OpenLayers.Layer.XYZ",
+    "args": [
+        'Stamen Toner Lite',
+        'https://stamen-tiles-a.a.ssl.fastly.net/toner-lite/${z}/${x}/${y}.png',
+        {
+            'transitionEffect': 'resize',
+            'attribution': '%s' % STAMEN_ATTR,
+        }
+    ],
+    "visibility": False,
+    "fixed": True,
+    "group": "background"
+}, {
+    "source": {"ptype": "gxp_olsource"},
+    "type": "OpenLayers.Layer.XYZ",
+    "args": [
+        'Stamen Toner',
+        'https://stamen-tiles-a.a.ssl.fastly.net/toner/${z}/${x}/${y}.png',
+        {
+            'transitionEffect': 'resize',
+            'attribution': '%s' % STAMEN_ATTR,
+        }
+    ],
+    "visibility": False,
+    "fixed": True,
+    "group": "background"
+}, {
+    "source": {"ptype": "gxp_olsource"},
+    "type": "OpenLayers.Layer.XYZ",
+    "args": [
+        'Stamen Terrain',
+        'https://stamen-tiles-a.a.ssl.fastly.net/terrain/${z}/${x}/${y}.png',
+        {
+            'transitionEffect': 'resize',
+            'attribution': '%s' % STAMEN_ATTR,
+        }
+    ],
+    "visibility": False,
+    "fixed": True,
+    "group": "background"
+}, {
+    "source": {"ptype": "gxp_osmsource"},
+    "type": "OpenLayers.Layer.OSM",
+    "name": "mapnik",
+    "visibility": True,
+    "fixed": True,
+    "group": "background"
+}, {
+    "source": {
+         "ptype":"gxp_googlesource",
+         "apiKey": GOOGLE_API_KEY
+    },
+    "name":"TERRAIN",
+    "visibility": False,
+    "fixed": True,
+    "group":"background",
+}, {
+    "source": {
+         "ptype":"gxp_googlesource",
+         "apiKey": GOOGLE_API_KEY
+    },
+    "name":"SATELLITE",
+    "visibility": False,
+    "fixed": True,
+    "group":"background",
+}, {
+    "source": {
+         "ptype":"gxp_googlesource",
+         "apiKey": GOOGLE_API_KEY
+    },
+    "name":"ROADMAP",
+    "visibility": False,
+    "fixed": True,
+    "group":"background",
+}, {
+    "source": {
+         "ptype":"gxp_googlesource",
+         "apiKey": GOOGLE_API_KEY
+    },
+    "name":"HYBRID",
+    "visibility": False,
+    "fixed": True,
+    "group":"background",
+}]
