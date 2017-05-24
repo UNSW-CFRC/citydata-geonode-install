@@ -1,5 +1,5 @@
 ---
-- include: 09.1_add_apache_geonode_config.yml
+- include: 09.1_geonode_config.yml
 - include: 09.2_initialize_the_database.yml
 - include: 09.3_create_geonode_superuser.yml
 - include: 09.4_change_superuser_password.yml
