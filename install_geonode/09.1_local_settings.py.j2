@@ -2,12 +2,20 @@ import os
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
-SITEURL = "http://localhost/"
-SITENAME = ""
+SITEURL = "http://{{ host }}/"
+SITENAME = "{{ sitename }}"
+
+# Local time zone for this installation. Choices can be found here:
+# http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
+TIME_ZONE = '{{ timezone }}'
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '::1']
 PROXY_ALLOWED_HOSTS = ("127.0.0.1", 'localhost', '::1')
 POSTGIS_VERSION = (2, 2, 1)
+
+# Whether uploaded resources should be public and downloadable by default
+DEFAULT_ANONYMOUS_VIEW_PERMISSION = False
+DEFAULT_ANONYMOUS_DOWNLOAD_PERMISSION = False
 
 # Add csv to default document types for upload
 # Also 3ws and fbx (3D file formats)
@@ -18,7 +26,7 @@ ALLOWED_DOCUMENT_TYPES = ['3ws', 'csv', 'doc', 'docx', 'fbx', 'gif', 'jpg', 'pdf
                           'ppt', 'pptx', 'txt', 'xls', 'xlsx', 'zip']
 
 # Email for users to contact admins.
-THEME_ACCOUNT_CONTACT_EMAIL = "admin@example.com"
+THEME_ACCOUNT_CONTACT_EMAIL = "{{ admin_email }}"
 
 DATABASES = {
     'default': {
@@ -48,7 +56,7 @@ OGC_SERVER = {
         # 'PUBLIC_LOCATION' : 'http://localhost/geoserver/',
         'PUBLIC_LOCATION' : '%sgeoserver/' % SITEURL,
         'USER' : 'admin',
-        'PASSWORD' : 'geoserver',
+        'PASSWORD' : '{{ admin_pass }}',
         'MAPFISH_PRINT_ENABLED' : True,
         'PRINT_NG_ENABLED' : True,
         'GEONODE_SECURITY_ENABLED' : True,
