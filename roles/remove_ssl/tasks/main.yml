@@ -1,0 +1,9 @@
+---
+# Remove SSL encryption. Reverses install_ssl
+- include: apache_config.yml
+# Must remove certificate after disabling module
+- include: remove_cert.yml
+- include: tomcat_config.yml
+- include: geonode_config.yml
+- include: geoserver_config.yml
+- include: images.yml

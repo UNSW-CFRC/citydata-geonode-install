@@ -1,0 +1,24 @@
+---
+- name: Set GEONODE_BASE_URL to use https
+  replace:
+#       path: /usr/share/geoserver/WEB-INF/web.xml
+    path: /var/lib/tomcat7/webapps/geoserver/WEB-INF/web.xml
+    regexp: '(<param-name>GEONODE_BASE_URL</param-name>\s*<param-value>)http(://localhost/</param-value>)'
+    replace: '\1https\2'
+  become: true
+  notify:
+    - Restart Tomcat
+   
+- name: Set proxyBaseUrl to use https
+  replace:
+    path: '{{ gsdata }}/global.xml'
+    regexp: '<proxyBaseUrl>http'
+    replace: '<proxyBaseUrl>https'
+#  lineinfile:
+##       path: /var/lib/geoserver/geonode-data/global.xml
+#    path: '{{ gsdata }}/global.xml'
+#    insertbefore: </global>
+#    line: '  <proxyBaseUrl>https://{{ inventory_hostname }}/geoserver/</proxyBaseUrl>'
+  become: true
+  notify:
+    - Restart Tomcat

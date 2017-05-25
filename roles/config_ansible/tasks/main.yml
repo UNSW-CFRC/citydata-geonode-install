@@ -1,0 +1,48 @@
+---
+- hosts: localhost
+  tasks:
+
+   - name: Upgrade ansible to 2.3
+     apt:
+       pkg: ansible
+       state: latest
+       update_cache: yes
+     become: true
+     
+     # This failed (once only) with error:
+     # TypeError: _execute_module() got an unexpected keyword argument 'wrap_async'
+     #
+     # But  sudo apt-get install python-pexpect says:
+     # python-pexpect is already the newest version (4.0.1-1)
+     #
+     # so it's ok to ignore the fail (as long as that's the cause :/ )
+     #
+   - name: Install pexpect for ansible expect module
+     apt:
+       name: python-pexpect
+       state: installed
+       update_cache: yes
+     become: true
+     ignore_errors: yes
+     no_log: true
+     
+   - name: Install openssl for ansible
+     pip:
+       name: pyOpenSSL
+#       state: installed
+#       update_cache: yes
+     become: true
+
+   - name: Hack Ansible git
+     # Workaround for Ansible git error when dest exists and is modified, and force=yes:
+     # UnboundLocalError: local variable 'remote_head' referenced before assignment
+     # See ansible issue #5504: https://github.com/ansible/ansible-modules-core/issues/5504
+     #
+     # Changed dest after ansible upgrade to 2.3 ('core' subfolder not found) 
+     #
+     lineinfile:
+#       dest: /usr/lib/python2.7/dist-packages/ansible/modules/core/source_control/git.py
+       dest: /usr/lib/python2.7/dist-packages/ansible/modules/source_control/git.py
+       regexp: '\s*result.update\(changed=True, .*msg=.Local modifications exist.\)'
+       line: "                result.update(changed=True, msg='Local modifications exist')"
+     become: true

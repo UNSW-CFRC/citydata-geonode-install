@@ -1,0 +1,7 @@
+---
+# Hosts with a small system disk so big things should be moved to /mnt/data
+
+home: /mnt/data/geonode
+gsdata: /mnt/data/geoserver_data
+tmp: /mnt/data/tmp
+dbhome: /mnt/data

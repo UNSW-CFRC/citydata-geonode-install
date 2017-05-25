@@ -1,0 +1,15 @@
+---
+- hosts: '{{ inventory_hostname }}'
+  tasks:
+   - name: Create postgres .ssh directory
+     file:
+       path: ~postgres/.ssh
+       state: directory
+       owner: postgres
+     become: true
+
+   - name: Install ssh keys for postgres
+     copy:
+       src: "{{ ansible_env.HOME}}/.ssh/id_rsa.pub"
+       dest: ~postgres/.ssh/authorized_keys
+     become: true

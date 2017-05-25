@@ -1,0 +1,63 @@
+---
+- name: Enable SSL module
+  apache2_module:
+    name: ssl
+  become: true
+
+- name: Insert opening if statement
+  lineinfile:
+    path: /etc/apache2/sites-available/geonode.conf
+    backup: yes
+    insertbefore: '^\s*\<VirtualHost'
+    line: <IfModule mod_ssl.c>
+  become: true
+
+- name: Edit virtualHost line
+  lineinfile:
+    path: /etc/apache2/sites-available/geonode.conf
+    regexp: '^\s*\<VirtualHost'
+    line: <VirtualHost _default_:443>
+  become: true
+
+- name: Add parameters into virtualHost block
+  blockinfile:
+    path: /etc/apache2/sites-available/geonode.conf
+    insertbefore: '^\s*\</VirtualHost'
+    marker: '#   {mark} ANSIBLE BLOCK 1 from install_ssl.yml'
+    block: |
+      blockinfile_deletethisline
+          SSLEngine on
+          SSLCertificateFile /etc/ssl/certs/geonode.crt
+          SSLCertificateChainFile /etc/ssl/certs/geonode-chain.crt
+          SSLCertificateKeyFile /etc/ssl/private/geonode.key
+          BrowserMatch "MSIE [2-6]" \
+            nokeepalive ssl-unclean-shutdown \
+            downgrade-1.0 force-response-1.0
+          # MSIE 7 and newer should be able to use keepalive
+          BrowserMatch "MSIE [17-9]" ssl-unclean-shutdown
+  become: true
+  
+- name: Delete indentation marker line for 
+  lineinfile:
+    path: /etc/apache2/sites-available/geonode.conf
+    state: absent
+    line: blockinfile_deletethisline
+  become: true
+
+- name: Add block after virtualHost
+  blockinfile:
+    marker: '#   {mark} ANSIBLE BLOCK 2 from install_ssl.yml'
+    path: /etc/apache2/sites-available/geonode.conf
+    insertafter: '^\s*\</VirtualHost'
+    block: |
+      </IfModule>
+      
+      <VirtualHost  *:80>
+          Redirect permanent / https://{{ inventory_hostname }}/
+      </VirtualHost>
+      <VirtualHost  *:8080>
+          Redirect permanent / https:8080//{{ inventory_hostname }}/
+      </VirtualHost>
+  become: true
+  notify:
+    - Restart Apache

@@ -1,12 +1,3 @@
----
-
-# Remove SSL encryption. Reverses install_ssl_cert.yml
-
-- include: ssl/2a_apache_config.yml
-# Must remove certificate after disabling module
-- include: ssl/1a_remove_cert.yml
-- include: ssl/3a_tomcat_config.yml
-- include: ssl/4a_geonode_config.yml
-- include: ssl/5a_geoserver_config.yml
-- include: ssl/6a_images.yml
-- include: ssl/7_restart.yml
+- hosts: all
+  roles:
+  - remove_ssl

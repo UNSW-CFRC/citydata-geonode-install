@@ -1,0 +1,49 @@
+---
+# Before running this playbook:
+#   Generate and add SSH keys to allow login from server to backup_server 
+#   - see http://www.linuxproblem.org/art_9.html
+
+- hosts: '{{ inventory_hostname }}'
+  tasks:
+  - name: Let postgres user stop and start postgres service
+    lineinfile:
+      path: /etc/sudoers
+      line: "postgres ALL=(ALL) NOPASSWD: /etc/init.d/postgresql"
+    become: true
+
+- hosts: '{{ inventory_hostname }}'
+  remote_user: postgres
+  tasks:
+  - name: Create empty log file
+    file:
+      path: ~postgres/backup.log
+      state: touch
+
+  - name: Install shell script
+    template:
+      src: backup.sh.j2
+      dest: ~postgres/backup.sh
+
+  - name: Make script executable
+    file:
+      path: ~postgres/backup.sh
+      mode: 0700
+
+  - name: Schedule nightly cron job
+    cron:
+      name: 'Backup geonode data'
+      special_time: daily
+      job: ~/backup.sh
+
+  - name: Add backup server to known hosts
+    shell: ssh-keyscan {{ backup_to_server }} >>~postgres/.ssh/known_hosts
+
+- hosts: '{{ backup_to_server }}'
+  tasks:
+  - name: Create destination dir
+    file:
+      path: "{{backup_to_dir}}/backup_of_{{ inventory_hostname }}"
+      state: directory
+      owner: postgres
+      group: postgres
+    become: true

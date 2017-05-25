@@ -1,0 +1,48 @@
+---
+- name: Copy server certificate to standard location
+  copy:
+    src: ../files/{{ inventory_hostname }}.crt
+    dest: /etc/ssl/certs/geonode.crt
+  become: true
+
+- name: Copy root certificate to server
+  copy:
+    src: ../files/root.crt
+    dest: "{{ ansible_env.HOME }}/root.crt"
+  become: true
+
+- name: Copy intermediate certificate to server
+  copy:
+    src: ../files/intermediate.crt
+    dest: "{{ ansible_env.HOME }}/intermediate.crt"
+  become: true
+
+- name: Bundle root, intermediate and server certificates
+  shell: |
+    cat root.crt intermediate.crt /etc/ssl/certs/geonode.crt \
+      > /etc/ssl/certs/geonode-chain.crt
+  become: true
+
+- name: Copy key to standard location
+  command: cp {{ inventory_hostname }}.key /etc/ssl/private/geonode.key
+  become: true
+  
+- name: Backup cacerts.txt
+  command: cp cacerts.txt cacerts.txt.bak-ansible
+  args:
+    chdir: /usr/local/lib/python2.7/dist-packages/httplib2
+  become: true
+
+- name: Append to cacerts.txt
+  shell: |
+    cat root.crt /etc/ssl/certs/geonode.crt \
+      >> /usr/local/lib/python2.7/dist-packages/httplib2/cacerts.txt
+  become: true
+
+- name: Import key
+  java_cert: 
+    cert_alias: geonodessl
+    keystore_path: /etc/ssl/certs/java/cacerts
+    keystore_pass: changeit
+    cert_path: "{{ inventory_hostname }}.crt"
+  become: true

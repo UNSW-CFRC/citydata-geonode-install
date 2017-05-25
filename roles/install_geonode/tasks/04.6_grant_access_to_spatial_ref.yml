@@ -1,0 +1,12 @@
+---
+- hosts: '{{ inventory_hostname }}'
+  remote_user: postgres
+  tasks:
+   - name: Grant public access to spatial reference system table
+     postgresql_privs:
+       database: geonode_data
+       state: present
+       privs: ALL
+       type: table
+       objs: spatial_ref_sys
+       roles: public

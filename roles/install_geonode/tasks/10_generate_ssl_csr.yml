@@ -1,0 +1,62 @@
+---
+- hosts: '{{ inventory_hostname }}'
+  tasks:
+
+   - name: Check for existing request
+     stat:
+       path: "{{ ansible_env.HOME }}/{{ inventory_hostname }}.csr"
+     register: csr_file
+    
+#   - name: Encrypt the site with Apache Secure Sockets Layer (SSL)
+#     become: true
+
+# The first step is to generate a DES key.:
+# for CommonName use GeoNode domain name or ip address as specified in GeoNode's SITEURL
+# genrsa superceded by genpkey. - https://linux.die.net/man/1/openssl
+#
+# openssl genpkey -des3 -out server.key 1024
+
+   - name: Generate a private key
+     openssl_privatekey:
+       path: "{{ ansible_env.HOME }}/{{ inventory_hostname }}.key"
+       force: True
+       size: 2048
+       type: RSA
+     when: csr_file.stat.exists == False
+
+# openssl req -new -key server.key -out server.csr
+# The ansible module 'openssl_csr' is not recognised as a command :/ 
+#   - name: Generate a certificate signing request
+#     openssl_csr:
+#       path: server.csr
+#       privatekey_path: server.key
+#       commonName: '{{ inventory_hostname }}'
+#       countryName: AU
+#       organizationName: '{{ orgname }}'
+#       emailAddress: '{{ admin_email }}'
+#     become: true
+
+   - name: Copy config file, substituting server variables
+     template:
+       src: 10_openssl.conf.j2
+       dest: "{{ ansible_env.HOME }}/openssl.conf"
+     become: true
+     when: csr_file.stat.exists == False
+
+   - name: Generate a certificate signing request
+     command: openssl req -new -key {{ inventory_hostname }}.key -out {{ inventory_hostname }}.csr -config openssl.conf
+     args:
+       chdir: "{{ ansible_env.HOME }}"
+     when: csr_file.stat.exists == False
+
+   - name: Rename key file
+     command: mv {{ inventory_hostname }}.key {{ inventory_hostname }}.key.tmp 
+     args:
+       chdir: "{{ ansible_env.HOME }}"
+     when: csr_file.stat.exists == False
+
+   - name: Generate new server key without challenge password
+     command: openssl rsa -in {{ inventory_hostname }}.key.tmp -out {{ inventory_hostname }}.key
+     args:
+       chdir: "{{ ansible_env.HOME }}"
+     when: csr_file.stat.exists == False

@@ -1,0 +1,9 @@
+---
+- name: Request banner with https
+  replace:
+    path: "{{ home }}/geonode/geonode/templates/site_index.html"
+    regexp: "(background-image: url.')http:"
+    replace: '\1https:'
+  become: true
+  notify:
+    - Restart Apache

@@ -1,0 +1,35 @@
+---
+- include: 00_mv_tmp_to_big_disk.yml
+  when: small_sysdisk in group_names
+# when: "'small_sysdisk' in group_names"
+
+- include: 01_packages_installation.yml
+- include: 02_geonode_setup.yml
+- include: 03_install_ssh_keys_for_postgres.yml
+- include: 04_create_geonode_db.yml
+- include: 05_change_user_access_policy.yml
+- include: 06_setup_httpd.yml
+- include: 07_copy_geonode_data.yml
+- include: 08_install_geoserver_application.yml
+- include: 09_geonode_configuration.yml
+- include: 10_generate_ssl_csr.yml
+
+- hosts: '{{ inventory_hostname }}'
+  tasks:
+  - name: Test if site is available
+    uri:
+      url: http://{{ inventory_hostname }}
+
+  - name: Completion message
+    vars:
+      msg: |
+           Geonode installed on http://{{ inventory_hostname }}
+           Now login to http://{{ inventory_hostname }}/geoserver as admin and change master password:
+           Security > Passwords > Active master password provider > Change password
+    debug:
+      msg: "{{ msg.split('\n') }}"
+
+  - name: Print master password if available
+    debug:
+      msg: "{{ masterpw.stdout }}"
+    when: masterpw.stdout is defined

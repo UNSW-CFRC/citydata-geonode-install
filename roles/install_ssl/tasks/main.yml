@@ -1,0 +1,11 @@
+---
+
+# Encrypt Geonode site with SSL
+# Set to Ansible from http://docs.geonode.org/en/master/tutorials/advanced/geonode_production/ssl.html
+
+- include: install_cert.yml
+- include: apache_config.yml
+- include: tomcat_config.yml
+- include: geonode_config.yml
+- include: geoserver_config.yml
+- include: images.yml
