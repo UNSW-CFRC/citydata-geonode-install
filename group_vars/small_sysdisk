@@ -5,3 +5,6 @@ home: /mnt/data/geonode
 gsdata: /mnt/data/geoserver_data
 tmp: /mnt/data/tmp
 dbhome: /mnt/data
+
+backup_from_dir: /mnt/data
+backup_to_dir: /mnt/data2
