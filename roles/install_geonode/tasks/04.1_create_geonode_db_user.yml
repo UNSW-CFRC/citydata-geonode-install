@@ -1,6 +1,0 @@
----
-- hosts: '{{ inventory_hostname }}'
-  remote_user: postgres
-  tasks:
-   - name: Create geonode DB user
-     postgresql_user: name=geonode password=geonode

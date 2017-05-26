@@ -6,5 +6,5 @@ citydata.be.unsw.edu.au
 [small_sysdisk]
 citydata.be.unsw.edu.au
 
-[backup]
-citydata-test.be.unsw.edu.au
+# [backup]
+# citydata-test.be.unsw.edu.au

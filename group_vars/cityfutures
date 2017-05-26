@@ -1,7 +1,7 @@
 ---
 orgname: "City Futures Research Centre"
 country: AU
-time_zone: Australia/Sydney
+timezone: Australia/Sydney
 admin_email: citydata@unsw.edu.au
 google_key: AIzaSyDD2vgGXTnLr53NeeC0h2_JErwG9KL92fU
 bing_key: AirNFUX63U0RgdpDPrc6jrTWGce1I-QOF-Z2GeCJ3q558EZXDt8Eh4VcdTxHYjEW

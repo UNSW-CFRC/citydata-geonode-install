@@ -1,5 +1,0 @@
----
-- hosts: '{{ inventory_hostname }}'
-  tasks:
-   - name: Initialize the Database
-     command: python '{{ home }}/geonode/manage.py' syncdb --noinput

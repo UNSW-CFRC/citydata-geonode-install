@@ -1,0 +1,70 @@
+---
+- name: Add apache geonode config
+  copy:
+#    src: ../files/06_geonode.conf
+    src: geonode.conf
+    dest: /etc/apache2/sites-available/geonode.conf
+  become: true
+
+- name: Set geonode home dir in apache geonode config
+  replace:
+    backup: yes
+    dest: /etc/apache2/sites-available/geonode.conf
+    regexp: 'GEONODE_HOME'
+    replace: '{{ home }}'
+  become: true
+
+- name:  Enable proxy_http
+  apache2_module:
+    state: present
+    name: proxy_http
+  become: true
+
+- name: Disable default apache site
+  command: a2dissite 000-default
+  become: true
+
+- name: Enable geonode apache site
+  command: a2ensite geonode
+  become: true
+  notify:
+  - Restart Apache
+ 
+- name: Create world-writable uploaded subdirectories
+  file:
+    path: '{{ home }}/geonode/geonode/uploaded/{{item}}'
+    state: directory
+    mode: a=rwx
+  with_items: 
+   - thumbs
+   - layers
+   - documents
+   - people_group
+  become: true
+
+- name: Change owner of geonode home to geonode
+  file:
+    path: '{{ home }}/geonode'
+    state: directory
+    owner: geonode
+    recurse: yes
+  become: true
+
+- name: Change owner and group of static and uploaded directories
+  file:
+    path: '{{ home }}/geonode/geonode/{{item}}'
+    state: directory
+    owner: geonode
+    group: www-data
+  with_items:
+   - static
+   - uploaded
+  become: true
+
+- name: Change owner and group of static_root directory
+  file:
+    path: '{{ home }}/geonode/geonode/static_root'
+    state: directory
+    owner: www-data
+    group: www-data
+  become: true

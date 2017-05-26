@@ -1,16 +1,22 @@
 ---
-- include: 00_mv_tmp_to_big_disk.yml
-  when: small_sysdisk in group_names
-# when: "'small_sysdisk' in group_names"
+- include: mv_tmp_to_big_disk.yml
+  when: "'small_sysdisk' in group_names"
 
-- include: 01_packages_installation.yml
-- include: 02_geonode_setup.yml
-- include: 03_install_ssh_keys_for_postgres.yml
-- include: 04_create_geonode_db.yml
-- include: 05_change_user_access_policy.yml
-- include: 06_setup_httpd.yml
-- include: 07_copy_geonode_data.yml
-- include: 08_install_geoserver_application.yml
-- include: 09_geonode_configuration.yml
-- include: 10_generate_ssl_csr.yml
-- include: 11_completion.yml
+- include: install_packages.yml
+
+- include: move_postgres.yml
+  when: "'small_sysdisk' in group_names"
+
+- include: geonode_setup.yml
+- include: install_ssh_keys_for_postgres.yml
+
+- include: create_geonode_db.yml
+  remote_user: postgres
+
+- include: change_user_access_policy.yml
+- include: setup_httpd.yml
+- include: copy_geonode_data.yml
+- include: install_geoserver_application.yml
+- include: geonode_configuration.yml
+- include: generate_ssl_csr.yml
+- include: completion.yml
