@@ -31,6 +31,7 @@
    - python
    - python-dev
    - python-gdal
+   - python-pexpect
    - python-pycurl
    - python-imaging
    - python-pastescript

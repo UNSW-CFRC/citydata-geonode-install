@@ -13,11 +13,11 @@
     version: 4.5.1
   become: true
 
-- name: Fix sitename
-  command: python '{{ home }}/geonode/manage.py' fixsitename
-
 - name: Initialize the Database
   command: python '{{ home }}/geonode/manage.py' syncdb --noinput
+
+- name: Fix sitename
+  command: python '{{ home }}/geonode/manage.py' fixsitename
 
 - name: Create GeoNode Superuser
   # Will fail if superuser already exists. Ignore this and suppress error log.
