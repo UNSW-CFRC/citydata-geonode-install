@@ -44,5 +44,5 @@
     cert_alias: geonodessl
     keystore_path: /etc/ssl/certs/java/cacerts
     keystore_pass: changeit
-    cert_path: "{{ inventory_hostname }}.crt"
+    cert_path: /etc/ssl/certs/geonode.crt
   become: true
