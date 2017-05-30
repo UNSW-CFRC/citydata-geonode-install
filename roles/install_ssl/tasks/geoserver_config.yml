@@ -9,6 +9,12 @@
   notify:
     - Restart Tomcat
    
+# By default proxyBaseUrl is not present in global.xml
+# But it is referred to in the Geonode SSL doco:
+# http://docs.geonode.org/en/master/tutorials/advanced/geonode_production/ssl.html#geoserver-configuration
+# Also it is present on our test installation (only), perhaps after a 'manual' settings change made through the geoserver web interface
+# This code will not change the file if proxyBaseUrl is not present
+#
 - name: Set proxyBaseUrl to use https
   replace:
     path: '{{ gsdata }}/global.xml'
