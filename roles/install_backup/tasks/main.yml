@@ -3,6 +3,41 @@
 #   Generate and add SSH keys to allow login from server to backup_server 
 #   - see http://www.linuxproblem.org/art_9.html
 
+- name: Generate ssh keys for postgres
+  user:
+    name: postgres
+    generate_ssh_key: yes
+  become: true
+
+- name: Fetch public key
+  fetch:
+    src: ~postgres/.ssh/id_rsa.pub
+    dest: /tmp/install_backup/{{ inventory_hostname }}/
+    flat: yes
+  become: true
+
+- name: Copy public key to backup server
+  copy:
+    src: /tmp/install_backup/{{ inventory_hostname }}/id_rsa.pub
+    dest: /tmp/install_backup_public.key
+  become: true
+  delegate_to: "{{ backup_server }}"
+
+- name: Add key to authorised keys
+  shell: cat /tmp/install_backup_public.key >> ~postgres/.ssh/authorized_keys
+  become: true
+  delegate_to: "{{ backup_server }}"
+
+- name: Add backup server to known hosts
+  shell: ssh-keyscan {{ backup_server }} >>~postgres/.ssh/known_hosts
+  become: true
+
+- name: Change known_hosts owner to postgres
+  file:
+    path: ~postgres/.ssh/known_hosts
+    owner: postgres
+  become: true
+
 - name: Let postgres user stop and start postgres service
   lineinfile:
     path: /etc/sudoers
@@ -32,16 +67,6 @@
     user: postgres
   become: true
 
-- name: Add backup server to known hosts
-  shell: ssh-keyscan {{ backup_to_server }} >>~postgres/.ssh/known_hosts
-  become: true
-
-- name: Change known_hosts owner to postgres
-  file:
-    path: ~postgres/.ssh/known_hosts
-    owner: postgres
-  become: true
-
 - name: Create destination dir
   file:
     path: "{{backup_to_dir}}/backup_of_{{ inventory_hostname }}"
@@ -49,4 +74,4 @@
     owner: postgres
     group: postgres
   become: true
-  delegate_to: "{{ backup_to_server }}"
+  delegate_to: "{{ backup_server }}"

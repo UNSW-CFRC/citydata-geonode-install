@@ -3,4 +3,4 @@ sitename: "CityData (Test) | City Futures Research Centre"
 
 backup_exclude: "{lost+found,python2.7_dist-packages_geonode_uploaded,tmp,.bash_history,.psql_history,.viminfo}"
 
-backup_to_server: citydata-dev.be.unsw.edu.au
+backup_server: citydata-dev.be.unsw.edu.au

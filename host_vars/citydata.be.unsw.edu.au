@@ -1,2 +1,4 @@
 ---
 sitename: "CityData | City Futures Research Centre"
+backup_server: citydata-test.be.unsw.edu.au
+backup_exclude: "{lost+found,tmp,.bash_history,.psql_history,.viminfo}"
