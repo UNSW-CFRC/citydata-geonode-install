@@ -10,4 +10,4 @@ Additional configuration added to resolve issues found while uploading and viewi
 ### Disclaimer
 This code was created for use on our own servers and is shared here to help others.
 
-It creates a server with the branding 'CityData', which fits own house style at [City Futures Research Centre](https://cityfutures.be.unsw.edu.au).
+It creates a server with the branding 'CityData', which fits our own house style at [City Futures Research Centre](https://cityfutures.be.unsw.edu.au).
