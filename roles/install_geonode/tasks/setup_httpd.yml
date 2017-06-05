@@ -1,7 +1,6 @@
 ---
 - name: Add apache geonode config
   copy:
-#    src: ../files/06_geonode.conf
     src: geonode.conf
     dest: /etc/apache2/sites-available/geonode.conf
   become: true
