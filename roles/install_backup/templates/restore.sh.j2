@@ -1,0 +1,16 @@
+#!/bin/bash
+# Shell script to restore geonode data from external server
+#
+# Run by administrator. See CityData Administrator Guide.
+
+echo Restore started at `date` >> ~postgres/backup.log
+
+sudo /etc/init.d/postgresql stop >> ~postgres/backup.log 2>&1
+
+sudo rsync -azv -e ssh \
+      postgres@{{backup_server}}:{{backup_to_dir}}/backup_of_{{ inventory_hostname }}/ \
+      {{backup_from_dir}} >> ~postgres/backup.log 2>&1
+
+sudo /etc/init.d/postgresql start >> ~postgres/backup.log 2>&1
+
+echo Restore finished at `date` >> ~postgres/backup.log

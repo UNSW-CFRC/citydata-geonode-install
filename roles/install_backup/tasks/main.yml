@@ -51,10 +51,18 @@
     owner: postgres
   become: true
 
-- name: Install shell script
+- name: Install backup shell script
   template:
     src: backup.sh.j2
     dest: ~postgres/backup.sh
+    owner: postgres
+    mode: 0700
+  become: true
+
+- name: Install restore shell script
+  template:
+    src: restore.sh.j2
+    dest: ~postgres/restore.sh
     owner: postgres
     mode: 0700
   become: true
