@@ -23,7 +23,6 @@
       SSLEngine on
       SSLCertificateFile    /etc/ssl/certs/geonode.crt
       SSLCertificateKeyFile /etc/ssl/private/geonode.key
-      SSLCertificateChainFile /etc/ssl/certs/geonode-chain.crt
       BrowserMatch "MSIE [2-6]" \
         nokeepalive ssl-unclean-shutdown \
         downgrade-1.0 force-response-1.0

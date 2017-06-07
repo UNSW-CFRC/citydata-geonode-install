@@ -28,7 +28,6 @@
       blockinfile_deletethisline
           SSLEngine on
           SSLCertificateFile /etc/ssl/certs/geonode.crt
-          SSLCertificateChainFile /etc/ssl/certs/geonode-chain.crt
           SSLCertificateKeyFile /etc/ssl/private/geonode.key
           BrowserMatch "MSIE [2-6]" \
             nokeepalive ssl-unclean-shutdown \
