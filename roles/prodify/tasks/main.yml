@@ -1,0 +1,71 @@
+---
+- name: Set debug false
+  lineinfile:
+    dest: '{{ home }}/geonode/geonode/local_settings.py'
+    regexp: '^\s*DEBUG\s*=.*$'
+    line: 'DEBUG = TEMPLATE_DEBUG = False'
+  become: true
+
+- name: Add FQDN to allowed hosts
+  replace:
+    dest: '{{ home }}/geonode/geonode/local_settings.py'
+    regexp: '^(\s*ALLOWED_HOSTS\s*=\s*\[((?!{{ inventory_hostname }})[^\]])*)\]'
+    replace: '\1, \047{{ inventory_hostname }}\047]'
+  become: true
+
+# http://docs.geonode.org/en/master/tutorials/advanced/geonode_production/production.html
+- name: Set the GeoServer Proxy URL
+  blockinfile:
+    dest: /var/lib/tomcat7/webapps/geoserver/WEB-INF/web.xml
+    marker: '<!-- {mark} ANSIBLE prodify MANAGED BLOCK -->'
+    insertafter: '<web-app>'
+    block: |
+      <context-param>
+      <param-name>PROXY_BASE_URL</param-name>
+      <param-value>https://{{ inventory_hostname }}/geoserver</param-value>
+      </context-param>
+  become: true
+
+- name: Add host to printing config
+  blockinfile:
+    dest: '{{ gsdata }}/printing/config.yaml'
+    marker: '<!-- {mark} ANSIBLE prodify MANAGED BLOCK -->'
+    insertbefore: 'dnsMatch'
+    block: |
+      - !dnsMatch
+        host: {{ inventory_hostname }}
+        port: 80
+  become: true
+
+- name: Update comment for robots.txt
+  replace:
+    dest: '{{ home }}/geonode/geonode/urls.py'
+    regexp: 'Keep out web crawlers: dev and test sites only'
+    replace: 'Keep out web crawlers: production sites only'
+  become: true
+
+- name: Set robots.txt to exclude only geoserver
+  replace:
+    dest: '{{ home }}/geonode/geonode/urls.py'
+    regexp: 'Disallow:[^"]*"'
+    replace: 'Disallow: /geoserver/"'
+  become: true
+
+- name: Add maxThreads for Java
+  lineinfile:
+    dest: /var/lib/tomcat7/conf/server.xml
+    insertafter: 'proxyName\s*='
+    line: '        maxThreads="50"'
+  become: true
+
+- name: Force Tomcat Restart
+  service:
+    name: tomcat7
+    state: restarted
+  become: true
+
+- name: Force Apache Restart
+  service:
+    name: apache2
+    state: restarted
+  become: true
