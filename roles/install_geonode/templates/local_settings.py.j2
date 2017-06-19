@@ -186,15 +186,18 @@ MAP_BASELAYERS = [
     "visibility": True,
     "fixed": True,
     "group": "background"
-}, {
-    "source": {
-         "ptype":"gxp_googlesource",
-         "apiKey": GOOGLE_API_KEY
-    },
-    "name":"TERRAIN",
-    "visibility": False,
-    "fixed": True,
-    "group":"background",
+#
+# Google terrain, roadmap and hybrid only display after Google Satellite has been selected
+# This is too confusing, and anyway, Bing, OSM and Stamen offer these three views.
+# , {
+#    "source": {
+#         "ptype":"gxp_googlesource",
+#         "apiKey": GOOGLE_API_KEY
+#    },
+#    "name":"TERRAIN",
+#    "visibility": False,
+#    "fixed": True,
+#    "group":"background",
 }, {
     "source": {
          "ptype":"gxp_googlesource",
@@ -204,22 +207,22 @@ MAP_BASELAYERS = [
     "visibility": False,
     "fixed": True,
     "group":"background",
-}, {
-    "source": {
-         "ptype":"gxp_googlesource",
-         "apiKey": GOOGLE_API_KEY
-    },
-    "name":"ROADMAP",
-    "visibility": False,
-    "fixed": True,
-    "group":"background",
-}, {
-    "source": {
-         "ptype":"gxp_googlesource",
-         "apiKey": GOOGLE_API_KEY
-    },
-    "name":"HYBRID",
-    "visibility": False,
-    "fixed": True,
-    "group":"background",
+# , {
+#    "source": {
+#         "ptype":"gxp_googlesource",
+#         "apiKey": GOOGLE_API_KEY
+#    },
+#    "name":"ROADMAP",
+#    "visibility": False,
+#    "fixed": True,
+#    "group":"background",
+# , {
+#    "source": {
+#         "ptype":"gxp_googlesource",
+#         "apiKey": GOOGLE_API_KEY
+#    },
+#    "name":"HYBRID",
+#    "visibility": False,
+#    "fixed": True,
+#    "group":"background",
 }]
