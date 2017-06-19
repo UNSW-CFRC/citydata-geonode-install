@@ -44,8 +44,8 @@
 - name: Add GeoNode base url to geoserver config
   blockinfile:
     dest: /var/lib/tomcat7/webapps/geoserver/WEB-INF/web.xml
-    marker: '<!-- {mark} ANSIBLE MANAGED BLOCK -->'
-    insertafter: '</context-param>'
+    marker: '<!-- {mark} ANSIBLE install_geoserver_application MANAGED BLOCK -->'
+    insertbefore: '<filter>'
     block: |
       <context-param>
       <param-name>GEONODE_BASE_URL</param-name>
