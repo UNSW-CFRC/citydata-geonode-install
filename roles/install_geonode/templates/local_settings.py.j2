@@ -5,6 +5,8 @@ PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 SITEURL = "http://{{ inventory_hostname }}/"
 SITENAME = "{{ sitename }}"
 
+SECRET_KEY = '{{ secret_key }}'
+
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 TIME_ZONE = '{{ timezone }}'
