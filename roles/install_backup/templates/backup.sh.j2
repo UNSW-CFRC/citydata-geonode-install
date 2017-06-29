@@ -7,7 +7,7 @@ echo Backup started at `date` >> ~postgres/backup.log
 
 sudo /etc/init.d/postgresql stop >> ~postgres/backup.log 2>&1
 
-rsync -azv -e ssh --exclude={{backup_exclude}} \
+rsync -azv -e ssh --del --exclude={{backup_exclude}} \
       {{backup_from_dir}}/ {{backup_server}}:{{backup_to_dir}}/backup_of_{{ inventory_hostname }}/ \
       >> ~postgres/backup.log 2>&1
 
