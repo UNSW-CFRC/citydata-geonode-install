@@ -24,7 +24,7 @@
 - name: Change postgres home
   user:
     name: postgres
-    home: /mnt/data/postgresql
+    home: "{{ dbhome }}/postgresql"
   become: true
 
 - name: Force postgresql restart
