@@ -1,10 +1,14 @@
 ---
 # Hosts with a small system disk so big things should be moved to /mnt/data
 
-home: /mnt/data/geonode
-gsdata: /mnt/data/geoserver_data
-tmp: /mnt/data/tmp
-dbhome: /mnt/data
+bigdisk1: /mnt/data
+bigdisk2: /mnt/data2
 
-backup_from_dir: /mnt/data
-backup_to_dir: /mnt/data2
+home: "{{ bigdisk1 }}/geonode"
+gsdata: "{{ bigdisk1 }}/geoserver_data"
+tmp: "{{ bigdisk1 }}/tmp"
+dbhome: "{{ bigdisk1 }}"
+gwc: "{{ bigdisk1 }}/geowebcache"
+
+backup_from_dir: "{{ bigdisk1 }}"
+backup_to_dir: "{{ bigdisk2 }}"
