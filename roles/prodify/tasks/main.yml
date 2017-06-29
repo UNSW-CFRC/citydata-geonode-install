@@ -24,6 +24,10 @@
       <param-name>PROXY_BASE_URL</param-name>
       <param-value>https://{{ inventory_hostname }}/geoserver</param-value>
       </context-param>
+      <context-param>
+      <param-name>GEOWEBCACHE_CACHE_DIR</param-name>
+      <param-value>{{ gwc }}</param-value>
+      </context-param>
   become: true
 
 - name: Add host to printing config
