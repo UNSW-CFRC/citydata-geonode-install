@@ -14,7 +14,7 @@
   become: true
 
 # http://docs.geonode.org/en/master/tutorials/advanced/geonode_production/production.html
-- name: Set the GeoServer Proxy URL
+- name: Set the GeoServer Proxy URL & geowebcache dir
   blockinfile:
     dest: /var/lib/tomcat7/webapps/geoserver/WEB-INF/web.xml
     marker: '<!-- {mark} ANSIBLE prodify MANAGED BLOCK -->'
@@ -28,6 +28,15 @@
       <param-name>GEOWEBCACHE_CACHE_DIR</param-name>
       <param-value>{{ gwc }}</param-value>
       </context-param>
+  become: true
+  
+- name: Create geowebcache dir
+  file:
+    path: '{{ gwc }}'
+    owner: tomcat7
+    group: root
+    mode: u=rwx,g=rx,o=rx
+    state: directory
   become: true
 
 - name: Add host to printing config
