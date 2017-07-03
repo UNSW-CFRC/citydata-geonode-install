@@ -57,11 +57,11 @@
     replace: 'Keep out web crawlers: production sites only'
   become: true
 
-- name: Set robots.txt to exclude only geoserver
+- name: Set robots.txt to exclude geoserver and catalogue
   replace:
     dest: '{{ home }}/geonode/geonode/urls.py'
     regexp: 'Disallow:[^"]*"'
-    replace: 'Disallow: /geoserver/"'
+    replace: 'Disallow: /geoserver/\\nDisallow: /catalogue/"'
   become: true
 
 - name: Add maxThreads for Java
