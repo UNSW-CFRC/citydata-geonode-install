@@ -17,7 +17,7 @@
 - name: Set the GeoServer Proxy URL & geowebcache dir
   blockinfile:
     dest: /var/lib/tomcat7/webapps/geoserver/WEB-INF/web.xml
-    marker: '#====== {mark} ANSIBLE prodify MANAGED BLOCK ======#'
+    marker: '<!-- {mark} ANSIBLE prodify MANAGED BLOCK -->'
     insertafter: '<web-app>'
     block: |
       <context-param>
@@ -42,9 +42,9 @@
 - name: Add host to printing config
   blockinfile:
     dest: '{{ gsdata }}/printing/config.yaml'
-    marker: '<!-- {mark} ANSIBLE prodify MANAGED BLOCK -->'
+    marker: '#====== {mark} ANSIBLE prodify MANAGED BLOCK ======#'
     insertbefore: 'dnsMatch'
-    block: |
+    block: |2
       - !dnsMatch
         host: {{ inventory_hostname }}
         port: 80
