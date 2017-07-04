@@ -44,10 +44,18 @@
     dest: '{{ gsdata }}/printing/config.yaml'
     marker: '#====== {mark} ANSIBLE prodify MANAGED BLOCK ======#'
     insertbefore: 'dnsMatch'
-    block: |2
-      - !dnsMatch
-        host: {{ inventory_hostname }}
-        port: 80
+    block: |
+      blockinfile_deletethisline
+        - !dnsMatch
+          host: {{ inventory_hostname }}
+          port: 80
+  become: true
+
+- name: Delete indentation marker line for printing config
+  lineinfile:
+    path: '{{ gsdata }}/printing/config.yaml'
+    state: absent
+    line: blockinfile_deletethisline
   become: true
 
 - name: Update comment for robots.txt
