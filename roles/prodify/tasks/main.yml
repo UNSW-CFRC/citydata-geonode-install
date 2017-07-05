@@ -64,6 +64,7 @@
     regexp: 'Keep out web crawlers: dev and test sites only'
     replace: 'Keep out web crawlers: production sites only'
   become: true
+  when: "'production' in group_names"
 
 - name: Set robots.txt to exclude geoserver and catalogue
   replace:
@@ -71,6 +72,7 @@
     regexp: 'Disallow:[^"]*"'
     replace: 'Disallow: /geoserver/\\nDisallow: /catalogue/"'
   become: true
+  when: "'production' in group_names"
 
 - name: Add maxThreads for Java
   lineinfile:
