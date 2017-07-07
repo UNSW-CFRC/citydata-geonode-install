@@ -230,3 +230,7 @@ MAP_BASELAYERS = [
 #    "fixed": True,
 #    "group":"background",
 }]
+
+# Add guide to apps
+from settings import INSTALLED_APPS
+INSTALLED_APPS = INSTALLED_APPS + ('geonode.guide',)
