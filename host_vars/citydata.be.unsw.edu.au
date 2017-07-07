@@ -1,5 +1,8 @@
 ---
-sitename: "CityData | City Futures Research Centre"
+sitename_short: "CityData"
+site_org: "City Futures Research Centre" 
+sitename: "{{ sitename_short }} | {{ site_org }}"
+
 backup_server: citydata-test.be.unsw.edu.au
 backup_exclude: "{lost+found,tmp,.bash_history,.psql_history,.viminfo}"
 

@@ -19,6 +19,13 @@
 - name: Fix sitename
   command: python '{{ home }}/geonode/manage.py' fixsitename
 
+- name: Display shortname on homepage
+  lineinfile:
+    dest: '{{ home }}/geonode/geonode/templates/site_index.html'
+    regexp: '^\s*<h1 class="page-title">.*</h1>'
+    line: '                    <h1 class="page-title">{{ sitename_short }}</h1>'
+  become: true
+
 - name: Create GeoNode Superuser
   # Will fail if superuser already exists. Ignore this and suppress error log.
   command: python '{{ home }}/geonode/manage.py' createsuperuser --noinput --username=admin --email='{{ admin_email }}'

@@ -1,5 +1,7 @@
 ---
-sitename: "CityData (Test) | City Futures Research Centre"
+sitename_short: "CityData (Test)"
+site_org: "City Futures Research Centre" 
+sitename: "{{ sitename_short }} | {{ site_org }}"
 
 backup_exclude: "{lost+found,python2.7_dist-packages_geonode_uploaded,tmp,.bash_history,.psql_history,.viminfo}"
 

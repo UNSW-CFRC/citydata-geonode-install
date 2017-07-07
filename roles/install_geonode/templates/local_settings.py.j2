@@ -3,7 +3,9 @@ import os
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
 SITEURL = "http://{{ inventory_hostname }}/"
-SITENAME = "{{ sitename }}"
+SITENAME_SHORT = "{{ sitename_short }}"
+SITE_ORG = "{{ site_org }}"
+SITENAME = SITENAME_SHORT + " | " + SITE_ORG
 
 SECRET_KEY = '{{ secret_key }}'
 
