@@ -24,10 +24,11 @@
 - name: Increase JVM memory
   # In response to 'OutOfMemoryError: Java heap space error' on uploading large layer
   # See: http://docs.geonode.org/en/master/tutorials/advanced/geonode_production/adv_gsconfig/gsproduction.html#configuring-your-container-for-production
+  # Further increased Xms and Xmx from 2048 to 4096, and added MaxPermSize=512m after out of memory error from WMS call 11/7/2017
   lineinfile:
     dest: /etc/default/tomcat7
     regexp: '^\s*JAVA_OPTS\s*=.*$'
-    line: 'JAVA_OPTS="-Djava.awt.headless=true -Xms2048m -Xmx2048M -XX:+UseConcMarkSweepGC"'
+    line: 'JAVA_OPTS="-Djava.awt.headless=true -Xms4096m -Xmx4096M -XX:MaxPermSize=512m -XX:+UseConcMarkSweepGC"'
   become: true
 
 - name: Move Geoserver data directory to data disk
