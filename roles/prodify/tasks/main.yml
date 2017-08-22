@@ -81,13 +81,36 @@
     line: '        maxThreads="50"'
   become: true
 
-- name: Force Tomcat Restart
+- name: Import modules to limit CSW response to public records
+  blockinfile:
+    dest: /usr/local/lib/python2.7/dist-packages/pycsw/plugins/repository/geonode/geonode_.py
+    marker: '#====== {mark} ANSIBLE prodify MANAGED BLOCK - import modules ======#'
+    insertafter: 'from django.conf import settings'
+    block: |
+      from guardian.shortcuts import get_objects_for_user
+      from django.contrib.auth.models import AnonymousUser
+  become: true
+
+- name: Limit CSW response to public records
+  blockinfile:
+    dest: /usr/local/lib/python2.7/dist-packages/pycsw/plugins/repository/geonode/geonode_.py
+    marker: '#====== {mark} ANSIBLE prodify MANAGED BLOCK - filter records ======#'
+    insertbefore: 'total = query.count()'
+    block: |
+      #
+              # filter query to show only public records
+              permitted = get_objects_for_user(AnonymousUser(), 'base.view_resourcebase')
+              query = query.filter(id__in=permitted)
+      #
+  become: true
+
+- name: Force Tomcat restart
   service:
     name: tomcat7
     state: restarted
   become: true
 
-- name: Force Apache Restart
+- name: Force Apache restart
   service:
     name: apache2
     state: restarted
