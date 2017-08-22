@@ -4,3 +4,19 @@ country: AU
 timezone: Australia/Sydney
 admin_email: citydata@unsw.edu.au
 google_key: AIzaSyDD2vgGXTnLr53NeeC0h2_JErwG9KL92fU
+
+ows_abstract: "Data for city analytics and decision-making."
+ows_title: "CityData: City Futures Research Centre"
+wms_title: "{{ ows_title }} Web Map Service"
+wfs_title: "{{ ows_title }} Web Feature Service"
+wcs_title: "{{ ows_title }} Web Coverage Service"
+ows_keywords: "cities | city | city analytics | smart cities | smart city | urban | urban research"
+
+ows_addressCity: Sydney
+ows_addressCountry: Australia
+ows_addressElectronicMailAddress: citydata@unsw.edu.au
+ows_addressPostalCode: 2052
+ows_addressState: NSW
+ows_contactEmail: citydata@unsw.edu.au
+ows_contactOrganization: City Futures Research Centre
+ows_contactPosition: CityData Admin
