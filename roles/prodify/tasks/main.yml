@@ -69,31 +69,31 @@
 - name: Set robots.txt to exclude non-content URLs
   replace:
     dest: '{{ home }}/geonode/geonode/urls.py'
-    regexp: 'Disallow:[^"]*"'
-    replace: ' Disallow: /geoserver/\\n
-               Disallow: /catalogue/\\n
+    regexp: '^\s*Disallow:[^"]*"'
+    replace: ' Disallow: /geoserver\\n
+               Disallow: /catalogue\\n
                Disallow: /data.json\\n
-               Disallow: /account/\\n
-               Disallow: /people/\\n
-               Disallow: /avatar/\\n
-               Disallow: /comments/\\n
-               Disallow: /ratings/\\n
-               Disallow: /activity/\\n
-               Disallow: /announcements/\\n
-               Disallow: /messages/\\n
-               Disallow: /social/\\n
-               Disallow: /security/\\n
+               Disallow: /account\\n
+               Disallow: /people\\n
+               Disallow: /avatar\\n
+               Disallow: /comments\\n
+               Disallow: /ratings\\n
+               Disallow: /activity\\n
+               Disallow: /announcements\\n
+               Disallow: /messages\\n
+               Disallow: /social\\n
+               Disallow: /security\\n
                Disallow: /lang.js\\n
-               Disallow: /jsi18n/\\n
-               Disallow: /i18n/\\n
-               Disallow: /autocomplete/\\n
-               Disallow: /admin/\\n
-               Disallow: /groups/\\n
-               Disallow: /services/\\n
-               Disallow: /dynamic/\\n
-               Disallow: /upload/\\n
-               Disallow: /gs/\\n
-               Disallow: /notifications/\\n
+               Disallow: /jsi18n\\n
+               Disallow: /i18n\\n
+               Disallow: /autocomplete\\n
+               Disallow: /admin\\n
+               Disallow: /groups\\n
+               Disallow: /services\\n
+               Disallow: /dynamic\\n
+               Disallow: /upload\\n
+               Disallow: /gs\\n
+               Disallow: /notifications\\n
              \\nSitemap: https://{{ inventory_hostname }}/sitemap.xml"'
   become: true
   when: "'production' in group_names"
