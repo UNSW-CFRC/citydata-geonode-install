@@ -69,7 +69,7 @@
 - name: Set robots.txt to exclude non-content URLs
   replace:
     dest: '{{ home }}/geonode/geonode/urls.py'
-    regexp: '^\s*Disallow:[^"]*"'
+    regexp: '\s*Disallow:[^"]*"'
     replace: ' Disallow: /geoserver\\n
                Disallow: /catalogue\\n
                Disallow: /data.json\\n
