@@ -94,6 +94,7 @@
                Disallow: /upload\\n
                Disallow: /gs\\n
                Disallow: /notifications\\n
+               Disallow: /maps/new\\n
              \\nSitemap: https://{{ inventory_hostname }}/sitemap.xml"'
   become: true
   when: "'production' in group_names"
