@@ -54,6 +54,27 @@
       </context-param>
   become: true
 
+- name: add Cross-Origin Resource Sharing (CORS) on geoserver and catalogue
+  blockinfile:
+    dest: /var/lib/tomcat7/conf/web.xml
+    insertbefore: </web-app>
+    marker: '<!-- {mark} ANSIBLE install_geoserver_application MANAGED BLOCK -->'
+    block: |
+      <!-- The filter to allow Cross-Origin Resource Sharing (CORS) -->
+      <filter>
+        <filter-name>CorsFilter</filter-name>
+        <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
+      </filter>
+      <!-- The mapping for the CORS Filter -->
+      <filter-mapping>
+        <filter-name>CorsFilter</filter-name>
+        <url-pattern>/geoserver/*</url-pattern>
+        <url-pattern>/catalogue/*</url-pattern>
+      </filter-mapping>
+  become: true
+  notify:
+    - Restart Tomcat
+
 - name: Set digest password encoding
   # To remove warning message: The default user/group service should use digest password encoding.
   lineinfile:
