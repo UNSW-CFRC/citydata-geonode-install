@@ -70,8 +70,7 @@
   replace:
     dest: '{{ home }}/geonode/geonode/urls.py'
     regexp: '\s*Disallow:[^"]*"'
-    replace: ' Disallow: /geoserver\\n
-               Disallow: /catalogue\\n
+    replace: ' Disallow: /catalogue\\n
                Disallow: /data.json\\n
                Disallow: /account\\n
                Disallow: /people\\n
