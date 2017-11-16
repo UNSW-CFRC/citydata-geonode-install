@@ -1,0 +1,14 @@
+---
+- name: Tell Apache to serve viz folder from static
+  lineinfile:
+    path: '/etc/apache2/sites-available/geonode.conf'
+    state: present
+    insertafter: 'Alias'
+    line: 'Alias /viz/ /mnt/data/geonode/geonode/geonode/static_root/cityfutures/viz/'
+  become: true
+
+- name: Force Apache restart
+  service:
+    name: apache2
+    state: restarted
+  become: true
