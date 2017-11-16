@@ -1,0 +1,19 @@
+---
+# Before running this playbook, run backup.yml
+
+- name: Install backup shell script
+  template:
+    src: backupb4dcom.sh.j2
+    dest: ~postgres/backupb4dcom.sh
+    owner: postgres
+    mode: 0700
+  become: true
+
+#- name: Create destination dir
+#  file:
+#    path: "{{backup_to_dir}}/backup_of_{{ inventory_hostname }}"
+#    state: directory
+#    owner: postgres
+#    group: postgres
+#  become: true
+#  delegate_to: "{{ backup_server }}"

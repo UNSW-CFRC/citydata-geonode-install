@@ -1,0 +1,3 @@
+- hosts: all
+  roles:
+  - backupb4dcom
