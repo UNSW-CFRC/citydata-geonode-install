@@ -4,16 +4,8 @@
 
 - include: install_packages.yml
 
-- include: move_postgres.yml
-  when: "'small_sysdisk' in group_names"
-
 - include: geonode_setup.yml
-- include: install_ssh_keys_for_postgres.yml
 
-- include: create_geonode_db.yml
-  remote_user: postgres
-
-- include: change_user_access_policy.yml
 - include: setup_httpd.yml
 - include: copy_geonode_data.yml
 - include: install_geoserver_application.yml

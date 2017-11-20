@@ -1,0 +1,12 @@
+---
+- include: install_packages.yml
+
+- include: move_postgres.yml
+  when: "'small_sysdisk' in group_names"
+
+- include: install_ssh_keys_for_postgres.yml
+
+- include: create_geonode_db.yml
+  remote_user: postgres
+
+- include: change_user_access_policy.yml
