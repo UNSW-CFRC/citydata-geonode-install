@@ -1,3 +1,4 @@
-- hosts: local
+- hosts:
+    localhost
   roles:
   - config_ansible

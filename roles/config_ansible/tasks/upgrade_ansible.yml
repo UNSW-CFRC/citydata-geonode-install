@@ -1,0 +1,7 @@
+---
+- name: Upgrade ansible to 2.3
+  apt:
+    pkg: ansible
+    state: latest
+    update_cache: yes
+  become: true
