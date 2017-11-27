@@ -31,16 +31,35 @@
     line: 'JAVA_OPTS="-Djava.awt.headless=true -Xms4096m -Xmx4096M -XX:MaxPermSize=512m -XX:+UseConcMarkSweepGC"'
   become: true
 
-- name: Move Geoserver data directory to data disk
+- name: Check geoserver data folder on data disk
+  stat:
+    path: '{{ gsdata }}'
+  register: new_gsdata
+ 
+- name: Move Geoserver data directory to data disk if not already there
   command: mv /var/lib/tomcat7/webapps/geoserver/data '{{ gsdata }}'
   become: true
+  when: "new_gsdata.stat.exists == False and 'small_sysdisk' in group_names"
 
-- name: Link Geoserver data directory
+- name: Delete new empty Geoserver data directory if old one exists on data disk
+  file:
+    path: /var/lib/tomcat7/webapps/geoserver/data
+    state: absent
+  become: true
+  when: "new_gsdata.stat.exists == True and 'small_sysdisk' in group_names"
+
+- name: Check link to geoserver data folder
+  stat:
+    path: /var/lib/tomcat7/webapps/geoserver/data
+  register: gsdatalink
+ 
+- name: Link Geoserver data directory if not already done
   file:
     src: '{{ gsdata }}'
     path: /var/lib/tomcat7/webapps/geoserver/data
     state: link
   become: true
+  when: "gsdatalink.stat.islnk is not defined or (gsdatalink.stat.islnk is defined and gsdatalink.stat.islnk == False) and 'small_sysdisk' in group_names"
 
 - name: Add GeoNode base url to geoserver config
   blockinfile:

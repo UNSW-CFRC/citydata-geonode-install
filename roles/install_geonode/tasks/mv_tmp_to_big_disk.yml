@@ -6,8 +6,7 @@
   when: "'local' in group_names and lookup('env', 'TMP') == ''"
   vars:
     text: |
-         Please set TMP=~/.ansible/tmp
-         export TMP
+         Please export TMP=~/.ansible/tmp
          then rerun this playbook
   fail:
     msg: "{{ text.split('\n') }}"
