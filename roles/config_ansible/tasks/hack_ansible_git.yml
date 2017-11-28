@@ -7,8 +7,7 @@
   # Changed dest after ansible upgrade to 2.3 ('core' subfolder not found) 
   #
   lineinfile:
-#       dest: /usr/lib/python2.7/dist-packages/ansible/modules/core/source_control/git.py
     dest: /usr/lib/python2.7/dist-packages/ansible/modules/source_control/git.py
-    regexp: '\s*result.update\(changed=True, .*msg=.Local modifications exist.\)'
-    line: "                result.update(changed=True, msg='Local modifications exist')"
+    regexp: '^\s*result.update.changed=True, .*msg=.Local modifications exist..'
+    line: "                result.update(changed=True, msg='Local modifications exist.')"
   become: true
