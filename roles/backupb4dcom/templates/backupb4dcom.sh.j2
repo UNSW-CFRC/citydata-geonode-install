@@ -7,7 +7,7 @@ echo Backup started at `date` >> ~postgres/backup.log
 
 sudo /etc/init.d/postgresql stop >> ~postgres/backup.log 2>&1
 
-sudo service tomcat7 stop >> ~postgres/backup.log 2>&1
+sudo service tomat8 stop >> ~postgres/backup.log 2>&1
 
 rsync -azv -e ssh --del           \
       /home/jdoig/                \
@@ -19,6 +19,6 @@ rsync -azv -e ssh --del           \
 
 sudo /etc/init.d/postgresql start >> ~postgres/backup.log 2>&1
 
-sudo service tomcat7 start >> ~postgres/backup.log 2>&1
+sudo service tomat8 start >> ~postgres/backup.log 2>&1
 
 echo Backup b4 decommission finished at `date` >> ~postgres/backup.log

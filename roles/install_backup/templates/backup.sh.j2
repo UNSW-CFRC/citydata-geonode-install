@@ -7,7 +7,7 @@ echo Backup started at `date` >> ~postgres/backup.log
 
 sudo /etc/init.d/postgresql stop >> ~postgres/backup.log 2>&1
 
-sudo service tomcat7 stop >> ~postgres/backup.log 2>&1
+sudo service tomat8 stop >> ~postgres/backup.log 2>&1
 
 rsync -azv -e ssh --del --exclude={{backup_exclude}} \
       {{backup_from_dir}}/ {{backup_server}}:{{backup_to_dir}}/backup_of_{{ inventory_hostname }}/ \
@@ -15,6 +15,6 @@ rsync -azv -e ssh --del --exclude={{backup_exclude}} \
 
 sudo /etc/init.d/postgresql start >> ~postgres/backup.log 2>&1
 
-sudo service tomcat7 start >> ~postgres/backup.log 2>&1
+sudo service tomat8 start >> ~postgres/backup.log 2>&1
 
 echo Backup finished at `date` >> ~postgres/backup.log

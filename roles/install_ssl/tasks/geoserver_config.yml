@@ -2,7 +2,7 @@
 - name: Set GEONODE_BASE_URL to use https
   replace:
 #       path: /usr/share/geoserver/WEB-INF/web.xml
-    path: /var/lib/tomcat7/webapps/geoserver/WEB-INF/web.xml
+    path: /var/lib/tomat8/webapps/geoserver/WEB-INF/web.xml
     regexp: '(<param-name>GEONODE_BASE_URL</param-name>\s*<param-value>)http(://localhost/</param-value>)'
     replace: '\1https\2'
   become: true

@@ -1,23 +1,23 @@
 ---
 - name: Stop Tomcat
   service:
-    name: tomcat7
+    name: tomat8
     state: stopped
   become: true
 
 - name: Copy Geoserver war to Tomcat
-  command: cp '{{ home }}/geonode/downloaded/geoserver.war' /var/lib/tomcat7/webapps/
+  command: cp '{{ home }}/geonode/downloaded/geoserver.war' /var/lib/tomat8/webapps/
   become: true
 
 - name: Force Tomcat Restart to deploy Geoserver
   service:
-    name: tomcat7
+    name: tomat8
     state: restarted
   become: true
 
 - name: Stop Tomcat again
   service:
-    name: tomcat7
+    name: tomat8
     state: stopped
   become: true
 
@@ -26,7 +26,7 @@
   # See: http://docs.geonode.org/en/master/tutorials/advanced/geonode_production/adv_gsconfig/gsproduction.html#configuring-your-container-for-production
   # Further increased Xms and Xmx from 2048 to 4096, and added MaxPermSize=512m after out of memory error from WMS call 11/7/2017
   lineinfile:
-    dest: /etc/default/tomcat7
+    dest: /etc/default/tomat8
     regexp: '^\s*JAVA_OPTS\s*=.*$'
     line: 'JAVA_OPTS="-Djava.awt.headless=true -Xms4096m -Xmx4096M -XX:MaxPermSize=512m -XX:+UseConcMarkSweepGC"'
   become: true
@@ -37,33 +37,33 @@
   register: new_gsdata
  
 - name: Move Geoserver data directory to data disk if not already there
-  command: mv /var/lib/tomcat7/webapps/geoserver/data '{{ gsdata }}'
+  command: mv /var/lib/tomat8/webapps/geoserver/data '{{ gsdata }}'
   become: true
   when: "new_gsdata.stat.exists == False and 'small_sysdisk' in group_names"
 
 - name: Delete new empty Geoserver data directory if old one exists on data disk
   file:
-    path: /var/lib/tomcat7/webapps/geoserver/data
+    path: /var/lib/tomat8/webapps/geoserver/data
     state: absent
   become: true
   when: "new_gsdata.stat.exists == True and 'small_sysdisk' in group_names"
 
 - name: Check link to geoserver data folder
   stat:
-    path: /var/lib/tomcat7/webapps/geoserver/data
+    path: /var/lib/tomat8/webapps/geoserver/data
   register: gsdatalink
  
 - name: Link Geoserver data directory if not already done
   file:
     src: '{{ gsdata }}'
-    path: /var/lib/tomcat7/webapps/geoserver/data
+    path: /var/lib/tomat8/webapps/geoserver/data
     state: link
   become: true
   when: "gsdatalink.stat.islnk is not defined or (gsdatalink.stat.islnk is defined and gsdatalink.stat.islnk == False) and 'small_sysdisk' in group_names"
 
 - name: Add GeoNode base url to geoserver config
   blockinfile:
-    dest: /var/lib/tomcat7/webapps/geoserver/WEB-INF/web.xml
+    dest: /var/lib/tomat8/webapps/geoserver/WEB-INF/web.xml
     marker: '<!-- {mark} ANSIBLE install_geoserver_application MANAGED BLOCK -->'
     insertbefore: '<filter>'
     block: |
@@ -75,7 +75,7 @@
 
 - name: add Cross-Origin Resource Sharing (CORS) on geoserver
   blockinfile:
-    dest: /var/lib/tomcat7/conf/web.xml
+    dest: /var/lib/tomat8/conf/web.xml
     insertbefore: </web-app>
     marker: '<!-- {mark} ANSIBLE install_geoserver_application MANAGED BLOCK -->'
     block: |
@@ -96,7 +96,7 @@
 - name: Set digest password encoding
   # To remove warning message: The default user/group service should use digest password encoding.
   lineinfile:
-    dest: /var/lib/tomcat7/webapps/geoserver/data/security/usergroup/default/config.xml
+    dest: /var/lib/tomat8/webapps/geoserver/data/security/usergroup/default/config.xml
     regexp: '\s*<passwordEncoderName>.*'
     line: '  <passwordEncoderName>digestPasswordEncoder</passwordEncoderName>'
   become: true
@@ -105,16 +105,16 @@
 
 - name: Check for masterpw.info file
   stat:
-    path: /var/lib/tomcat7/webapps/geoserver/data/security/masterpw.info
+    path: /var/lib/tomat8/webapps/geoserver/data/security/masterpw.info
   register: masterpw_file
 
 - name: Save Geoserver master password
-  command: grep 'master password is' /var/lib/tomcat7/webapps/geoserver/data/security/masterpw.info
+  command: grep 'master password is' /var/lib/tomat8/webapps/geoserver/data/security/masterpw.info
   register: masterpw
   when: masterpw_file.stat.exists == True
  
 - name: Remove masterpw.info file to remove security risk warning
   file:
-    path: /var/lib/tomcat7/webapps/geoserver/data/security/masterpw.info
+    path: /var/lib/tomat8/webapps/geoserver/data/security/masterpw.info
     state: absent
   become: true
