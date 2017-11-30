@@ -7,6 +7,6 @@
 
 - name: Restart Tomcat
   service:
-    name: tomat8
+    name: tomcat8
     state: restarted
   become: true

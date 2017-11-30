@@ -16,7 +16,7 @@
 # http://docs.geonode.org/en/master/tutorials/advanced/geonode_production/production.html
 - name: Set the GeoServer Proxy URL & geowebcache dir
   blockinfile:
-    dest: /var/lib/tomat8/webapps/geoserver/WEB-INF/web.xml
+    dest: /var/lib/tomcat8/webapps/geoserver/WEB-INF/web.xml
     marker: '<!-- {mark} ANSIBLE prodify MANAGED BLOCK -->'
     insertafter: '<web-app>'
     block: |
@@ -33,7 +33,7 @@
 - name: Create geowebcache dir
   file:
     path: '{{ gwc }}'
-    owner: tomat8
+    owner: tomcat8
     group: root
     mode: u=rwx,g=rx,o=rx
     state: directory
@@ -100,7 +100,7 @@
 
 - name: Add maxThreads for Java
   lineinfile:
-    dest: /var/lib/tomat8/conf/server.xml
+    dest: /var/lib/tomcat8/conf/server.xml
     insertafter: 'proxyName\s*='
     line: '        maxThreads="50"'
   become: true
@@ -188,7 +188,7 @@
 
 - name: Force Tomcat restart
   service:
-    name: tomat8
+    name: tomcat8
     state: restarted
   become: true
 
