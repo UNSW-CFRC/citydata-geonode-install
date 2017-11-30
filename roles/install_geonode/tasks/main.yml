@@ -4,7 +4,7 @@
   stat:
     path: /tmp
   register: tmp
- 
+
 - include_tasks: mv_tmp_to_big_disk.yml
   when: "tmp.stat.islnk is not defined or (tmp.stat.islnk is defined and tmp.stat.islnk == False) and 'small_sysdisk' in group_names"
 
@@ -17,7 +17,9 @@
 - include_tasks: install_ssh_keys_for_postgres.yml
 
 - include_tasks: create_geonode_db.yml
-  remote_user: postgres
+  #remote_user: postgres
+  become: yes
+  become_user: postgres
 
 - include_tasks: change_user_access_policy.yml
 - include_tasks: setup_httpd.yml

@@ -8,7 +8,7 @@
   postgresql_db:
     name: geonode
     owner: geonode
-  
+
 - name: Create geonode_data database
   postgresql_db:
     name: geonode_data
