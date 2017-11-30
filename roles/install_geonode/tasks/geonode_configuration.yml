@@ -13,8 +13,14 @@
     version: 4.5.1
   become: true
 
+#- name: Initialize the Database
+#  command: python '{{ home }}/geonode/manage.py' syncdb --noinput
+
 - name: Initialize the Database
-  command: python '{{ home }}/geonode/manage.py' syncdb --noinput
+  command: python '{{ home }}/geonode/manage.py' migrate
+
+- name: Initialize the Database
+  command: python '{{ home }}/geonode/manage.py' loaddata '{{ home }}/geonode/geonode/base/fixtures/initial_data.json'
 
 - name: Fix sitename
   command: python '{{ home }}/geonode/manage.py' fixsitename

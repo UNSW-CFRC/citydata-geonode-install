@@ -9,11 +9,11 @@
   git:
     clone: yes
     force: yes
-    repo: https://github.com/UNSW-CFRC/geonode
-#    repo: https://github.com/GeoNode/geonode
+#    repo: https://github.com/UNSW-CFRC/geonode
+    repo: https://github.com/GeoNode/geonode
 #    repo: https://github.com/GeoNode/geonode.git
     dest: '{{ home }}/geonode'
-    version: 2.4.x
+    version: 2.7.x
   ignore_errors: yes
   no_log: true
   become: true

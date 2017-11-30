@@ -17,11 +17,11 @@
    - libapache2-mod-wsgi
    - libgeos-dev
    - libjpeg-dev
-   - libpng-dev
+   - libpng12-dev
    - libpq-dev
    - libproj-dev
    - libxml2-dev
-   - libxslt-dev
+   - libxslt1-dev
    - openjdk-8-jre
    - patch
    - postgresql
@@ -38,14 +38,14 @@
    - python-psycopg2
    - python-urlgrabber
    - python-virtualenv
-   - tomcat7
+   - tomcat8
    - unzip
    - zip
    - ncdu
   become: true
 
 - name: Check if python-support is installed
-  command: dpkg-query -W python-support 
+  command: dpkg-query -W python-support
   register: check_deb
   failed_when: check_deb.rc > 1
   changed_when: check_deb.rc == 1

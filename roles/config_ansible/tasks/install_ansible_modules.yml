@@ -7,10 +7,11 @@
   #
   # so it's ok to ignore the fail (as long as that's the cause :/ )
   #
-- name: Install source control for ansible
-  pip:
-    name: source_control
-  become: true
+# Not required anymore
+#- name: Install source control for ansible
+#  pip:
+#    name: source_control
+#  become: true
 
 - name: Install pexpect for ansible expect module
   apt:
@@ -20,9 +21,8 @@
   become: true
   ignore_errors: yes
   no_log: true
-  
+
 - name: Install openssl for ansible
   pip:
     name: pyOpenSSL
   become: true
-

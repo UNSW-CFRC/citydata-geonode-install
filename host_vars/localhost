@@ -1,0 +1,22 @@
+---
+sitename_short: "CityData (localhost)"
+site_org: "City Futures Research Centre"
+sitename: "{{ sitename_short }} | {{ site_org }}"
+
+backup_exclude: "{lost+found,python2.7_dist-packages_geonode_uploaded,tmp,.bash_history,.psql_history,.viminfo}"
+
+backup_server: localhost
+
+bing_key: AirNFUX63U0RgdpDPrc6jrTWGce1I-QOF-Z2GeCJ3q558EZXDt8Eh4VcdTxHYjEW
+
+app_root: /webapps
+backups: /backups
+
+home: "{{ app_root }}/geonode"
+gsdata: "{{ app_root }}/geoserver_data"
+tmp: "{{ app_root }}/tmp"
+dbhome: "{{ app_root }}"
+gwc: "{{ app_root }}/geowebcache"
+
+backup_from_dir: "{{ app_root }}"
+backup_to_dir: "{{ backups }}"
