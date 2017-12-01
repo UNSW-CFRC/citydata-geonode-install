@@ -17,7 +17,7 @@ SECRET_KEY = '{{ secret_key }}'
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 TIME_ZONE = '{{ timezone }}'
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '::1',{{ inventory_hostname }}]
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '::1','{{ inventory_hostname }}']
 PROXY_ALLOWED_HOSTS = ("127.0.0.1", 'localhost', '::1')
 POSTGIS_VERSION = (2, 2, 1)
 
