@@ -1,6 +1,5 @@
 ---
-# Not required if running on localhost
-#- include: set_hostname.yml
+- include: set_hostname.yml
 - include: upgrade_ansible.yml
 - include: install_ansible_modules.yml
 # Not required anymore

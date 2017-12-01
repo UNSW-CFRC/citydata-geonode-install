@@ -1,12 +1,12 @@
 - name: change hostname to myserver
   hostname:
-    name: "citydata-test.be.unsw.edu.au"
+    name: "{{ my_hostname }}"
   become: true
-  
+
 - name: add myself to /etc/hosts
   lineinfile:
     dest: /etc/hosts
     regexp: '^127\.0\.0\.1[ \t]+localhost'
-    line: '127.0.0.1 localhost citydata-test.be.unsw.edu.au'
+    line: '127.0.0.1 localhost {{ my_hostname }}'
     state: present
   become: true

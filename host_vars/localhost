@@ -9,17 +9,13 @@ backup_server: localhost
 
 bing_key: AirNFUX63U0RgdpDPrc6jrTWGce1I-QOF-Z2GeCJ3q558EZXDt8Eh4VcdTxHYjEW
 
-app_root: /webapps
-backups: /backups
+app_root: /home
 
 home: "{{ app_root }}/geonode"
 gsdata: "{{ app_root }}/geoserver_data"
 tmp: "{{ app_root }}/tmp"
 dbhome: "{{ app_root }}"
 gwc: "{{ app_root }}/geowebcache"
-
-backup_from_dir: "{{ app_root }}"
-backup_to_dir: "{{ backups }}"
 
 orgname: "City Futures Research Centre"
 country: AU
@@ -42,3 +38,4 @@ ows_addressState: NSW
 ows_contactEmail: citydata@unsw.edu.au
 ows_contactOrganization: City Futures Research Centre
 ows_contactPosition: CityData Admin
+my_hostname: "plusdata-10-116-2-220"
