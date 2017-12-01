@@ -1,7 +1,11 @@
 import os
+from geonode.settings import *
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
-
+MEDIA_ROOT = os.getenv('MEDIA_ROOT', os.path.join(PROJECT_ROOT, "uploaded"))
+STATIC_ROOT = os.getenv('STATIC_ROOT',
+                        os.path.join(PROJECT_ROOT, "static_root")
+                        )
 SITEURL = "http://{{ inventory_hostname }}/"
 SITENAME_SHORT = "{{ sitename_short }}"
 SITE_ORG = "{{ site_org }}"
@@ -13,7 +17,7 @@ SECRET_KEY = '{{ secret_key }}'
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 TIME_ZONE = '{{ timezone }}'
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '::1']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '::1',{{ inventory_hostname }}]
 PROXY_ALLOWED_HOSTS = ("127.0.0.1", 'localhost', '::1')
 POSTGIS_VERSION = (2, 2, 1)
 
@@ -51,19 +55,37 @@ DATABASES = {
     }
 }
 
+GEOSERVER_LOCATION = os.getenv(
+    'GEOSERVER_LOCATION', 'http://localhost/geoserver/'
+)
+
+GEOSERVER_PUBLIC_LOCATION = os.getenv(
+#    'GEOSERVER_PUBLIC_LOCATION', '{}/geoserver/'.format(SITEURL)
+    'GEOSERVER_LOCATION', 'http://{{ inventory_hostname }}/geoserver/'
+)
+
+OGC_SERVER_DEFAULT_USER = os.getenv(
+    'GEOSERVER_ADMIN_USER', 'admin'
+)
+
+OGC_SERVER_DEFAULT_PASSWORD = os.getenv(
+    'GEOSERVER_ADMIN_PASSWORD', '{{ admin_pass }}'
+)
+
 # OGC (WMS/WFS/WCS) Server Settings
 OGC_SERVER = {
     'default' : {
         'BACKEND' : 'geonode.geoserver',
-        'LOCATION' : 'http://localhost/geoserver/',
+        'LOCATION' : GEOSERVER_LOCATION,
         # Public location must have actual site name, otherwise WMS calls in layer map fails
         # 'PUBLIC_LOCATION' : 'http://localhost/geoserver/',
         'PUBLIC_LOCATION' : '%sgeoserver/' % SITEURL,
-        'USER' : 'admin',
-        'PASSWORD' : '{{ admin_pass }}',
+        'USER' : OGC_SERVER_DEFAULT_USER,
+        'PASSWORD' : OGC_SERVER_DEFAULT_PASSWORD,
         'MAPFISH_PRINT_ENABLED' : True,
         'PRINT_NG_ENABLED' : True,
         'GEONODE_SECURITY_ENABLED' : True,
+        'GEOFENCE_SECURITY_ENABLED' : True,
         'GEOGIG_ENABLED' : False,
         'WMST_ENABLED' : False,
         'BACKEND_WRITE_ENABLED': True,
@@ -97,6 +119,58 @@ CATALOGUE = {
     }
 }
 
+# pycsw settings
+PYCSW = {
+    # pycsw configuration
+    'CONFIGURATION': {
+        # uncomment / adjust to override server config system defaults
+        # 'server': {
+        #    'maxrecords': '10',
+        #    'pretty_print': 'true',
+        #    'federatedcatalogues': 'http://catalog.data.gov/csw'
+        # },
+        'metadata:main': {
+            'identification_title': 'GeoNode Catalogue',
+            'identification_abstract': 'GeoNode is an open source platform' \
+            ' that facilitates the creation, sharing, and collaborative use' \
+            ' of geospatial data',
+            'identification_keywords': 'sdi, catalogue, discovery, metadata,' \
+            ' GeoNode',
+            'identification_keywords_type': 'theme',
+            'identification_fees': 'None',
+            'identification_accessconstraints': 'None',
+            'provider_name': 'Organization Name',
+            'provider_url': SITEURL,
+            'contact_name': 'Lastname, Firstname',
+            'contact_position': 'Position Title',
+            'contact_address': 'Mailing Address',
+            'contact_city': 'City',
+            'contact_stateorprovince': 'Administrative Area',
+            'contact_postalcode': 'Zip or Postal Code',
+            'contact_country': 'Country',
+            'contact_phone': '+xx-xxx-xxx-xxxx',
+            'contact_fax': '+xx-xxx-xxx-xxxx',
+            'contact_email': 'Email Address',
+            'contact_url': 'Contact URL',
+            'contact_hours': 'Hours of Service',
+            'contact_instructions': 'During hours of service. Off on ' \
+            'weekends.',
+            'contact_role': 'pointOfContact',
+        },
+        'metadata:inspire': {
+            'enabled': 'true',
+            'languages_supported': 'eng,gre',
+            'default_language': 'eng',
+            'date': 'YYYY-MM-DD',
+            'gemet_keywords': 'Utility and governmental services',
+            'conformity_service': 'notEvaluated',
+            'contact_name': 'Organization Name',
+            'contact_email': 'Email Address',
+            'temp_extent': 'YYYY-MM-DD/YYYY-MM-DD',
+        }
+    }
+}
+
 # Default preview library
 #LAYER_PREVIEW_LIBRARY = 'geoext'
 
@@ -109,6 +183,64 @@ UPLOADER = {
     }
 }
 
+# GeoNode javascript client configuration
+
+# default map projection
+# Note: If set to EPSG:4326, then only EPSG:4326 basemaps will work.
+DEFAULT_MAP_CRS = "EPSG:900913"
+
+# Where should newly created maps be focused?
+DEFAULT_MAP_CENTER = (0, 0)
+
+# How tightly zoomed should newly created maps be?
+# 0 = entire world;
+# maximum zoom is between 12 and 15 (for Google Maps, coverage varies by area)
+DEFAULT_MAP_ZOOM = 0
+
+# Default preview library
+LAYER_PREVIEW_LIBRARY = 'geoext'
+#LAYER_PREVIEW_LIBRARY = 'leaflet'
+#LEAFLET_CONFIG = {
+#    'TILES': [
+#        # Find tiles at:
+#        # http://leaflet-extras.github.io/leaflet-providers/preview/
+#
+#        # Map Quest
+#        ('Map Quest',
+#         'http://otile4.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png',
+#         'Tiles Courtesy of <a href="http://www.mapquest.com/">MapQuest</a> '
+#         '&mdash; Map data &copy; '
+#         '<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'),
+#        # Stamen toner lite.
+#        # ('Watercolor',
+#        #  'http://{s}.tile.stamen.com/watercolor/{z}/{x}/{y}.png',
+#        #  'Map tiles by <a href="http://stamen.com">Stamen Design</a>, \
+#        #  <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; \
+#        #  <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, \
+#        #  <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'),
+#        # ('Toner Lite',
+#        #  'http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png',
+#        #  'Map tiles by <a href="http://stamen.com">Stamen Design</a>, \
+#        #  <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; \
+#        #  <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, \
+#        #  <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'),
+#    ],
+#    'PLUGINS': {
+#        'esri-leaflet': {
+#            'js': 'lib/js/esri-leaflet.js',
+#            'auto-include': True,
+#        },
+#        'leaflet-fullscreen': {
+#            'css': 'lib/css/leaflet.fullscreen.css',
+#            'js': 'lib/js/Leaflet.fullscreen.min.js',
+#            'auto-include': True,
+#        },
+#    },
+#    'SRID': 3857,
+#    'RESET_VIEW': False
+#}
+
+
 # Stamen base layers - see https://gis.stackexchange.com/questions/206286/adding-stamen-global-terrain-maps-to-geonode
 
 STAMEN_ATTR = ('Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a'
@@ -116,6 +248,12 @@ STAMEN_ATTR = ('Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a'
                'a> &mdash; Map data &copy; <a href="http://www.openstreetmap.o'
                'rg/copyright">OpenStreetMap</a>')
 
+
+ALT_OSM_BASEMAPS = os.environ.get('ALT_OSM_BASEMAPS', False)
+CARTODB_BASEMAPS = os.environ.get('CARTODB_BASEMAPS', False)
+STAMEN_BASEMAPS = os.environ.get('STAMEN_BASEMAPS', False)
+THUNDERFOREST_BASEMAPS = os.environ.get('THUNDERFOREST_BASEMAPS', False)
+MAPBOX_ACCESS_TOKEN = os.environ.get('MAPBOX_ACCESS_TOKEN', None)
 GOOGLE_API_KEY = "AIzaSyDD2vgGXTnLr53NeeC0h2_JErwG9KL92fU"
 BING_API_KEY = "AirNFUX63U0RgdpDPrc6jrTWGce1I-QOF-Z2GeCJ3q558EZXDt8Eh4VcdTxHYjEW"
 
@@ -230,6 +368,77 @@ MAP_BASELAYERS = [
 #    "fixed": True,
 #    "group":"background",
 }]
+
+
+# Use kombu broker by default
+# REDIS_URL = 'redis://localhost:6379/1'
+# BROKER_URL = REDIS_URL
+# CELERY_RESULT_BACKEND = REDIS_URL
+CELERYD_HIJACK_ROOT_LOGGER = True
+CELERYD_CONCURENCY = 1
+# Set this to False to run real async tasks
+CELERY_ALWAYS_EAGER = True
+CELERYD_LOG_FILE = None
+CELERY_REDIRECT_STDOUTS = True
+CELERYD_LOG_LEVEL = 1
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d '
+                      '%(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(message)s',
+        },
+    },
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'handlers': {
+        'null': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.NullHandler',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'mail_admins': {
+            'level': 'ERROR', 'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler',
+        }
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"], "level": "ERROR", },
+        "geonode": {
+            "handlers": ["console"], "level": "DEBUG", },
+        "gsconfig.catalog": {
+            "handlers": ["console"], "level": "DEBUG", },
+        "owslib": {
+            "handlers": ["console"], "level": "DEBUG", },
+        "pycsw": {
+            "handlers": ["console"], "level": "ERROR", },
+        },
+    }
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+GEOIP_PATH = "/usr/local/share/GeoIP"
+
+MONITORING_ENABLED = True
+# add following lines to your local settings to enable monitoring
+if MONITORING_ENABLED:
+  INSTALLED_APPS += ('geonode.contrib.monitoring',)
+  MIDDLEWARE_CLASSES += ('geonode.contrib.monitoring.middleware.MonitoringMiddleware',)
+  MONITORING_CONFIG = None
+  MONITORING_SERVICE_NAME = 'local-geonode'
 
 # Add guide to apps
 from settings import INSTALLED_APPS

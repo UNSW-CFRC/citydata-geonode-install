@@ -1,0 +1,4 @@
+10.116.2.220 ansible_connection=local
+
+[local]
+10.116.2.220 ansible_connection=local
