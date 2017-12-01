@@ -19,7 +19,7 @@
 - name: Initialize the Database
   command: python '{{ home }}/geonode/manage.py' migrate
 
-- name: Initialize the Database
+- name: Load initial data
   command: python '{{ home }}/geonode/manage.py' loaddata '{{ home }}/geonode/geonode/base/fixtures/initial_data.json'
 
 - name: Fix sitename
