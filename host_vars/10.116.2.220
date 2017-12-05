@@ -1,5 +1,5 @@
 ---
-sitename_short: "PlusData (10.116.2.220)"
+sitename_short: "CityData (10.116.2.220)"
 site_org: "City Futures Research Centre"
 sitename: "{{ sitename_short }}"
 
@@ -38,4 +38,4 @@ ows_addressState: NSW
 ows_contactEmail: citydata@unsw.edu.au
 ows_contactOrganization: City Futures Research Centre
 ows_contactPosition: CityData Admin
-my_hostname: "plusdata-10-116-2-220"
+my_hostname: "citydata-dev"

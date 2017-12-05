@@ -77,6 +77,8 @@ OGC_SERVER = {
     'default' : {
         'BACKEND' : 'geonode.geoserver',
         'LOCATION' : GEOSERVER_LOCATION,
+        'LOGIN_ENDPOINT': 'j_spring_oauth2_geonode_login',
+        'LOGOUT_ENDPOINT': 'j_spring_oauth2_geonode_logout',
         # Public location must have actual site name, otherwise WMS calls in layer map fails
         # 'PUBLIC_LOCATION' : 'http://localhost/geoserver/',
         'PUBLIC_LOCATION' : '%sgeoserver/' % SITEURL,
@@ -93,6 +95,8 @@ OGC_SERVER = {
         'LOG_FILE': '%s/geoserver/data/logs/geoserver.log' % os.path.abspath(os.path.join(PROJECT_ROOT, os.pardir)),
         # Set to name of database in DATABASES dictionary to enable
         'DATASTORE': 'datastore', #'datastore',
+        'PG_GEOGIG': False,
+        'TIMEOUT': 10  # number of seconds to allow for HTTP requests
     }
 }
 
