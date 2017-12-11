@@ -29,6 +29,7 @@
 - name: Install geonode
   pip:
     name: '{{ home }}/geonode'
+    executable: pip2
   become: true
 
 - name: Download GeoServer web archive
