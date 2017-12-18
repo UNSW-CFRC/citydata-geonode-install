@@ -10,7 +10,7 @@
   replace:
     dest: '{{ home }}/geonode/geonode/local_settings.py'
     regexp: '^(\s*ALLOWED_HOSTS\s*=\s*\[((?!{{ inventory_hostname }})[^\]])*)\]'
-    replace: '\1, \047{{ inventory_hostname }}\047]'
+    replace: '\1, \047{{ fqdn }}\047]'
   become: true
 
 # http://docs.geonode.org/en/master/tutorials/advanced/geonode_production/production.html
