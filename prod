@@ -1,10 +1,10 @@
-citydata.be.unsw.edu.au
+10.116.0.229 ansible_python_interpreter=/usr/bin/python2
 
-[cityfutures]
-citydata.be.unsw.edu.au
+[plusalliance]
+10.116.0.229
 
 [small_sysdisk]
-citydata.be.unsw.edu.au
+10.116.0.229
 
 [production]
-citydata.be.unsw.edu.au
+10.116.0.229

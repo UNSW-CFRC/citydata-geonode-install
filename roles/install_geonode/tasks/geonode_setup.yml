@@ -22,12 +22,13 @@
   apt:
     name: python-pip
     state: latest
-    update_cache: yes
+    # update_cache: yes - failed with error msg
   become: true
 
 - name: Install geonode
   pip:
     name: '{{ home }}/geonode'
+    executable: pip2
   become: true
 
 - name: Download GeoServer web archive

@@ -1,0 +1,12 @@
+---
+sitename_short: "PLuSData"
+site_org: "PLuS Alliance" 
+sitename: "{{ sitename_short }} | {{ site_org }}"
+
+backup_exclude: "{lost+found,python2.7_dist-packages_geonode_uploaded,tmp,.bash_history,.psql_history,.viminfo}"
+
+backup_server: 10.116.2.29
+
+bing_key: AirNFUX63U0RgdpDPrc6jrTWGce1I-QOF-Z2GeCJ3q558EZXDt8Eh4VcdTxHYjEW
+
+fqdn: data.plusalliance.org
