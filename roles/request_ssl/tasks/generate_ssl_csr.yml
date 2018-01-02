@@ -1,7 +1,7 @@
 ---
 - name: Check for existing request
   stat:
-    path: "{{ ansible_env.HOME }}/{{ inventory_hostname }}.csr"
+    path: "{{ ansible_env.HOME }}/{{ fqdn }}.csr"
   register: csr_file
  
 #   - name: Encrypt the site with Apache Secure Sockets Layer (SSL)
@@ -15,7 +15,7 @@
 
 - name: Generate a private key
   openssl_privatekey:
-    path: "{{ ansible_env.HOME }}/{{ inventory_hostname }}.key"
+    path: "{{ ansible_env.HOME }}/{{ fqdn }}.key"
     force: True
     size: 2048
     type: RSA
@@ -27,7 +27,7 @@
 #     openssl_csr:
 #       path: server.csr
 #       privatekey_path: server.key
-#       commonName: '{{ inventory_hostname }}'
+#       commonName: '{{ fqdn }}'
 #       countryName: AU
 #       organizationName: '{{ orgname }}'
 #       emailAddress: '{{ admin_email }}'
@@ -41,19 +41,19 @@
   when: csr_file.stat.exists == False
 
 - name: Generate a certificate signing request
-  command: openssl req -new -key {{ inventory_hostname }}.key -out {{ inventory_hostname }}.csr -config openssl.conf
+  command: openssl req -new -key {{ fqdn }}.key -out {{ fqdn }}.csr -config openssl.conf
   args:
     chdir: "{{ ansible_env.HOME }}"
   when: csr_file.stat.exists == False
 
 - name: Rename key file
-  command: mv {{ inventory_hostname }}.key {{ inventory_hostname }}.key.tmp 
+  command: mv {{ fqdn }}.key {{ fqdn }}.key.tmp 
   args:
     chdir: "{{ ansible_env.HOME }}"
   when: csr_file.stat.exists == False
 
 - name: Generate new server key without challenge password
-  command: openssl rsa -in {{ inventory_hostname }}.key.tmp -out {{ inventory_hostname }}.key
+  command: openssl rsa -in {{ fqdn }}.key.tmp -out {{ fqdn }}.key
   args:
     chdir: "{{ ansible_env.HOME }}"
   when: csr_file.stat.exists == False
