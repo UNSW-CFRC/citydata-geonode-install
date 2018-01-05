@@ -9,10 +9,12 @@
   git:
     clone: yes
     force: yes
-    repo: https://github.com/UNSW-CFRC/geonode
+    repo: https://github.com/{{ geonode_repo }}/geonode
+#    repo: https://github.com/UNSW-CFRC/geonode
 #    repo: https://github.com/GeoNode/geonode
     dest: '{{ home }}/geonode'
-    version: 2.7-CityData
+    version: '{{ geonode_version }}'
+#    version: 2.7-CityData
   ignore_errors: yes
   no_log: true
   become: true

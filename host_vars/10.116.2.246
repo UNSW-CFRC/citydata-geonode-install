@@ -8,3 +8,6 @@ backup_exclude: "{lost+found,python2.7_dist-packages_geonode_uploaded,tmp,.bash_
 backup_server: 10.116.2.220
 
 bing_key: AirNFUX63U0RgdpDPrc6jrTWGce1I-QOF-Z2GeCJ3q558EZXDt8Eh4VcdTxHYjEW
+
+geonode_repo: UNSW-CFRC
+geonode_version: 2.7-CityData
