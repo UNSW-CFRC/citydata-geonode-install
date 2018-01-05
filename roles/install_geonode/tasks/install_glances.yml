@@ -1,0 +1,6 @@
+---
+# System resource realtime monitoring from ye olde ASCII telnet terminal window
+- name: Install glances
+  pip:
+    name: glances
+  become: true
