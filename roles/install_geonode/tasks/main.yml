@@ -29,11 +29,6 @@
 #
 ################################################################
 
-- include_tasks: install_packages.yml
-  when: ansible_python_interpreter == /usr/bin/python3
-  tags:
-    - py3
-
 # Test if tomcat8 is installed
 - name: Check if packages installed 
   service:
@@ -44,7 +39,11 @@
   register: run_installed_package
   become: true
 
-- name: Error message
+- include_tasks: install_packages.yml
+  tags:
+    - py3
+
+- name: Message to install packages
   vars:
     msg: |
          As a workaround for open Ansible issue #14468, please install the packages using the python3 interpreter.
