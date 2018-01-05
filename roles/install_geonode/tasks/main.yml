@@ -58,6 +58,11 @@
 - meta: end_play
   when: run_installed_package is defined and run_installed_package.failed
 
+#- name: Check tmp folder
+#  stat:
+#    path: /tmp
+#  register: tmp
+#
 - include_tasks: move_postgres.yml
   when: "'small_sysdisk' in group_names"
 
