@@ -1,4 +1,26 @@
 ---
+################################################################
+#
+#                             IMPORTANT
+#
+# As a workaround to an open Ansible issue (#14468) this
+# playbook must be run using python3 interpreter
+#
+# A testpy3 inventory file has been created for test target
+#
+# For other targets:
+#   copy their inventory file into another (adding suffix py3)
+#   and add the python3 interpreter as shown in testpy3
+#
+################################################################
+
+- name: Ensure python-apt is installed
+  command: apt-get install python-apt -y -q
+             creates=/usr/share/doc/python-apt
+  become: true
+  tags:
+    - py3
+
 - name: Install packages
 #     action: apt pkg= state=installed update_cache=yes
   apt:
@@ -43,6 +65,8 @@
    - zip
    - ncdu
   become: true
+  tags:
+    - py3
 
 - name: Check if python-support is installed
   command: dpkg-query -W python-support
