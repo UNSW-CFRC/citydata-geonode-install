@@ -19,13 +19,6 @@
   no_log: true
   become: true
 
-- name: Install latest pip
-  apt:
-    name: python-pip
-    state: latest
-    # update_cache: yes - failed with error msg
-  become: true
-
 - name: Install geonode
   pip:
     name: '{{ home }}/geonode'

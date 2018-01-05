@@ -84,3 +84,14 @@
   apt: deb="{{ ansible_env.HOME }}/python-support_1.0.15_all.deb"
   become: true
   when: check_deb.rc == 1
+- name: Install latest pip
+  apt:
+    name: python-pip
+    state: latest
+    update_cache: yes # failed with error msg
+  become: true
+  when: ansible_python_interpreter == '/usr/bin/python3' and
+          run_installed_package is defined and run_installed_package.failed
+  tags:
+    - py3
+
