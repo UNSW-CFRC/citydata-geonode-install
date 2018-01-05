@@ -13,7 +13,8 @@
 
 - name: Create folder tmp on big disk with attributes like /tmp
   file:
-    path: '{{ tmp }}'
+    path: mnt/data/tmp
+#    path: '{{ bigdisk1 }}/tmp' # "There was an issue creating ...File name too long"?
     owner: root
     group: root
     mode: u=rwx,g=rwx,o=rwx,g+s
