@@ -50,7 +50,7 @@
    - postgis
    - postgresql-9.5-postgis-scripts
    - postgresql-contrib
-   - python
+   - python2.7
    - python-dev
    - python-gdal
    - python-pexpect

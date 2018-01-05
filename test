@@ -1,4 +1,4 @@
-10.116.2.246 ansible_python_interpreter=/usr/local/bin/python2.7
+10.116.2.246 ansible_python_interpreter=/usr/bin/python2.7
 
 [plusalliance]
 10.116.2.246
