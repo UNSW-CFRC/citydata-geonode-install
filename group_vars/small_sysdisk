@@ -14,4 +14,4 @@ backup_from_dir: "{{ bigdisk1 }}"
 backup_to_dir: "{{ bigdisk2 }}"
 
 # Number of inodes (on 100 GB disk - lots for web map cache)
-inodes: 1000000000000 # 1 billion
+# inodes: 1000000000000 # 1 billion - not possible for ext4 - max is 2^32 ~= 4 billion

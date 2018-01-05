@@ -5,8 +5,9 @@
 - name: create filesystem for big disk
   filesystem:
     dev: /dev/xvdb
-    fstype: ext4
-    opts: -N {{ inodes }}    
+#    fstype: ext4
+    fstype: xfs
+#    opts: -N {{ inodes }}    
   become: true
 
 - name: Mount big disk
@@ -14,4 +15,5 @@
     path: /mnt/data
     src: /dev/xvdb
     state: mounted
+    fstype: xfs
   become: true
