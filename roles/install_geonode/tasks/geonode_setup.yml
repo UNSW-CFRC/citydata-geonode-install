@@ -18,7 +18,6 @@
   become: true
 
 - name: Install latest pip
-#     action: apt pkg=python-pip state=installed update_cache=yes
   apt:
     name: python-pip
     state: latest
