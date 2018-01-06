@@ -1,4 +1,57 @@
 ---
+- name: Check if GEOSERVER_DATA_DIR parameter exists
+  xml:
+    path: /var/lib/tomcat8/webapps/geoserver/WEB-INF/web.xml
+    xpath: /web-app/context-param/param-name[text()="GEOSERVER_DATA_DIR"]
+    content: text
+  register: gsdata_parm_check
+  ignore_errors: yes
+  no_log: true
+  become: true
+
+- name: Add container for GEOSERVER_DATA_DIR parameter if needed
+  xml:
+    path: /var/lib/tomcat8/webapps/geoserver/WEB-INF/web.xml
+    xpath: /web-app
+    add_children: 'context-param'
+  when: gsdata_parm_check.failed
+  become: true
+
+- name: Add GEOSERVER_DATA_DIR parameter if needed
+  xml:
+    path: /var/lib/tomcat8/webapps/geoserver/WEB-INF/web.xml
+    xpath: /web-app/context-param[last()]
+    set_children:
+    - 'param-name': GEOSERVER_DATA_DIR
+    - 'param-value': /var/lib/tomcat8/webapps/geoserver/data
+  when: gsdata_parm_check.failed
+  become: true
+  notify:
+    - Restart Tomcat
+
+- name: Set GEOSERVER_DATA_DIR parameter if already present
+  xml:
+    path: /var/lib/tomcat8/webapps/geoserver/WEB-INF/web.xml
+    xpath: /web-app/context-param[param-name="GEOSERVER_DATA_DIR"]
+    set_children:
+    - 'param-name': GEOSERVER_DATA_DIR
+    - 'param-value': /var/lib/tomcat8/webapps/geoserver/data
+  when: not gsdata_parm_check.failed
+  become: true
+  notify:
+    - Restart Tomcat
+
+#- name: Set GEOSERVER_DATA_DIR
+#  xml:
+#    path: /var/lib/tomcat8/webapps/geoserver/WEB-INF/web.xml
+#    xpath: /web-app/context-param[last()]
+#    add_children:
+#    - 'param-name': GEOSERVER_DATA_DIR
+#    - 'param-value': /var/lib/tomcat8/webapps/geoserver/data
+#  become: true
+#  notify:
+#    - Restart Tomcat
+#
 - name: Install local settings
   template:
     src: local_settings.py.j2
