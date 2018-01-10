@@ -41,17 +41,6 @@
   notify:
     - Restart Tomcat
 
-#- name: Set GEOSERVER_DATA_DIR
-#  xml:
-#    path: /var/lib/tomcat8/webapps/geoserver/WEB-INF/web.xml
-#    xpath: /web-app/context-param[last()]
-#    add_children:
-#    - 'param-name': GEOSERVER_DATA_DIR
-#    - 'param-value': /var/lib/tomcat8/webapps/geoserver/data
-#  become: true
-#  notify:
-#    - Restart Tomcat
-#
 - name: Install local settings
   template:
     src: local_settings.py.j2
@@ -65,9 +54,6 @@
     name: beautifulsoup4
     version: 4.5.1
   become: true
-
-#- name: Initialize the Database
-#  command: python '{{ home }}/geonode/manage.py' syncdb --noinput
 
 - name: Initialize the Database
   command: python '{{ home }}/geonode/manage.py' migrate
