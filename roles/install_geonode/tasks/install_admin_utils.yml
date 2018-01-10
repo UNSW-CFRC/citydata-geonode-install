@@ -1,9 +1,9 @@
 ---
 # System resource realtime monitoring from telnet window
-#- name: Install glances
-#  pip:
-#    name: glances
-#  become: true
+- name: Install glances
+  pip:
+    name: glances
+  become: true
 
 - name: Make local logs dir
   file:
