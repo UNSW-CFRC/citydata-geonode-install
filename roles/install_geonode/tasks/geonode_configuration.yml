@@ -64,6 +64,82 @@
 - name: Fix sitename
   command: python '{{ home }}/geonode/manage.py' fixsitename
 
+- name: Fix oAuth URI
+  command: python '{{ home }}/geonode/manage.py' fixoauthuri
+  register: oauth
+  
+- name: Set CliendId (sic) in oauth2 config
+  xml:
+    path: '{{ gsdata }}/security/filter/geonode-oauth2/config.xml'
+    xpath: /geoNodeOauth2Authentication/cliendId
+    value: "{{ oauth.stdout.split(',')[0] }}"
+  become: true
+  notify:
+    - Restart Tomcat
+
+- name: Set clientSecret in oauth2 config
+  xml:
+    path: '{{ gsdata }}/security/filter/geonode-oauth2/config.xml'
+    xpath: /geoNodeOauth2Authentication/clientSecret
+    value: "{{ oauth.stdout.split(',')[1] }}"
+  become: true
+  notify:
+    - Restart Tomcat
+
+- name: Set accessTokenUri in oauth2 config
+  xml:
+    path: '{{ gsdata }}/security/filter/geonode-oauth2/config.xml'
+    xpath: /geoNodeOauth2Authentication/accessTokenUri
+    value: http://{{ inventory_hostname }}/o/token/
+  become: true
+  notify:
+    - Restart Tomcat
+
+- name: Set userAuthorizationUri in oauth2 config
+  xml:
+    path: '{{ gsdata }}/security/filter/geonode-oauth2/config.xml'
+    xpath: /geoNodeOauth2Authentication/userAuthorizationUri
+    value: http://{{ inventory_hostname }}/o/authorize/
+  become: true
+  notify:
+    - Restart Tomcat
+
+- name: Set redirectUri in oauth2 config
+  xml:
+    path: '{{ gsdata }}/security/filter/geonode-oauth2/config.xml'
+    xpath: /geoNodeOauth2Authentication/redirectUri
+    value: http://{{ inventory_hostname }}/geoserver/
+  become: true
+  notify:
+    - Restart Tomcat
+
+- name: Set checkTokenEndpointUrl in oauth2 config
+  xml:
+    path: '{{ gsdata }}/security/filter/geonode-oauth2/config.xml'
+    xpath: /geoNodeOauth2Authentication/checkTokenEndpointUrl
+    value: http://{{ inventory_hostname }}/api/o/v4/tokeninfo/
+  become: true
+  notify:
+    - Restart Tomcat
+
+- name: Set logoutUri in oauth2 config
+  xml:
+    path: '{{ gsdata }}/security/filter/geonode-oauth2/config.xml'
+    xpath: /geoNodeOauth2Authentication/logoutUri
+    value: http://{{ inventory_hostname }}/account/logout/
+  become: true
+  notify:
+    - Restart Tomcat
+
+- name: Set baseUrl in REST config
+  xml:
+    path: '{{ gsdata }}/security/role/geonode REST role service/config.xml'
+    xpath: /authKeyRESTRoleService/baseUrl
+    value: http://{{ inventory_hostname }}
+  become: true
+  notify:
+    - Restart Tomcat
+
 - name: Display shortname on homepage
   lineinfile:
     dest: '{{ home }}/geonode/geonode/templates/site_index.html'
