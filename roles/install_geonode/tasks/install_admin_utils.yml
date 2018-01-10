@@ -1,0 +1,17 @@
+---
+# System resource realtime monitoring from telnet window
+#- name: Install glances
+#  pip:
+#    name: glances
+#  become: true
+
+- name: Make local logs dir
+  file:
+    path: ~/logs
+    state: directory
+
+- name: Install script to copy log files for ftp
+  template:
+    src: cplogs
+    dest: ~/bin/
+    mode: 0700

@@ -1,0 +1,14 @@
+# =============================================================== #
+#
+# cplogs
+#
+# Copy Apache and Geoserver logs to tmp folder and chown for FTP access
+# J Doig 10/1/2018
+#
+# =============================================================== #
+
+cp '{{ gsdata }}'/logs/{geoserver.log,geoserver.log.1}  ~/logs/ || :
+
+sudo cp /var/log/apache2/{access.log,access.log.1,error.log,error.log.1}  ~/logs/ || :
+
+sudo chown $USER ~/logs/*.log*
