@@ -1,5 +1,7 @@
 ---
 
+- include_tasks: mount_disk.yml
+
 - name: Check tmp folder
   stat:
     path: /tmp
