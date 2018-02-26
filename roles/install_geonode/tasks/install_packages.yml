@@ -1,4 +1,13 @@
 ---
+- name: Ensure python-apt is installed
+  command: apt-get install python-apt -y -q
+             creates=/usr/share/doc/python-apt
+  when: ansible_python_interpreter == '/usr/bin/python3' and
+          run_installed_package is defined and run_installed_package.failed
+  become: true
+  tags:
+    - py3
+
 - name: Install packages
 #     action: apt pkg= state=installed update_cache=yes
   apt:
