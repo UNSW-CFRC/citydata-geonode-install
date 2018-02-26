@@ -1,0 +1,60 @@
+---
+
+- name: Install  precursors
+  apt:
+    name: '{{ item }}'
+    state: installed
+    update_cache: yes
+  with_items:
+   - build-essential
+   - checkinstall
+  become: true
+
+- name: Install  dependencies
+  apt:
+    name: '{{ item }}'
+    state: installed
+    update_cache: yes
+  with_items:
+   - libreadline-gplv2-dev
+   - libncursesw5-dev
+   - libssl-dev
+   - libsqlite3-dev
+   - tk-dev
+   - libgdbm-dev
+   - libc6-dev
+   - libbz2-dev
+  become: true
+
+- name: Download Python
+  get_url:
+    url: https://www.python.org/ftp/python/2.7.14/Python-2.7.14.tgz
+    dest: /usr/src/
+  become: true
+
+- name: Extract the downloaded package
+  unarchive:
+    src: /usr/src/Python-2.7.14.tgz
+    remote_src: yes
+    dest: /usr/src/
+  become: true
+
+- name: Configure
+  shell: ./configure
+  args:
+    chdir: /usr/src/Python-2.7.14
+  become: true
+
+- name: Compile Python
+  shell: make altinstall
+  args:
+    chdir: /usr/src/Python-2.7.14
+  become: true
+
+- name: Link into /usr/bin
+  file:
+    src: /usr/local/bin/python2.7
+    dest: /usr/bin/python2
+    state: link
+  become: true
+    
