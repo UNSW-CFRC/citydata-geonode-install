@@ -1,0 +1,23 @@
+---
+
+- name: Backup geonode schema
+  postgresql_db:
+    state: dump
+    name: geonode
+    target: geonode_dump.tar
+  remote_user: postgres
+  
+- name: Backup geonode_data schema
+  postgresql_db:
+    state: dump
+    name: geonode_data
+    target: geonode_data_dump.tar
+  remote_user: postgres
+  
+# Backup the directories where your files/documents are uploaded to
+
+# Backup local_settings
+
+# Backup static content
+
+# Backup your Apache vhost config
