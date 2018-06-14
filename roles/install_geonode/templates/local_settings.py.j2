@@ -100,7 +100,7 @@ CATALOGUE = {
 # Default preview library
 #LAYER_PREVIEW_LIBRARY = 'geoext'
 
-# Enable upload of KML, CSV, geoJSON and Zip (?) - according to static/geonode/js/upload/FileTypes.js 
+# Enable upload of KML, CSV, geoJSON and Zip (?) - according to static/geonode/js/upload/FileTypes.js
 UPLOADER = {
     'BACKEND': 'geonode.importer',
     'OPTIONS': {
@@ -234,6 +234,13 @@ MAP_BASELAYERS = [
 # Add guide to apps
 from settings import INSTALLED_APPS
 INSTALLED_APPS = INSTALLED_APPS + ('geonode.guide',)
+
+# Add redirects to apps
+INSTALLED_APPS = INSTALLED_APPS + ('django.contrib.redirects',)
+
+# Add middleware for redirects
+from settings import MIDDLEWARE_CLASSES
+MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + {'django.contrib.redirects.middleware.RedirectFallbackMiddleware',}
 
 # Remove Tiles as a download format (it only gives a sample URL)
 DOWNLOAD_FORMATS_VECTOR = [
