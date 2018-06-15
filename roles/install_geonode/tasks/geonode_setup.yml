@@ -23,7 +23,7 @@
   apt:
     name: python-pip
     state: latest
-    update_cache: yes
+    # update_cache: yes
   become: true
 
 - name: Install geonode
