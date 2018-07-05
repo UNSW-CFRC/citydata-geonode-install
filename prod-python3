@@ -1,0 +1,7 @@
+10.116.41.154 ansible_python_interpreter=/usr/bin/python3
+
+[cityfutures]
+10.116.41.154
+
+[small_sysdisk]
+10.116.41.154

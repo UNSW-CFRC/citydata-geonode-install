@@ -1,10 +1,10 @@
-citydata.be.unsw.edu.au
+10.116.41.154 ansible_python_interpreter=/usr/bin/python2
 
 [cityfutures]
-citydata.be.unsw.edu.au
+10.116.41.154
 
 [small_sysdisk]
-citydata.be.unsw.edu.au
+10.116.41.154
 
 [production]
-citydata.be.unsw.edu.au
+10.116.41.154
