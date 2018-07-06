@@ -26,7 +26,7 @@ DEFAULT_ANONYMOUS_DOWNLOAD_PERMISSION = False
 # Remove entries we don't need as the list is getting unwieldy
 #ALLOWED_DOCUMENT_TYPES = ['3ws', 'csv', 'doc', 'docx', 'fbx', 'gif', 'gz', 'jpeg', 'jpg', 'odp', 'ods', 'odt', 'pdf', 'png',
 #                          'ppt', 'pptx', 'rar', 'sld', 'tif', 'tiff', 'txt', 'xls', 'xlsx', 'xml', 'zip']
-ALLOWED_DOCUMENT_TYPES = ['3ws', 'csv', 'doc', 'docx', 'fbx', 'gif', 'jpg', 'mp4', 'pdf', 'png',
+ALLOWED_DOCUMENT_TYPES = ['3ws', 'csv', 'doc', 'docx', 'fbx', 'gif', 'jpg', 'mmpk', 'mp4', 'pdf', 'png',
                           'ppt', 'pptx', 'txt', 'xls', 'xlsx', 'zip']
 
 # Email for users to contact admins.
@@ -100,7 +100,7 @@ CATALOGUE = {
 # Default preview library
 #LAYER_PREVIEW_LIBRARY = 'geoext'
 
-# Enable upload of KML, CSV, geoJSON and Zip (?) - according to static/geonode/js/upload/FileTypes.js 
+# Enable upload of KML, CSV, geoJSON and Zip (?) - according to static/geonode/js/upload/FileTypes.js
 UPLOADER = {
     'BACKEND': 'geonode.importer',
     'OPTIONS': {
