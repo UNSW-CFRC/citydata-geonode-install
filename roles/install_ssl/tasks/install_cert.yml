@@ -1,19 +1,19 @@
 ---
 - name: Copy root certificate to server
   copy:
-    src: "{{ inventory_hostname }}.root.crt"
+    src: "{{ intended_fqdn }}.root.crt"
     dest: "{{ ansible_env.HOME }}/root.crt"
   become: true
 
 - name: Copy intermediate certificate to server
   copy:
-    src: "{{ inventory_hostname }}.intermediate.crt"
+    src: "{{ intended_fqdn }}.intermediate.crt"
     dest: "{{ ansible_env.HOME }}/intermediate.crt"
   become: true
 
 - name: Copy server certificate to server
   copy:
-    src: "{{ inventory_hostname }}.crt"
+    src: "{{ intended_fqdn }}.crt"
     dest: "{{ ansible_env.HOME }}/server.crt"
   become: true
 
@@ -26,7 +26,7 @@
 - name: Copy key to standard location
   command: cp {{ inventory_hostname }}.key /etc/ssl/private/geonode.key
   become: true
-  
+
 - name: Backup cacerts.txt
   command: cp cacerts.txt cacerts.txt.bak-ansible
   args:
@@ -40,7 +40,7 @@
   become: true
 
 - name: Import key
-  java_cert: 
+  java_cert:
     cert_alias: geonodessl
     keystore_path: /etc/ssl/certs/java/cacerts
     keystore_pass: changeit
