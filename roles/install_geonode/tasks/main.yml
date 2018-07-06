@@ -1,4 +1,6 @@
 ---
+- name: PLAY
+  remote_user: {{ remote_user}}
 
 - include_tasks: mount_disk.yml
 
