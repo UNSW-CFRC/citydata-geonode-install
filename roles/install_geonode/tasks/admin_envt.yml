@@ -1,15 +1,15 @@
 ---
   # Store logfile locations as bash variables
-  name: Store logfile locations as bash variables
-    blockinfile:
-      path: ~/.bashrc
-      block: |
-        # Geonode: log file folder names for convenience
+- name: Store logfile locations as bash variables
+  blockinfile:
+    path: ~/.bashrc
+    block: |
+      # Geonode: log file folder names for convenience
 
-        apachelogs=/var/log/apache2
-        geoserverlogs=/var/lib/tomcat7/webapps/geoserver/data/logs
-        gslogs=$geoserverlogs
-        postgreslogs=/var/log/postgresql
-        postgresqllogs=$postgreslogs
-        tomcatlogs=/var/log/tomcat7
-    become: True
+      apachelogs=/var/log/apache2
+      gsdata=/var/lib/tomcat7/webapps/geoserver/data
+      gslogs=$gsdata/logs
+      postgreslogs=/var/log/postgresql
+      postgresqllogs=$postgreslogs
+      tomcatlogs=/var/log/tomcat7
+  become: True
