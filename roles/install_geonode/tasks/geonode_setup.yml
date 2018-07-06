@@ -23,8 +23,18 @@
   apt:
     name: python-pip
     state: latest
-    # update_cache: yes
+    update_cache: yes # Even if this is commented out, task fails with error "Could not execute 'apt-key' to verify signature (is gnupg installed?)"
   become: true
+
+# This effort gives error: mkstemp (2: No such file or directory)
+# - name: Install latest pip
+#   command: apt install -y pip
+#   become: true
+
+# This effort gives error: mkstemp (2: No such file or directory)
+# - name: Install latest pip
+#   command: apt-get install -y pip
+#   become: true
 
 - name: Install geonode
   pip:
