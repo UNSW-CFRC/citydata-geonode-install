@@ -24,7 +24,7 @@
   become: true
 
 - name: Copy key to standard location
-  command: cp {{ inventory_hostname }}.key /etc/ssl/private/geonode.key
+  command: cp {{ intended_fqdn }}.key /etc/ssl/private/geonode.key
   become: true
 
 - name: Backup cacerts.txt

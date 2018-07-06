@@ -30,7 +30,7 @@
       BrowserMatch "MSIE [17-9]" ssl-unclean-shutdown
     state: absent
   become: true
-  
+
 - name: Remove block after virtualHost
   blockinfile:
     marker: '#   {mark} ANSIBLE BLOCK 2 from install_ssl.yml'
@@ -38,16 +38,16 @@
     insertafter: '^\s*\</VirtualHost'
     block: |
       </IfModule>
-      
+
       <VirtualHost  *:80>
-          Redirect permanent / https://{{ inventory_hostname }}/
+          Redirect permanent / https://{{ intended_fqdn }}/
       </VirtualHost>
       <VirtualHost  *:8080>
-          Redirect permanent / https:8080//{{ inventory_hostname }}/
+          Redirect permanent / https:8080//{{ intended_fqdn }}/
       </VirtualHost>
     state: absent
   become: true
-  
+
 - name: Edit virtualHost line
   lineinfile:
     path: /etc/apache2/sites-available/geonode.conf

@@ -12,7 +12,7 @@
   replace:
     dest: '{{ home }}/geonode/geonode/local_settings.py'
     regexp: '(^\s*\047LOCATION\047\s*:\s*\047)http:\/\/[^\/]+/geoserver'
-    replace: '\1https://{{ inventory_hostname }}/geoserver'
+    replace: '\1https://{{ intended_fqdn }}/geoserver'
   become: true
   notify:
     - Restart Apache

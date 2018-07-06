@@ -20,11 +20,6 @@
     path: '{{ gsdata }}/global.xml'
     regexp: '<proxyBaseUrl>http:'
     replace: '<proxyBaseUrl>https:'
-#  lineinfile:
-##       path: /var/lib/geoserver/geonode-data/global.xml
-#    path: '{{ gsdata }}/global.xml'
-#    insertbefore: </global>
-#    line: '  <proxyBaseUrl>https://{{ inventory_hostname }}/geoserver/</proxyBaseUrl>'
   become: true
   notify:
     - Restart Tomcat

@@ -9,8 +9,8 @@
 - name: Add FQDN to allowed hosts
   replace:
     dest: '{{ home }}/geonode/geonode/local_settings.py'
-    regexp: '^(\s*ALLOWED_HOSTS\s*=\s*\[((?!{{ inventory_hostname }})[^\]])*)\]'
-    replace: '\1, \047{{ inventory_hostname }}\047]'
+    regexp: '^(\s*ALLOWED_HOSTS\s*=\s*\[((?!{{ intended_fqdn }})[^\]])*)\]'
+    replace: '\1, \047{{ intended_fqdn }}\047]'
   become: true
 
 # http://docs.geonode.org/en/master/tutorials/advanced/geonode_production/production.html
@@ -22,7 +22,7 @@
     block: |
       <context-param>
       <param-name>PROXY_BASE_URL</param-name>
-      <param-value>https://{{ inventory_hostname }}/geoserver</param-value>
+      <param-value>https://{{ intended_fqdn }}/geoserver</param-value>
       </context-param>
       <context-param>
       <param-name>GEOWEBCACHE_CACHE_DIR</param-name>
@@ -47,7 +47,7 @@
     block: |
       blockinfile_deletethisline
         - !dnsMatch
-          host: {{ inventory_hostname }}
+          host: {{ intended_fqdn }}
           port: 80
   become: true
 
@@ -105,7 +105,7 @@
                Allow: /geoserver/wfs?*AXFEATURES=*=GetFeature\\n
                Disallow: /geoserver/wms/kml*download\\n
                Disallow: /geoserver/wms/kml*DOWNLOAD\\n
-               \\nSitemap: https://{{ inventory_hostname }}/sitemap.xml"'
+               \\nSitemap: https://{{ intended_fqdn }}/sitemap.xml"'
   become: true
   when: "'production' in group_names"
 

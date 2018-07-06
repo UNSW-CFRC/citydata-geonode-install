@@ -4,7 +4,7 @@
   replace:
     path: /etc/tomcat7/server.xml
     regexp: '(^\s*<Connector port\s*="8080"\s+protocol\s*="HTTP/1.1"\s+connectionTimeout\s*="20000"\s+URIEncoding\s*="UTF-8")\s+redirectPort\s*="8443"'
-    replace: '\1\n        scheme="https"\n        proxyName="{{ inventory_hostname }}"\n        proxyPort="443"'
+    replace: '\1\n        scheme="https"\n        proxyName="{{ intended_fqdn }}"\n        proxyPort="443"'
     backup: true
   become: true
   notify:
