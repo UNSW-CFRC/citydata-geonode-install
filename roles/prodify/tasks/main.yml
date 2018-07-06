@@ -29,7 +29,7 @@
       <param-value>{{ gwc }}</param-value>
       </context-param>
   become: true
-  
+
 - name: Create geowebcache dir
   file:
     path: '{{ gwc }}'
@@ -94,7 +94,18 @@
                Disallow: /gs\\n
                Disallow: /notifications\\n
                Disallow: /maps/new\\n
-             \\nSitemap: https://{{ inventory_hostname }}/sitemap.xml"'
+               Disallow: /geoserver/wfs?*=GetFeature\\n
+               Allow: /geoserver/wfs?*=GetFeature*COUNT=\\n
+               Allow: /geoserver/wfs?*COUNT=*=GetFeature\\n
+               Allow: /geoserver/wfs?*=GetFeature*count=\\n
+               Allow: /geoserver/wfs?*count=*=GetFeature\\n
+               Allow: /geoserver/wfs?*=GetFeature*axFeatures=\\n
+               Allow: /geoserver/wfs?*axFeatures=*=GetFeature\\n
+               Allow: /geoserver/wfs?*=GetFeature*AXFEATURES=\\n
+               Allow: /geoserver/wfs?*AXFEATURES=*=GetFeature\\n
+               Disallow: /geoserver/wms/kml*download\\n
+               Disallow: /geoserver/wms/kml*DOWNLOAD\\n
+               \\nSitemap: https://{{ inventory_hostname }}/sitemap.xml"'
   become: true
   when: "'production' in group_names"
 
