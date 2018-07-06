@@ -1,0 +1,7 @@
+---
+- name: Install xmlstarlet for cache seeding list
+  apt:
+    name: jq
+    state: present
+    update_cache: yes
+  become: true
