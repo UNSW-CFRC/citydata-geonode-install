@@ -8,7 +8,8 @@ home: "{{ bigdisk1 }}/geonode"
 gsdata: "{{ bigdisk1 }}/geoserver_data"
 tmp: "{{ bigdisk1 }}/tmp"
 dbhome: "{{ bigdisk1 }}"
-gwc: "{{ bigdisk1 }}/geowebcache"
+
+gwc: "/mnt/geowebcache"
 
 backup_from_dir: "{{ bigdisk1 }}"
 backup_to_dir: "{{ bigdisk2 }}"
