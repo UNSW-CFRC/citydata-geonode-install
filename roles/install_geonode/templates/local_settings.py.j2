@@ -235,6 +235,11 @@ MAP_BASELAYERS = [
 from settings import INSTALLED_APPS
 INSTALLED_APPS = INSTALLED_APPS + ('geonode.guide',)
 
+# Add redirects to apps for general URL redirection facility (see Admin > Redirects)
+from settings import MIDDLEWARE_CLASSES
+INSTALLED_APPS = INSTALLED_APPS + ('django.contrib.redirects',)
+MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + ('django.contrib.redirects.middleware.RedirectFallbackMiddleware',)
+
 # Remove Tiles as a download format (it only gives a sample URL)
 DOWNLOAD_FORMATS_VECTOR = [
     'JPEG', 'PDF', 'PNG', 'Zipped Shapefile', 'GML 2.0', 'GML 3.1.1', 'CSV',
