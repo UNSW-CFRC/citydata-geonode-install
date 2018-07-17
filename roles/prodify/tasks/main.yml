@@ -197,6 +197,13 @@
    - wcs
   become: true
 
+  - name: Install shell script to seed geowebcache
+    template:
+      src: seed_cache.sh.j2
+      dest: ~/seed_cache.sh
+      mode: 0700
+    become: true
+
 - name: Force Tomcat restart
   service:
     name: tomcat7
