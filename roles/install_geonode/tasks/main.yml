@@ -4,6 +4,8 @@
 
 - include_tasks: set_hostname.yml
 
+- include_tasks: set_timezone.yml
+
 - include_tasks: mount_disk.yml
 
 - name: Check tmp folder
