@@ -2,6 +2,8 @@
 - name: PLAY
   remote_user: {{ remote_user}}
 
+- include_tasks: set_hostname.yml
+
 - include_tasks: mount_disk.yml
 
 - name: Check tmp folder
