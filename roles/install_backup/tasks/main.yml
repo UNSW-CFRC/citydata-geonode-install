@@ -5,6 +5,12 @@
     dest: ~/backupRestoreGeonode
     mode: 0700
 
+- name: Install shell script to call backup daily
+  template:
+    src: backupDaily.j2
+    dest: ~/backupDaily
+    mode: 0700
+
 - name: create filesystem for backup
   filesystem:
     dev: /dev/{{ backup_disk_volume }}
@@ -33,6 +39,6 @@
   cron:
     name: 'Backup geonode data'
     special_time: daily
-    job: dir={{ backup_dir }}/day_`date +%d` && mkdir -p $dir && cd $dir && ~/backupRestoreGeonode backup . > backup.out 2> backup.err
+    job: ~/backupDaily
     user: ubuntu
   become: true

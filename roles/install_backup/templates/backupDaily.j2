@@ -1,0 +1,40 @@
+#!/bin/bash
+# Called by cron to backup each weeknight of the month into its own folder
+
+# Backup is run just after midnight, so backup folder
+# is called day_N, where N is yesterday's day of the month
+yesterday=`date -d "yesterday" +%d`
+dir={{ backup_dir }}/day_$yesterday
+
+# Create backup folder if not present
+mkdir -p $dir
+
+cd $dir
+
+# Delete any previous backup
+rm -r *
+
+# Backup Geonode and write output and errors to local files
+~/backupRestoreGeonode backup . > backup.out 2> backup.err
+
+# Find date of previous backup
+day_of_week=`date +%w`
+if (($day_of_week == 1)) ; then
+  look_back=4
+else
+  look_back=2
+fi
+last_backup=`date -d "$look_back days ago" +%d`
+
+# If the previous backup was this month...
+if (($last_backup < $yesterday)) && test -d ../day_$last_backup; then
+  # If any file is unchanged since last backup,
+  # replace it with a symbolic link to save space
+  for file in *.tgz *.backup
+  do
+    if cmp -s $file ../day_$last_backup/$file; then
+      rm $file
+      ln -s ../day_$last_backup/$file .
+    fi
+  done
+fi
