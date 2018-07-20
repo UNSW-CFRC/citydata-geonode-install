@@ -44,58 +44,41 @@ backup)
   echo -e "\nSql dump"
   sudo -u postgres -i pg_dump -c -Fc geonode > $geonodeBackup/geonodedb.backup
   sudo -u postgres -i pg_dump -c -Fc geonode_data > $geonodeBackup/geonode_data_db.backup
-  # Commented because not worth the time.
-  # Gzip only reduces the big geonode_data_db.backup from 2.15 GB to 1.99 GB, a saving of 7%.
-  # sudo gzip $geonodeBackup/geonode{_data_,}db.backup
+
   stopServices
+
   echo "Making Files/Directory backup"
   cd $geonodeBackup # go into the folder for backup
 
-  # Change geonode folder location
-  # tar -czf geonodeConfigBackup.tgz /etc/geonode
+  # Backup Geonode project folder
   tar -czf geonodeConfigBackup.tgz /mnt/data/geonode/geonode
 
-  # Not needed in Geonode 2.4? Relic of Geonode 2.0?
-  # tar -czf geonodeVarDataBackup.tgz /var/lib/geoserver/geonode-data/ # ToDo: change folder location
-
-  # Change geoserver data folder location
-  # tar -czf geonodeUsrDataBackup.tgz /usr/share/geoserver/data/
+  # Backup Geoserver data folder
   tar -czf geonodeUsrDataBackup.tgz /mnt/data/geoserver_data
 
-  # Not needed in Geonode 2.4? Relic of Geonode 2.0?
-  # tar -czf geonodeWWWDataBackup.tgz /var/www/geonode/ # ToDo: change folder location
-
-  # Try skipping these - why are they needed?
-  # tar -czf geonodei18nBackup.tgz /usr/local/lib/python2.7/dist-packages/geonode/locale/ # OK: folder exists on CityData
-
-  # Try skipping these - why are they needed?
-  # tar -czf geonodePyDjangoBackup.tgz /usr/local/lib/python2.7/dist-packages/geonode/ # OK: folder exists on CityData
-
-  # change folder location for CityData
-  # -czf geonodePyDjangoEggBackup.tgz /usr/local/lib/python2.7/dist-packages/GeoNode-2.0-py2.7.egg-info/
-  # tar -czf geonodePyDjangoEggBackup.tgz /usr/local/lib/python2.7/dist-packages/GeoNode-2.4.dev20170525043502.egg-info
-
-  # Try skipping these - why are they needed?
-  # tar -czf geonodePyDjangoEggBackup.tgz /usr/local/lib/python2.7/dist-packages/GeoNode-2.4.dev*.egg-info
-
   startServices
+
   Message="$(basename $0): $1 $geonodeBackup finished at `date`"
   ;;
+
 restore)
   echo "$(basename $0): $1 $geonodeBackup started at `date`"
   stopServices
   cd $geonodeBackup
+
   for i in $(ls *.tgz)
   do
    echo "Restoring: $i"
    sudo tar -C / -xzf $i
   done
+
   startServices
-  # sudo gunzip $geonodeBackup/geonode{_data_,}db.backup.gz
+
   sudo -u postgres dropdb geonode;
   sudo -u postgres createdb geonode;
   sudo -u postgres -i pg_restore -Fc -d geonode geonodedb.backup
   sudo -u postgres -i pg_restore -Fc -d geonode_data $geonodeBackup/geonode_data_db.backup
+
   Message="$(basename $0): $1 $geonodeBackup finished at `date`"
   ;;
 *)

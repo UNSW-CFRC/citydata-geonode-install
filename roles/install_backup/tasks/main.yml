@@ -1,7 +1,7 @@
 ---
 - name: Install backup shell script
-  template:
-    src: backupRestoreGeonode.j2
+  copy:
+    src: backupRestoreGeonode
     dest: ~/backupRestoreGeonode
     mode: 0700
 
