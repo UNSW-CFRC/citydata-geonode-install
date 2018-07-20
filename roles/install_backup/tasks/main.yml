@@ -11,6 +11,25 @@
     dest: ~/backupDaily
     mode: 0700
 
+- name: Test if backup disk mounted
+  lineinfile:
+    path: /proc/mounts
+    regex: '^/dev/{{ backup_disk_volume }}\s{{ backup_dir }}\s/*$'
+    state: present
+  check_mode: yes
+  register: mounts_would_have
+  failed_when: (mounts_would_have | changed)
+  ignore_errors: yes
+
+- name: Create backup parent dir
+  file:
+    path: "{{ backup_dir }}"
+    state: directory
+    owner: ubuntu
+    group: ubuntu
+  become: true
+  when: (mounts_would_have | changed)
+
 - name: create filesystem for backup
   filesystem:
     dev: /dev/{{ backup_disk_volume }}
@@ -18,6 +37,7 @@
     # force: yes # Only need this if disk has different format but is not mounted
   become: true
   ignore_errors: yes
+  when: (mounts_would_have | changed)
 
 - name: Mount backup disk
   mount:
@@ -26,14 +46,7 @@
     state: mounted
     fstype: ext4
   become: true
-
-- name: Create backup parent dir
-  file:
-    path: "{{ backup_dir }}/"
-    state: directory
-    owner: ubuntu
-    group: ubuntu
-  become: true
+  when: (mounts_would_have | changed)
 
 - name: Schedule nightly cron job
   cron:
