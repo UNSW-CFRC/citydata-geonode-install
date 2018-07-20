@@ -48,10 +48,12 @@
   become: true
   when: (mounts_would_have | changed)
 
-- name: Schedule nightly cron job
+- name: Schedule cron job for just after midnight each weeknight
   cron:
     name: 'Backup geonode data'
-    special_time: daily
+    weekday: 2-6
+    minute: 15
+    hour: 0
     job: ~/backupDaily
     user: ubuntu
   become: true
