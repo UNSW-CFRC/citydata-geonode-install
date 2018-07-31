@@ -26,13 +26,18 @@ else
 fi
 last_backup=`date -d "$look_back days ago" +%d`
 
+# Header bytes to ignore because they contain a timestamp
+tgz_ignore_bytes=6
+backup_ignore_bytes=33
+
 # If the previous backup was this month...
 if (($last_backup < $yesterday)) && test -d ../day_$last_backup; then
-  # If any file is unchanged since last backup,
+  # If any file is unchanged since last backup (ignoring timestamp in header),
   # replace it with a symbolic link to save space
   for file in *.tgz *.backup
   do
-    if cmp -s $file ../day_$last_backup/$file; then
+    ignore_bytes=$"${file#*.}"_ignore_bytes
+    if cmp -s -i $ignore_bytes:$ignore_bytes $file ../day_$last_backup/$file; then
       rm $file
       ln -s ../day_$last_backup/$file .
     fi
