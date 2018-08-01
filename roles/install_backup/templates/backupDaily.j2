@@ -28,7 +28,7 @@ last_backup=`date -d "$look_back days ago" +%d`
 
 # Header bytes to ignore because they contain a timestamp
 tgz_ignore_bytes=6
-backup_ignore_bytes=33
+backup_ignore_bytes=38 # tried 33
 
 # If the previous backup was this month...
 if (($last_backup < $yesterday)) && test -d ../day_$last_backup; then
