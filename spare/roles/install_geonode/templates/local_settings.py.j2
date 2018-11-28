@@ -1,0 +1,247 @@
+import os
+
+PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+
+SITEURL = "http://{{ inventory_hostname }}/"
+SITENAME_SHORT = "{{ sitename_short }}"
+SITE_ORG = "{{ site_org }}"
+SITENAME = SITENAME_SHORT + " | " + SITE_ORG
+
+SECRET_KEY = '{{ secret_key }}'
+
+# Local time zone for this installation. Choices can be found here:
+# http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
+TIME_ZONE = '{{ timezone }}'
+
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '::1']
+PROXY_ALLOWED_HOSTS = ("127.0.0.1", 'localhost', '::1')
+POSTGIS_VERSION = (2, 2, 1)
+
+# Whether uploaded resources should be public and downloadable by default
+DEFAULT_ANONYMOUS_VIEW_PERMISSION = False
+DEFAULT_ANONYMOUS_DOWNLOAD_PERMISSION = False
+
+# Add csv and mp4 to default document types for upload
+# Also 3ws and fbx (3D file formats)
+# Remove entries we don't need as the list is getting unwieldy
+#ALLOWED_DOCUMENT_TYPES = ['3ws', 'csv', 'doc', 'docx', 'fbx', 'gif', 'gz', 'jpeg', 'jpg', 'odp', 'ods', 'odt', 'pdf', 'png',
+#                          'ppt', 'pptx', 'rar', 'sld', 'tif', 'tiff', 'txt', 'xls', 'xlsx', 'xml', 'zip']
+ALLOWED_DOCUMENT_TYPES = ['3ws', 'csv', 'doc', 'docx', 'fbx', 'gif', 'jpg', 'mmpk', 'mp4', 'pdf', 'png',
+                          'ppt', 'pptx', 'sav', 'txt', 'xls', 'xlsx', 'zip']
+
+# Email for users to contact admins.
+THEME_ACCOUNT_CONTACT_EMAIL = "{{ admin_email }}"
+
+DATABASES = {
+    'default': {
+         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+         'NAME': 'geonode',
+         'USER': 'geonode',
+         'PASSWORD': 'geonode',
+     },
+    # vector datastore for uploads
+    'datastore' : {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        #'ENGINE': '', # Empty ENGINE name disables
+        'NAME': 'geonode_data',
+        'USER' : 'geonode',
+        'PASSWORD' : 'geonode',
+        'HOST' : 'localhost',
+        'PORT' : '5432',
+    }
+}
+
+# OGC (WMS/WFS/WCS) Server Settings
+OGC_SERVER = {
+    'default' : {
+        'BACKEND' : 'geonode.geoserver',
+        'LOCATION' : 'http://localhost/geoserver/',
+        # Public location must have actual site name, otherwise WMS calls in layer map fails
+        # 'PUBLIC_LOCATION' : 'http://localhost/geoserver/',
+        'PUBLIC_LOCATION' : '%sgeoserver/' % SITEURL,
+        'USER' : 'admin',
+        'PASSWORD' : '{{ admin_pass }}',
+        'MAPFISH_PRINT_ENABLED' : True,
+        'PRINT_NG_ENABLED' : True,
+        'GEONODE_SECURITY_ENABLED' : True,
+        'GEOGIG_ENABLED' : False,
+        'WMST_ENABLED' : False,
+        'BACKEND_WRITE_ENABLED': True,
+        'WPS_ENABLED' : False,
+        'LOG_FILE': '%s/geoserver/data/logs/geoserver.log' % os.path.abspath(os.path.join(PROJECT_ROOT, os.pardir)),
+        # Set to name of database in DATABASES dictionary to enable
+        'DATASTORE': 'datastore', #'datastore',
+    }
+}
+
+CATALOGUE = {
+    'default': {
+        # The underlying CSW implementation
+        # default is pycsw in local mode (tied directly to GeoNode Django DB)
+        'ENGINE': 'geonode.catalogue.backends.pycsw_local',
+        # pycsw in non-local mode
+        # 'ENGINE': 'geonode.catalogue.backends.pycsw_http',
+        # GeoNetwork opensource
+        # 'ENGINE': 'geonode.catalogue.backends.geonetwork',
+        # deegree and others
+        # 'ENGINE': 'geonode.catalogue.backends.generic',
+
+        # The FULLY QUALIFIED base url to the CSW instance for this GeoNode
+        'URL': '%scatalogue/csw' % SITEURL,
+        # 'URL': 'http://localhost:8080/geonetwork/srv/en/csw',
+        # 'URL': 'http://localhost:8080/deegree-csw-demo-3.0.4/services',
+
+        # login credentials (for GeoNetwork)
+        'USER': 'admin',
+        'PASSWORD': 'admin',
+    }
+}
+
+# Default preview library
+#LAYER_PREVIEW_LIBRARY = 'geoext'
+
+# Enable upload of KML, CSV, geoJSON and Zip (?) - according to static/geonode/js/upload/FileTypes.js
+UPLOADER = {
+    'BACKEND': 'geonode.importer',
+    'OPTIONS': {
+        'TIME_ENABLED': False,
+        'GEOGIG_ENABLED': False,
+    }
+}
+
+# Stamen base layers - see https://gis.stackexchange.com/questions/206286/adding-stamen-global-terrain-maps-to-geonode
+
+STAMEN_ATTR = ('Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a'
+               ' href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</'
+               'a> &mdash; Map data &copy; <a href="http://www.openstreetmap.o'
+               'rg/copyright">OpenStreetMap</a>')
+
+GOOGLE_API_KEY = "AIzaSyDD2vgGXTnLr53NeeC0h2_JErwG9KL92fU"
+BING_API_KEY = "AirNFUX63U0RgdpDPrc6jrTWGce1I-QOF-Z2GeCJ3q558EZXDt8Eh4VcdTxHYjEW"
+
+MAP_BASELAYERS = [
+{
+    "source": {"ptype": "gxp_olsource"},
+    "type": "OpenLayers.Layer",
+    "args": ["No background"],
+    "visibility": False,
+    "fixed": True,
+    "group":"background"
+}, {
+    "source": {"ptype": "gxp_olsource"},
+    "type": "OpenLayers.Layer.XYZ",
+    "args": [
+        'Stamen Watercolor',
+        'https://stamen-tiles-a.a.ssl.fastly.net/watercolor/${z}/${x}/${y}.png',
+        {
+            'transitionEffect': 'resize',
+            'attribution': '%s' % STAMEN_ATTR,
+        }
+    ],
+    "visibility": False,
+    "fixed": True,
+    "group": "background"
+}, {
+    "source": {"ptype": "gxp_olsource"},
+    "type": "OpenLayers.Layer.XYZ",
+    "args": [
+        'Stamen Toner Lite',
+        'https://stamen-tiles-a.a.ssl.fastly.net/toner-lite/${z}/${x}/${y}.png',
+        {
+            'transitionEffect': 'resize',
+            'attribution': '%s' % STAMEN_ATTR,
+        }
+    ],
+    "visibility": False,
+    "fixed": True,
+    "group": "background"
+}, {
+    "source": {"ptype": "gxp_olsource"},
+    "type": "OpenLayers.Layer.XYZ",
+    "args": [
+        'Stamen Toner',
+        'https://stamen-tiles-a.a.ssl.fastly.net/toner/${z}/${x}/${y}.png',
+        {
+            'transitionEffect': 'resize',
+            'attribution': '%s' % STAMEN_ATTR,
+        }
+    ],
+    "visibility": False,
+    "fixed": True,
+    "group": "background"
+}, {
+    "source": {"ptype": "gxp_olsource"},
+    "type": "OpenLayers.Layer.XYZ",
+    "args": [
+        'Stamen Terrain',
+        'https://stamen-tiles-a.a.ssl.fastly.net/terrain/${z}/${x}/${y}.png',
+        {
+            'transitionEffect': 'resize',
+            'attribution': '%s' % STAMEN_ATTR,
+        }
+    ],
+    "visibility": False,
+    "fixed": True,
+    "group": "background"
+}, {
+    "source": {"ptype": "gxp_osmsource"},
+    "type": "OpenLayers.Layer.OSM",
+    "name": "mapnik",
+    "visibility": True,
+    "fixed": True,
+    "group": "background"
+#
+# Google terrain, roadmap and hybrid only display after Google Satellite has been selected
+# This is too confusing, and anyway, Bing, OSM and Stamen offer these three views.
+# , {
+#    "source": {
+#         "ptype":"gxp_googlesource",
+#         "apiKey": GOOGLE_API_KEY
+#    },
+#    "name":"TERRAIN",
+#    "visibility": False,
+#    "fixed": True,
+#    "group":"background",
+}, {
+    "source": {
+         "ptype":"gxp_googlesource",
+         "apiKey": GOOGLE_API_KEY
+    },
+    "name":"SATELLITE",
+    "visibility": False,
+    "fixed": True,
+    "group":"background",
+# , {
+#    "source": {
+#         "ptype":"gxp_googlesource",
+#         "apiKey": GOOGLE_API_KEY
+#    },
+#    "name":"ROADMAP",
+#    "visibility": False,
+#    "fixed": True,
+#    "group":"background",
+# , {
+#    "source": {
+#         "ptype":"gxp_googlesource",
+#         "apiKey": GOOGLE_API_KEY
+#    },
+#    "name":"HYBRID",
+#    "visibility": False,
+#    "fixed": True,
+#    "group":"background",
+}]
+
+# Add guide to apps
+from settings import INSTALLED_APPS
+INSTALLED_APPS = INSTALLED_APPS + ('geonode.guide',)
+
+# Add redirects to apps for general URL redirection facility (see Admin > Redirects)
+from settings import MIDDLEWARE_CLASSES
+INSTALLED_APPS = INSTALLED_APPS + ('django.contrib.redirects',)
+MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + ('django.contrib.redirects.middleware.RedirectFallbackMiddleware',)
+
+# Remove Tiles as a download format (it only gives a sample URL)
+DOWNLOAD_FORMATS_VECTOR = [
+    'JPEG', 'PDF', 'PNG', 'Zipped Shapefile', 'GML 2.0', 'GML 3.1.1', 'CSV',
+    'Excel', 'GeoJSON', 'KML', 'View in Google Earth',
+]

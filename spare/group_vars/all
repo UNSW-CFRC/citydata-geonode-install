@@ -1,0 +1,7 @@
+---
+# Default variables
+tmp_dir:  ~/.ansible/tmp
+
+backup_disk_volume: xvdb
+
+backup_dir: /mnt/data_backup

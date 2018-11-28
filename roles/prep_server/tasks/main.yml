@@ -5,3 +5,11 @@
 - include_tasks: mount_disk.yml
 
 - include_tasks: install_python2.7.yml
+
+- name: Check tmp folder
+  stat:
+    path: /tmp
+  register: tmp_check
+
+- include_tasks: mv_tmp_to_big_disk.yml
+  when: "tmp_check.stat.islnk is not defined or (tmp_check.stat.islnk is defined and tmp_check.stat.islnk == False) and 'small_sysdisk' in group_names"

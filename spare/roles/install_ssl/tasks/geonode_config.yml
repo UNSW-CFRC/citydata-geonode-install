@@ -1,0 +1,26 @@
+---
+- name: Set siteurl to use https
+  replace:
+    dest: '{{ home }}/geonode/geonode/local_settings.py'
+    regexp: '(^\s*SITEURL\s*=\s*.?)http:'
+    replace: '\1https:'
+  become: true
+  notify:
+    - Restart Apache
+
+- name: Set OGC server to use https and FQDN
+  replace:
+    dest: '{{ home }}/geonode/geonode/local_settings.py'
+    regexp: '(^\s*\047LOCATION\047\s*:\s*\047)http:\/\/[^\/]+/geoserver'
+    replace: '\1https://{{ intended_fqdn }}/geoserver'
+  become: true
+  notify:
+    - Restart Apache
+
+- name: Call gravatar with https
+  lineinfile:
+    dest: '{{ home }}/geonode/geonode/local_settings.py'
+    line: 'AVATAR_GRAVATAR_SSL = True'
+  become: true
+  notify:
+    - Restart Apache

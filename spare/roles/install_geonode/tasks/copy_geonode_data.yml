@@ -1,0 +1,9 @@
+---
+- name: Copy GeoNode data to be served by Apache
+  expect:
+    command: python '{{ home }}/geonode/manage.py' collectstatic
+    responses:
+      'Type .yes. to continue, or .no. to cancel:': 'yes'
+  become: true
+  notify:
+    - Restart Apache

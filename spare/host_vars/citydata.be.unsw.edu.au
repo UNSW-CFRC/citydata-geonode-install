@@ -1,0 +1,13 @@
+---
+sitename_short: "CityData"
+site_org: "City Futures Research Centre"
+sitename: "{{ sitename_short }} | {{ site_org }}"
+
+bing_key: AirNFUX63U0RgdpDPrc6jrTWGce1I-QOF-Z2GeCJ3q558EZXDt8Eh4VcdTxHYjEW
+
+intended_fqdn: citydata.be.unsw.edu.au
+
+backup_disk_volume: xvdb
+
+timezone: Australia/Sydney
+hostname: citydata

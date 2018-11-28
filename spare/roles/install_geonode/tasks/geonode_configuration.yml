@@ -1,0 +1,44 @@
+---
+- name: Install local settings
+  template:
+    src: local_settings.py.j2
+    dest: '{{ home }}/geonode/geonode/local_settings.py'
+  become: true
+
+- name: Upgrade beautifulsoup
+  # To avoid bug when running /manage.py fixsitename
+  # See https://bugs.launchpad.net/beautifulsoup/+bug/1603299
+  pip:
+    name: beautifulsoup4
+    version: 4.5.1
+  become: true
+
+- name: Initialize the Database
+  command: python '{{ home }}/geonode/manage.py' syncdb --noinput
+
+- name: Fix sitename
+  command: python '{{ home }}/geonode/manage.py' fixsitename
+
+- name: Display shortname on homepage
+  lineinfile:
+    dest: '{{ home }}/geonode/geonode/templates/site_index.html'
+    regexp: '^\s*<h1 class="page-title">.*</h1>'
+    line: '                    <h1 class="page-title">{{ sitename_short }}</h1>'
+  become: true
+
+- name: Create GeoNode Superuser
+  # Will fail if superuser already exists. Ignore this and suppress error log.
+  command: python '{{ home }}/geonode/manage.py' createsuperuser --noinput --username=admin --email='{{ admin_email }}'
+  ignore_errors: yes
+  no_log: true
+
+- name: Change superuser password
+  # Separating this task from previous one (createsuperuser) allows playbook to be idempotent.
+  # I.e. password can be changed on an existing superuser account.
+  expect:
+    command: python '{{ home }}/geonode/manage.py' changepassword admin
+    responses:
+      Password: '{{ admin_pass }}'
+      Password (again): '{{ admin_pass }}'
+  notify:
+    - Restart Apache

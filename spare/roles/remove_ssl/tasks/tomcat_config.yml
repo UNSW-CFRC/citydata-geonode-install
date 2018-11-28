@@ -1,0 +1,10 @@
+---
+- name: Remove parms from Connector
+  replace:
+    path: /etc/tomcat7/server.xml
+    regexp: ' *scheme="https"\n *proxyName="{{ intended_fqdn }}"\n *proxyPort="443"'
+    replace: '        redirectPort="8443"'
+    backup: true
+  become: true
+  notify:
+    - Restart Tomcat

@@ -1,0 +1,34 @@
+---
+- name: Stop postgresql
+  service:
+    name: postgresql
+    state: stopped
+  become: true
+
+- name: Set data_directory
+  lineinfile:
+    dest: /etc/postgresql/9.5/main/postgresql.conf
+    regexp: '^\s*data_directory\s*='
+    line: "data_directory = '{{ dbhome }}/postgresql/9.5/main'"
+  become: true
+
+- name: Check old data dir exists
+  stat: path=/var/lib/postgresql
+  register: datadir_stat
+
+- name: Move database
+  command: mv /var/lib/postgresql /mnt/data
+  when: datadir_stat.stat.exists
+  become: true
+
+- name: Change postgres home
+  user:
+    name: postgres
+    home: "{{ dbhome }}/postgresql"
+  become: true
+
+- name: Force postgresql restart
+  service:
+    name: postgresql
+    state: restarted
+  become: true

@@ -1,0 +1,13 @@
+---
+- name: Hack Ansible git
+  # Workaround for Ansible git error when dest exists and is modified, and force=yes:
+  # UnboundLocalError: local variable 'remote_head' referenced before assignment
+  # See ansible issue #5504: https://github.com/ansible/ansible-modules-core/issues/5504
+  #
+  # Changed dest after ansible upgrade to 2.3 ('core' subfolder not found) 
+  #
+  lineinfile:
+    dest: /usr/lib/python2.7/dist-packages/ansible/modules/source_control/git.py
+    regexp: '^\s*result.update.changed=True, .*msg=.Local modifications exist..'
+    line: "                result.update(changed=True, msg='Local modifications exist.')"
+  become: true

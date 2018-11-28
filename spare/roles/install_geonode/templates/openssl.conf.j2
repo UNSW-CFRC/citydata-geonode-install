@@ -1,0 +1,11 @@
+[ req ]
+default_bits           = 2048
+distinguished_name     = req_distinguished_name
+prompt                 = no
+
+[ req_distinguished_name ]
+countryName            = {{country}}
+organizationalUnitName = '{{orgname}}'
+emailAddress	       = {{admin_email}}
+commonName             = {{ intended_fqdn }}
+subjectAltName         = {{ intended_fqdn }}

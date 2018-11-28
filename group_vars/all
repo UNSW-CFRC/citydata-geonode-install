@@ -10,6 +10,19 @@ big_disk_size: 100
 gwc_disk_device: xvdg
 gwc_disk_size: 300
 
+# Assumes host has small system disk so big things should be moved to /mnt/...
+mount_point: /mnt
+
+big_disk_mount_point: '{{ mount_point }}/data'
+backup_disk_mount_point: '{{ mount_point }}/data2'
+
+gnhome: '{{ big_disk_mount_point }}/geonode'
+gsdata: '{{ big_disk_mount_point }}/geoserver_data'
+tmp: '{{ big_disk_mount_point }}/tmp'
+dbhome: '{{ big_disk_mount_point }}'
+
+gwc: '{{ mount_point }}/geowebcache'
+
 timezone: Australia/Sydney
 dev_ssh_source_ip_range: 172.26.192.0/18
 aws_region: ap-southeast-2

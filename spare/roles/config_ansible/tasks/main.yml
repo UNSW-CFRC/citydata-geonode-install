@@ -1,0 +1,6 @@
+---
+- include_tasks: set_hostname.yml
+- include_tasks: set_timezone.yml
+- include_tasks: upgrade_ansible.yml
+- include_tasks: install_ansible_modules.yml
+- include_tasks: hack_ansible_git.yml

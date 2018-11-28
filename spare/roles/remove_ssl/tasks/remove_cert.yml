@@ -1,0 +1,20 @@
+---
+- name: Remove certificate from standard location
+  file:
+    path: /etc/ssl/certs/geonode.crt
+    state: absent
+  become: true
+
+- name: Remove key from standard location
+  file:
+    path: /etc/ssl/private/geonode.key
+    state: absent
+  become: true
+
+- name: Restore cacerts.txt
+  command: cp cacerts.txt.bak-ansible cacerts.txt
+  args:
+    chdir: /usr/local/lib/python2.7/dist-packages/httplib2
+  become: true
+
+  # Leave certificate in the java lib

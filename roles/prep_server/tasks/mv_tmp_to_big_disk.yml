@@ -1,0 +1,38 @@
+---
+
+
+- name: Exit if localhost and TMP not set
+#  when: "'local' in group_names and ansible_env.TMP is undefined"
+#  when: "ansible_env.TMP is undefined" - is undefined even when TMP is actually defined
+#  when: "lookup('env', 'TMP') == ''" - works OK! Now combine it
+  when: "'local' in group_names and lookup('env', 'TMP') == ''"
+  vars:
+    text: |
+         Please export TMP=~/.ansible/tmp
+         then rerun this playbook
+  fail:
+    msg: "{{ text.split('\n') }}"
+
+- debug: var=tmp
+
+- name: Create folder tmp on big disk with attributes like /tmp
+  file:
+    path: '{{ tmp }}'
+    owner: root
+    group: root
+    mode: u=rwx,g=rwx,o=rwx,g+s
+    state: directory
+  become: true
+
+- name: Remove /tmp
+  file:
+    path: /tmp
+    state: absent
+  become: true
+
+- name: Link back from big disk to /tmp
+  file:
+    src: '{{ tmp }}'
+    dest: /tmp
+    state: link
+  become: true
