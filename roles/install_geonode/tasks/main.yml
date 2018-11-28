@@ -1,7 +1,7 @@
 ---
 
 include_tasks:
-    - install_packages.yml
-    - config_postgres.yml
-    - install_geonode.yml
-    - config_geonode.yml
+  - install_packages.yml
+  # - config_postgres.yml
+  # - install_geonode.yml
+  # - config_geonode.yml
