@@ -1,4 +1,0 @@
----
-- include: ansible.yml
-- include: geonode.yml
-- include: backup.yml

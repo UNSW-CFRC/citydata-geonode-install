@@ -1,0 +1,7 @@
+---
+
+- include_tasks: set_hostname.yml
+
+- include_tasks: mount_disk.yml
+
+- include_tasks: install_python2.7.yml

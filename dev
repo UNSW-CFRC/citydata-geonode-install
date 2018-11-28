@@ -1,10 +1,10 @@
-citydata-dev.be.unsw.edu.au
+10.116.2.14 envt=dev ansible_python_interpreter=/usr/bin/python3
 
 [cityfutures]
-citydata-dev.be.unsw.edu.au
+10.116.2.14
 
 [small_sysdisk]
-citydata-dev.be.unsw.edu.au
+10.116.2.14
 
-[local]
-citydata-dev.be.unsw.edu.au
+[dev]
+10.116.2.14

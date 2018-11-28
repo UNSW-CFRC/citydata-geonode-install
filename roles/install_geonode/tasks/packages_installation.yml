@@ -1,5 +1,0 @@
----
-- include: 01.1_install_packages.yml
-
-- include: 01.2_move_postgres.yml
-  when: small_sysdisk in group_names

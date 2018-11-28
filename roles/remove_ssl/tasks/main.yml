@@ -1,8 +1,0 @@
----
-# Remove SSL encryption. Reverses install_ssl
-- include_tasks: apache_config.yml
-# Must remove certificate after disabling module
-- include_tasks: remove_cert.yml
-- include_tasks: tomcat_config.yml
-- include_tasks: geonode_config.yml
-- include_tasks: geoserver_config.yml

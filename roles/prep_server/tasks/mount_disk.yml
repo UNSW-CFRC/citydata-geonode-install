@@ -1,0 +1,32 @@
+---
+# Assumes AWS instance created with big disk at /dev/xvdb.
+# Uses XFS for dynamically allocated inodes (necessary as Geowebcache can easily create millions of files).
+
+- name: create filesystem for big disk
+  filesystem:
+    dev: /dev/xvdb
+    fstype: ext4
+  become: true
+
+- name: Mount data disk
+  mount:
+    path: /mnt/data
+    src: /dev/xvdb
+    state: mounted
+    fstype: ext4
+  become: true
+
+# Use XFS (no inode limit) for cache to handle many small files
+- name: create XFS filesystem for geowebcache
+  filesystem:
+    dev: /dev/xvdg
+    fstype: xfs
+  become: true
+
+- name: Mount geowebcache
+  mount:
+    path: /mnt/geowebcache
+    src: /dev/xvdg
+    state: mounted
+    fstype: xfs
+  become: true

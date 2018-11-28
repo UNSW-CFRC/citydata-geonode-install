@@ -1,0 +1,173 @@
+{
+    "Description": "CityData",
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Outputs" : {
+        "CityDataPrvIp" : {
+          "Value" : { "Fn::GetAtt" : [ "CityData", "PrivateIp" ]},
+          "Description" : "Citydata server's Private IP Address"
+        }
+    },
+    "Resources": {
+        "CityData": {
+            "Type": "AWS::EC2::Instance",
+            "Properties": {
+                "DisableApiTermination": "false",
+                "InstanceInitiatedShutdownBehavior": "stop",
+                "ImageId": "ami-963cecf4",
+                "InstanceType": "t2.xlarge",
+                "KeyName": "CityData",
+                "Monitoring": "false",
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "CityData{{ envt_suffix }}"
+                    },
+                    {
+                        "Key": "Owner",
+                        "Value": "{{ cloud_resource_owner }}"
+                    }
+                ],
+                "Volumes": [
+                  {
+                    "Device": "/dev/{{ big_disk_device }}",
+                    "VolumeId": {
+                      "Ref": "volData"
+                    }
+                  },
+                  {
+                    "Device": "/dev/{{ gwc_disk_device }}",
+                    "VolumeId": {
+                      "Ref": "volGWC"
+                    }
+                  }
+                ],
+                "NetworkInterfaces": [
+                    {
+                        "DeleteOnTermination": "true",
+                        "Description": "Primary network interface",
+                        "DeviceIndex": 0,
+                        "SubnetId": "{{ subnet_id }}",
+                        {{ assign_prv_ip }}
+                        "GroupSet": [
+                            {
+                                "Ref": "SGCityData"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "8f77b450-eebc-4160-8475-f1fc2e7713db"
+                }
+            }
+        },
+        "volData": {
+            "Type": "AWS::EC2::Volume",
+            "Properties": {
+                "AvailabilityZone": "ap-southeast-2a",
+                "Size": "{{ big_disk_size }}",
+                "VolumeType": "gp2"
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "1d252d89-effb-4317-b886-6ca4d302f6c0"
+                }
+            }
+        },
+        "volGWC": {
+            "Type": "AWS::EC2::Volume",
+            "Properties": {
+                "AvailabilityZone": "ap-southeast-2a",
+                "Size": "{{ gwc_disk_size }}",
+                "VolumeType": "gp2"
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "1d252d89-effb-4317-b886-6ca4d302f6c0"
+                }
+            }
+        },
+        "SGCityData": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupName": "CityData{{ envt_suffix }}",
+                "GroupDescription": "CityData SG",
+                "VpcId": "{{ vpc_id }}",
+                "Tags": [
+                    {
+                        "Key": "Owner",
+                        "Value": "{{ cloud_resource_owner }}"
+                    },
+                    {
+                        "Key": "Name",
+                        "Value": "CityData{{ envt_suffix }}"
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "a1362cf7-a3c7-4ba4-a9d5-c180237f7be7"
+                }
+            }
+        },
+        "ingress1": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId": {
+                    "Ref": "SGCityData"
+                },
+                "IpProtocol": "tcp",
+                "FromPort": "80",
+                "ToPort": "80",
+                "CidrIp": "0.0.0.0/0"
+            }
+        },
+        "ingress2": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId": {
+                    "Ref": "SGCityData"
+                },
+                "IpProtocol": "tcp",
+                "FromPort": "22",
+                "ToPort": "22",
+                "CidrIp": "{{ ansible_default_ipv4.address }}/32"
+            }
+        },
+        "ingress3": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId": {
+                    "Ref": "SGCityData"
+                },
+                "IpProtocol": "tcp",
+                "FromPort": "22",
+                "ToPort": "22",
+                "CidrIp": "{{ dev_ssh_source_ip_range }}"
+            }
+        },
+        "egress1": {
+            "Type": "AWS::EC2::SecurityGroupEgress",
+            "Properties": {
+                "GroupId": {
+                    "Ref": "SGCityData"
+                },
+                "IpProtocol": "tcp",
+                "FromPort": "80",
+                "ToPort": "80",
+                "CidrIp": "0.0.0.0/0"
+            }
+        },
+        "egress2": {
+            "Type": "AWS::EC2::SecurityGroupEgress",
+            "Properties": {
+                "GroupId": {
+                    "Ref": "SGCityData"
+                },
+                "IpProtocol": "-1",
+                "CidrIp": "0.0.0.0/0"
+            }
+        },
+    }
+}
