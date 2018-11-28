@@ -1,6 +1,6 @@
 ---
-- name: PLAY
-  remote_user: {{ remote_user}}
+# - name: PLAY
+  # remote_user: {{ remote_user}}
 
 - include_tasks: set_hostname.yml
 
