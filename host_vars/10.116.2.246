@@ -2,7 +2,7 @@
 sitename_short: "CityData (Test)"
 site_org: "City Futures Research Centre"
 sitename: "{{ sitename_short }} | {{ site_org }}"
-
+hostname: citydata-test
 bing_key: AirNFUX63U0RgdpDPrc6jrTWGce1I-QOF-Z2GeCJ3q558EZXDt8Eh4VcdTxHYjEW
 
 backup_disk_volume: xvdf
