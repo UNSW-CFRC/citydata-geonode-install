@@ -1,3 +1,0 @@
-- hosts: all
-  roles:
-  - serve_viz_folder
