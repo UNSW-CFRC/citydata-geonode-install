@@ -1,5 +1,12 @@
 {
+    "Description": "CityData",
     "AWSTemplateFormatVersion": "2010-09-09",
+    "Outputs" : {
+        "CityDataPrvIp" : {
+          "Value" : { "Fn::GetAtt" : [ "CityData", "PrivateIp" ]},
+          "Description" : "Citydata server's Private IP Address"
+        }
+    },
     "Resources": {
         "CityData": {
             "Type": "AWS::EC2::Instance",
@@ -26,6 +33,12 @@
                     "VolumeId": {
                       "Ref": "volData"
                     }
+                  },
+                  {
+                    "Device": "/dev/xvdg",
+                    "VolumeId": {
+                      "Ref": "volGWC"
+                    }
                   }
                 ],
                 "NetworkInterfaces": [
@@ -34,7 +47,7 @@
                         "Description": "Primary network interface",
                         "DeviceIndex": 0,
                         "SubnetId": "subnet-1823467d",
-                        
+                        "PrivateIpAddress": "13.238.103.217",
                         "GroupSet": [
                             {
                                 "Ref": "SGCityData"
@@ -53,7 +66,20 @@
             "Type": "AWS::EC2::Volume",
             "Properties": {
                 "AvailabilityZone": "ap-southeast-2a",
-                "Size": "100G",
+                "Size": "100",
+                "VolumeType": "gp2"
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "1d252d89-effb-4317-b886-6ca4d302f6c0"
+                }
+            }
+        },
+        "volGWC": {
+            "Type": "AWS::EC2::Volume",
+            "Properties": {
+                "AvailabilityZone": "ap-southeast-2a",
+                "Size": "300",
                 "VolumeType": "gp2"
             },
             "Metadata": {
@@ -143,13 +169,5 @@
                 "CidrIp": "0.0.0.0/0"
             }
         },
-    },
-    "Outputs" : {
-        "raiseapiprvip" : {
-          "Value" : { "Fn::GetAtt" : [ "raiseapi", "PrivateIp" ]},
-          "Description" : "API server's Private IP Address"
-        }
-    },
-    "Description": "CityData"
     }
 }

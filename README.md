@@ -31,7 +31,7 @@ sudo apt-get update
 sudo apt-get install ansible
 ```
 
-## Create AWS resources
+## Create AWS key pair
 
 On the AWS EC2 Console, under **NETWORK & SECURITY > Key Pairs**:  
 * Create a key pair called `CityData`
@@ -39,6 +39,12 @@ On the AWS EC2 Console, under **NETWORK & SECURITY > Key Pairs**:
 Download and save the pem file.
 
 If working on Windows, use PuTTYGen to convert the pem to a ppk for use in PuTTY.
+
+## Create elastic IP
+
+On the AWS EC2 Console,
+
+## Create stack
 
 Now create the stack, including EC2 instance, volumes and security group:
 
@@ -111,24 +117,10 @@ Make sure your inventory file (dev, test or prod) contains the IP addresses of t
 Run the playbook with:
 
 ```bash
-ansible-playbook prep.yml -i ENV
+ansible-playbook prep.yml -i ENV_py3
 ```
 
 ...where ENV = dev, test or prod.
-
-## Load the S3 buckets
-
-The `s3.yml` playbook downloads the four front-end repos from GitHub to the Ansible control machine, removes the .git folders from each and uploads them to the S3 buckets in the specified environment.
-
-Run the playbook with:
-
-```bash
-ansible-playbook s3.yml -i localhost_ENV --ask-vault-pass
-```
-
-...where ENV = dev, test or prod. E.g. localhost_test
-
-When prompted, enter the CityData Ansible vault password.
 
 ## Save encrypted passwords
 
@@ -153,10 +145,12 @@ Where ENV = dev, test or prod
 ## Install CityData to EC2 server
 
 ```bash
-ansible-playbook -i ENV geonode.yml --ask-vault-pass
+ansible-playbook geonode.yml -i ENV_py2
 ```
 Where:  
 * ENV = dev, test or prod
+
+# HEREIAM
 
 ### Manually install SSH public keys
 
@@ -307,8 +301,8 @@ Restart the server:
 **On the ansible control machine:**  
 Mount the big disk again:
 ```
-ansible-playbook prep.yml -i ENV
-ansible-playbook services.yml -i ENV
+ansible-playbook prep.yml -i ENV_py3
+ansible-playbook services.yml -i ENV_py3
 ```
 ...where ENV is dev, test or prod
 

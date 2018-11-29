@@ -1,0 +1,42 @@
+---
+project: CityData
+orgname: City Futures Research Centre
+city: Sydney
+postcode: 2052
+state: NSW
+country: Australia
+country_code: AU
+timezone: '{{ country }}/{{ city }}'
+
+admin_email: citydata@unsw.edu.au
+admin_pass: !vault |
+  $ANSIBLE_VAULT;1.1;AES256
+  39653663303737366162376331386531383430353731366462626138656633396164633531323332
+  3132653166366538373936623438643034613936643731660a303534303232383737636637383735
+  37323737636663616364353265373130363032316533303539636432376131303032333662623137
+  3536323934616237310a373266356235346230393765663432653861613461666530616566373633
+  6262
+
+tmp_sitename_short: '{{ project }} ({{ envt }})'
+sitename_short: "{{ tmp_sitename_short | replace(' (prod)','') }}"
+sitename: '{{ sitename_short }} | {{ orgname }}'
+bing_key: AirNFUX63U0RgdpDPrc6jrTWGce1I-QOF-Z2GeCJ3q558EZXDt8Eh4VcdTxHYjEW
+
+google_key: AIzaSyDD2vgGXTnLr53NeeC0h2_JErwG9KL92fU
+
+ows_abstract: "Data for city analytics and decision-making."
+ows_keywords: "cities | city | city analytics | smart cities | smart city | urban | urban research"
+
+ows_title: '{{ project }}: {{ orgname }}'
+wms_title: "{{ ows_title }} Web Map Service"
+wfs_title: "{{ ows_title }} Web Feature Service"
+wcs_title: "{{ ows_title }} Web Coverage Service"
+
+ows_addressCity: '{{ city }}'
+ows_addressCountry: '{{ country }}'
+ows_addressElectronicMailAddress: '{{ admin_email }}'
+ows_addressPostalCode: '{{ postcode }}'
+ows_addressState: '{{ state }}'
+ows_contactEmail: '{{ admin_email }}'
+ows_contactOrganization: '{{ orgname }}'
+ows_contactPosition: '{{ project }} Admin'

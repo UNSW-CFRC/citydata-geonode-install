@@ -1,0 +1,34 @@
+---
+- name: Create geonode user
+  user:
+    name: geonode
+    home: '{{ gnhome }}'
+  become: true
+
+- name: Clone geonode from UNSW
+  git:
+    clone: yes
+    force: yes
+    repo: https://github.com/UNSW-CFRC/geonode
+    dest: '{{ gnhome }}/geonode'
+    version: 2.4.x
+  # ignore_errors: yes
+  # no_log: true
+  become: true
+
+- name: Install geonode
+  pip:
+    name: '{{ gnhome }}/geonode'
+  become: true
+
+- name: Install local settings
+  template:
+    src: local_settings.py.j2
+    dest: '{{ gnhome }}/geonode/geonode/local_settings.py'
+  become: true
+
+- name: Download GeoServer web archive
+  shell: export PYTHONHTTPSVERIFY=0 && paver setup
+  args:
+    chdir: '{{ gnhome }}/geonode'
+  become: true

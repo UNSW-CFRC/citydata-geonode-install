@@ -1,5 +1,6 @@
 ---
-sitename_short: "CityData (Test)"
+sitename_short: CityData ({{ envt }})
+sitename_short: "{{ sitename_short | replace(' (prod)','')}}"
 site_org: "City Futures Research Centre"
 sitename: "{{ sitename_short }} | {{ site_org }}"
 hostname: citydata-test

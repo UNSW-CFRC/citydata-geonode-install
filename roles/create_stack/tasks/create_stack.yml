@@ -4,6 +4,14 @@
     src: citydata.j2
     dest: '{{ role_path }}/outputs/citydata.json'
 
+- name: Delete any stack from a previous run
+  cloudformation:
+    stack_name: CityData-{{ envt | upper }}
+    region: '{{ aws_region }}'
+    aws_access_key: '{{ aws_access_key }}'
+    aws_secret_key: '{{ aws_secret_key }}'
+    state: absent
+
 - name: Create stack
   cloudformation:
     stack_name: CityData-{{ envt | upper }}
@@ -13,11 +21,8 @@
     aws_secret_key: '{{ aws_secret_key }}'
     state: present
   register: stack_result
-  ignore_errors: True
+  # ignore_errors: True
   # when: mode | lower == 'create'
-
-- debug:
-    msg: "Stack failed :("
 
 - name: Delete stack if failed
   cloudformation:
