@@ -4,10 +4,10 @@ PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
 SITEURL = "http://{{ inventory_hostname }}/"
 SITENAME_SHORT = "{{ sitename_short }}"
-SITE_ORG = "{{ site_org }}"
+SITE_ORG = "{{ orgname }}"
 SITENAME = SITENAME_SHORT + " | " + SITE_ORG
 
-SECRET_KEY = '{{ secret_key }}'
+SECRET_KEY = '{{ django_secret_key }}'
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -26,8 +26,8 @@ DEFAULT_ANONYMOUS_DOWNLOAD_PERMISSION = False
 # Remove entries we don't need as the list is getting unwieldy
 #ALLOWED_DOCUMENT_TYPES = ['3ws', 'csv', 'doc', 'docx', 'fbx', 'gif', 'gz', 'jpeg', 'jpg', 'odp', 'ods', 'odt', 'pdf', 'png',
 #                          'ppt', 'pptx', 'rar', 'sld', 'tif', 'tiff', 'txt', 'xls', 'xlsx', 'xml', 'zip']
-ALLOWED_DOCUMENT_TYPES = ['3ws', 'csv', 'doc', 'docx', 'fbx', 'gif', 'jpg', 'mp4', 'pdf', 'png',
-                          'ppt', 'pptx', 'txt', 'xls', 'xlsx', 'zip', 'sav']
+ALLOWED_DOCUMENT_TYPES = ['3ws', 'csv', 'doc', 'docx', 'fbx', 'gif', 'jpg', 'mmpk', 'mp4', 'pdf', 'png',
+                          'ppt', 'pptx', 'sav', 'txt', 'xls', 'xlsx', 'zip']
 
 # Email for users to contact admins.
 THEME_ACCOUNT_CONTACT_EMAIL = "{{ admin_email }}"
@@ -100,7 +100,7 @@ CATALOGUE = {
 # Default preview library
 #LAYER_PREVIEW_LIBRARY = 'geoext'
 
-# Enable upload of KML, CSV, geoJSON and Zip (?) - according to static/geonode/js/upload/FileTypes.js 
+# Enable upload of KML, CSV, geoJSON and Zip (?) - according to static/geonode/js/upload/FileTypes.js
 UPLOADER = {
     'BACKEND': 'geonode.importer',
     'OPTIONS': {
@@ -234,6 +234,11 @@ MAP_BASELAYERS = [
 # Add guide to apps
 from settings import INSTALLED_APPS
 INSTALLED_APPS = INSTALLED_APPS + ('geonode.guide',)
+
+# Add redirects to apps for general URL redirection facility (see Admin > Redirects)
+from settings import MIDDLEWARE_CLASSES
+INSTALLED_APPS = INSTALLED_APPS + ('django.contrib.redirects',)
+MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + ('django.contrib.redirects.middleware.RedirectFallbackMiddleware',)
 
 # Remove Tiles as a download format (it only gives a sample URL)
 DOWNLOAD_FORMATS_VECTOR = [

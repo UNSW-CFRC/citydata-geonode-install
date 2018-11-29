@@ -1,0 +1,39 @@
+---
+- name: Save post-processed template
+  template:
+    src: citydata.j2
+    dest: '{{ role_path }}/outputs/citydata.json'
+
+- name: Delete any stack from a previous run
+  cloudformation:
+    stack_name: CityData-{{ envt | upper }}
+    region: '{{ aws_region }}'
+    aws_access_key: '{{ aws_access_key }}'
+    aws_secret_key: '{{ aws_secret_key }}'
+    state: absent
+
+- name: Create stack
+  cloudformation:
+    stack_name: CityData-{{ envt | upper }}
+    template_body: "{{ lookup('template', 'citydata.j2') }}"
+    region: '{{ aws_region }}'
+    aws_access_key: '{{ aws_access_key }}'
+    aws_secret_key: '{{ aws_secret_key }}'
+    state: present
+  register: stack_result
+  # ignore_errors: True
+  # when: mode | lower == 'create'
+
+- name: Delete stack if failed
+  cloudformation:
+    stack_name: CityData-{{ envt | upper }}
+    region: '{{ aws_region }}'
+    aws_access_key: '{{ aws_access_key }}'
+    aws_secret_key: '{{ aws_secret_key }}'
+    state: absent
+  when: stack_result is failed
+
+- name: print private IPs
+  debug:
+    msg: '{{ stack_result.stack_outputs }}'
+  # when: mode | lower == 'create'

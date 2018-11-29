@@ -7,24 +7,24 @@
 
 - name: Set data_directory
   lineinfile:
-    dest: /etc/postgresql/9.5/main/postgresql.conf
+    dest: '{{ db_conf_dir }}/postgresql.conf'
     regexp: '^\s*data_directory\s*='
-    line: "data_directory = '{{ dbhome }}/postgresql/9.5/main'"
+    line: "data_directory = '{{ dbhome }}/postgresql/{{ postgres_version }}/main'"
   become: true
 
 - name: Check old data dir exists
-  stat: path=/var/lib/postgresql
+  stat: path={{ old_dbhome }}
   register: datadir_stat
 
 - name: Move database
-  command: mv /var/lib/postgresql /mnt/data
+  command: mv {{ old_dbhome }} {{ dbhome }}
   when: datadir_stat.stat.exists
   become: true
 
 - name: Change postgres home
   user:
     name: postgres
-    home: "{{ dbhome }}/postgresql"
+    home: '{{ dbhome }}/postgresql'
   become: true
 
 - name: Force postgresql restart

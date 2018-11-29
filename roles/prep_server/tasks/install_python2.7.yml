@@ -1,0 +1,12 @@
+---
+- name: Install python2 and both pip versions
+  apt:
+    name: '{{ item }}'
+    # state: present
+    state: latest
+    update_cache: yes
+  with_items:
+   - python2.7
+   - python-pip
+   - python3-pip
+  become: true

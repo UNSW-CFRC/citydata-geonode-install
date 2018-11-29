@@ -5,12 +5,12 @@
     dest: /etc/apache2/sites-available/geonode.conf
   become: true
 
-- name: Set geonode home dir in apache geonode config
+- name: Set geonode gnhome dir in apache geonode config
   replace:
     backup: yes
     dest: /etc/apache2/sites-available/geonode.conf
     regexp: 'GEONODE_HOME'
-    replace: '{{ home }}'
+    replace: '{{ gnhome }}'
   become: true
 
 - name:  Enable proxy_http
@@ -28,22 +28,22 @@
   become: true
   notify:
   - Restart Apache
- 
+
 - name: Create world-writable uploaded subdirectories
   file:
-    path: '{{ home }}/geonode/geonode/uploaded/{{item}}'
+    path: '{{ gnhome }}/geonode/geonode/uploaded/{{item}}'
     state: directory
     mode: a=rwx
-  with_items: 
+  with_items:
    - thumbs
    - layers
    - documents
    - people_group
   become: true
 
-- name: Change owner of geonode home to geonode
+- name: Change owner of geonode gnhome to geonode
   file:
-    path: '{{ home }}/geonode'
+    path: '{{ gnhome }}/geonode'
     state: directory
     owner: geonode
     recurse: yes
@@ -51,7 +51,7 @@
 
 - name: Change owner and group of static and uploaded directories
   file:
-    path: '{{ home }}/geonode/geonode/{{item}}'
+    path: '{{ gnhome }}/geonode/geonode/{{item}}'
     state: directory
     owner: geonode
     group: www-data
@@ -62,8 +62,17 @@
 
 - name: Change owner and group of static_root directory
   file:
-    path: '{{ home }}/geonode/geonode/static_root'
+    path: '{{ gnhome }}/geonode/geonode/static_root'
     state: directory
     owner: www-data
     group: www-data
   become: true
+
+- name: Copy GeoNode data to be served by Apache
+  expect:
+    command: python '{{ gnhome }}/geonode/manage.py' collectstatic
+    responses:
+      'Type .yes. to continue, or .no. to cancel:': 'yes'
+  become: true
+  notify:
+    - Restart Apache

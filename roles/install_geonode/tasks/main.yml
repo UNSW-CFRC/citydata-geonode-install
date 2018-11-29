@@ -1,28 +1,16 @@
 ---
 
-- name: Check tmp folder
-  stat:
-    path: /tmp
-  register: tmp
- 
-- include_tasks: mv_tmp_to_big_disk.yml
-  when: "tmp.stat.islnk is not defined or (tmp.stat.islnk is defined and tmp.stat.islnk == False) and 'small_sysdisk' in group_names"
-
-- include_tasks: install_packages.yml
-
 - include_tasks: move_postgres.yml
-  when: "'small_sysdisk' in group_names"
 
-- include_tasks: geonode_setup.yml
-- include_tasks: install_ssh_keys_for_postgres.yml
+- include_tasks: install_geonode.yml
 
 - include_tasks: create_geonode_db.yml
-  remote_user: postgres
 
-- include_tasks: change_user_access_policy.yml
 - include_tasks: setup_httpd.yml
-- include_tasks: copy_geonode_data.yml
+
 - include_tasks: install_geoserver_application.yml
-- include_tasks: geonode_configuration.yml
-- include_tasks: generate_ssl_csr.yml
-- include_tasks: completion.yml
+- include_tasks: config_geonode.yml
+# - include_tasks: generate_ssl_csr.yml
+# - include_tasks: install_admin_tools.yml
+# - include_tasks: admin_envt.yml
+- include_tasks: complete.yml

@@ -1,9 +1,0 @@
----
-sitename_short: "CityData"
-site_org: "City Futures Research Centre" 
-sitename: "{{ sitename_short }} | {{ site_org }}"
-
-backup_server: citydata-test.be.unsw.edu.au
-backup_exclude: "{lost+found,tmp,.bash_history,.psql_history,.viminfo}"
-
-bing_key: Alr20Y89FtzXN8mhNYJVB6dIe1qvMf7UpCj_mfoUisj2lBoaWJNdtn9IOR_bfBS5

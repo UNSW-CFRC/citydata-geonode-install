@@ -4,8 +4,8 @@ distinguished_name     = req_distinguished_name
 prompt                 = no
 
 [ req_distinguished_name ]
-countryName            = {{country}}
+countryName            = '{{ country_code }}'
 organizationalUnitName = '{{orgname}}'
-emailAddress	       = {{admin_email}}
-commonName             = {{ inventory_hostname }}
-subjectAltName         = {{ inventory_hostname }}
+emailAddress	       = '{{ admin_email }}'
+commonName             = '{{ intended_fqdn }}'
+subjectAltName         = '{{ intended_fqdn }}'

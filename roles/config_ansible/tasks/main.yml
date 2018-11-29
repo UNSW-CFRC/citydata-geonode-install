@@ -1,5 +1,0 @@
----
-- include: set_hostname.yml
-- include: upgrade_ansible.yml
-- include: install_ansible_modules.yml
-- include: hack_ansible_git.yml

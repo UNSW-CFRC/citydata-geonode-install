@@ -1,23 +1,44 @@
 ---
+# - name: Create postgres .ssh directory
+#   file:
+#     path: ~postgres/.ssh
+#     state: directory
+#     owner: postgres
+#   become: true
+#
+# - name: Install ssh keys for postgres
+#   copy:
+#     src: "{{ ansible_env.HOME}}/.ssh/id_rsa.pub"
+#     dest: ~postgres/.ssh/authorized_keys
+#   become: true
+#
 - name: Create geonode DB user
   postgresql_user:
     name: geonode
     password: geonode
+  become: true
+  become_user: postgres
 
 - name: Create geonode database
   postgresql_db:
     name: geonode
     owner: geonode
-  
+  become: true
+  become_user: postgres
+
 - name: Create geonode_data database
   postgresql_db:
     name: geonode_data
     owner: geonode
+  become: true
+  become_user: postgres
 
 - name: Create postgis extension
   postgresql_ext:
     name: postgis
     db: geonode_data
+  become: true
+  become_user: postgres
 
 - name: Grant public access to geometry columns
   postgresql_privs:
@@ -27,6 +48,8 @@
     type: table
     objs: geometry_columns
     roles: public
+  become: true
+  become_user: postgres
 
 - name: Grant public access to spatial reference system table
   postgresql_privs:
@@ -36,3 +59,19 @@
     type: table
     objs: spatial_ref_sys
     roles: public
+  become: true
+  become_user: postgres
+
+- name: Change user access policy for local connections
+  replace:
+    backup: yes
+    dest: '{{ db_conf_dir }}/pg_hba.conf'
+    regexp: '^(local\s+all\s+all\s+)peer$'
+    replace: '\1trust'
+  become: true
+
+- name: Restart postgresql
+  service:
+    name: postgresql
+    state: restarted
+  become: true
