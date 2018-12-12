@@ -47,7 +47,7 @@ Now create the stack, including EC2 instance, volumes and security group:
 ```bash
 ansible-playbook stack.yml -i localhost_ENV --ask-vault-pass
 ```
-...where ENV = dev, test or prod. E.g. localhost_test
+where ENV = dev, test or prod. E.g. localhost_test
 
 When prompted, enter the Ansible vault password for your project.
 
@@ -108,7 +108,7 @@ Run the playbook with:
 ansible-playbook prep.yml -i ENV_py3
 ```
 
-...where ENV = dev, test or prod.
+where ENV = dev, test or prod.
 
 #### Timout error
 
@@ -138,14 +138,14 @@ Easiest response is to SSH into your new server and:
 127.0.1.1 CityData-ENV
 ```
 
-  ...where ENV is your target environment: dev, test or prod.
+where ENV is your target environment: dev, test or prod.
 
 ## Install CityData
 
 ```bash
-ansible-playbook geonode.yml -i ENV_py2
+ansible-playbook geonode.yml -i ENV_py2 --ask-vault-pass
 ```
-Where:  
+where:  
 * ENV = dev, test or prod
 
 #### Install complete
@@ -154,7 +154,7 @@ If you see the message below, you''ve installed CityData and can now test the en
 
 `Geonode installed on http://YOUR_IP_ADDRESS`
 
-...where YOUR_IP_ADDRESS is the IP address of the server.
+where YOUR_IP_ADDRESS is the IP address of the server.
 
 # Configuration
 
