@@ -110,6 +110,36 @@ ansible-playbook prep.yml -i ENV_py3
 
 ...where ENV = dev, test or prod.
 
+#### Timout error
+
+If you see:  
+```
+TASK [prep_server : Set hostname] **********************************************
+fatal: [10.116.2.8]: FAILED! => {"msg": "Timeout (12s) waiting for privilege escalation prompt: "}
+        to retry, use: --limit @/home/ubuntu/ansible/geonode_install/prep.retry
+```
+
+This means the server is timing out trying to set the hostname because the current hostname is not recorded in `/etc/hosts`.
+
+Easiest response is to SSH into your new server and:  
+
+1. Click on the current hostname which will be part of your shell prompt, e.g. the **bold** part of the prompt string below:
+
+  > ubuntu@**ip10_116_2_8**:~$
+
+2. Edit the hosts file with `vi`:
+
+  ```
+  sudo vi /etc/hosts
+  ```
+
+3. Once in `vi`, add (or change) second line to:  
+```
+127.0.1.1 CityData-ENV
+```
+
+  ...where ENV is your target environment: dev, test or prod.
+
 ## Install CityData
 
 ```bash
