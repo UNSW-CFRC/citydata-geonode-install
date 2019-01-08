@@ -1,26 +1,26 @@
 {
-    "Description": "CityData",
+    "Description": "KERData",
     "AWSTemplateFormatVersion": "2010-09-09",
     "Outputs" : {
-        "CityDataPrvIp" : {
-          "Value" : { "Fn::GetAtt" : [ "CityData", "PrivateIp" ]},
-          "Description" : "Citydata server's Private IP Address"
+        "KERDataPrvIp" : {
+          "Value" : { "Fn::GetAtt" : [ "KERData", "PrivateIp" ]},
+          "Description" : "KERData server's Private IP Address"
         }
     },
     "Resources": {
-        "CityData": {
+        "KERData": {
             "Type": "AWS::EC2::Instance",
             "Properties": {
                 "DisableApiTermination": "false",
                 "InstanceInitiatedShutdownBehavior": "stop",
                 "ImageId": "ami-963cecf4",
                 "InstanceType": "t2.xlarge",
-                "KeyName": "CityData",
+                "KeyName": "KERData",
                 "Monitoring": "false",
                 "Tags": [
                     {
                         "Key": "Name",
-                        "Value": "CityData-dev"
+                        "Value": "KERData-dev"
                     },
                     {
                         "Key": "Owner",
@@ -46,11 +46,11 @@
                         "DeleteOnTermination": "true",
                         "Description": "Primary network interface",
                         "DeviceIndex": 0,
-                        "SubnetId": "subnet-1823467d",
-                        "PrivateIpAddress": "13.238.103.217",
+                        "SubnetId": "subnet-75cfd012",
+                        
                         "GroupSet": [
                             {
-                                "Ref": "SGCityData"
+                                "Ref": "SGKERData"
                             }
                         ]
                     }
@@ -65,7 +65,7 @@
         "volData": {
             "Type": "AWS::EC2::Volume",
             "Properties": {
-                "AvailabilityZone": "ap-southeast-2a",
+                "AvailabilityZone": "us-west-1",
                 "Size": "100",
                 "VolumeType": "gp2"
             },
@@ -78,7 +78,7 @@
         "volGWC": {
             "Type": "AWS::EC2::Volume",
             "Properties": {
-                "AvailabilityZone": "ap-southeast-2a",
+                "AvailabilityZone": "us-west-1",
                 "Size": "300",
                 "VolumeType": "gp2"
             },
@@ -88,12 +88,12 @@
                 }
             }
         },
-        "SGCityData": {
+        "SGKERData": {
             "Type": "AWS::EC2::SecurityGroup",
             "Properties": {
-                "GroupName": "CityData-dev",
-                "GroupDescription": "CityData SG",
-                "VpcId": "vpc-57c87032",
+                "GroupName": "KERData-dev",
+                "GroupDescription": "KERData SG",
+                "VpcId": "vpc-cbfbd7ac",
                 "Tags": [
                     {
                         "Key": "Owner",
@@ -101,7 +101,7 @@
                     },
                     {
                         "Key": "Name",
-                        "Value": "CityData-dev"
+                        "Value": "KERData-dev"
                     }
                 ]
             },
@@ -115,7 +115,7 @@
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "GroupId": {
-                    "Ref": "SGCityData"
+                    "Ref": "SGKERData"
                 },
                 "IpProtocol": "tcp",
                 "FromPort": "80",
@@ -127,19 +127,19 @@
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "GroupId": {
-                    "Ref": "SGCityData"
+                    "Ref": "SGKERData"
                 },
                 "IpProtocol": "tcp",
                 "FromPort": "22",
                 "ToPort": "22",
-                "CidrIp": "10.116.2.220/32"
+                "CidrIp": "172.31.21.133/32"
             }
         },
         "ingress3": {
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "GroupId": {
-                    "Ref": "SGCityData"
+                    "Ref": "SGKERData"
                 },
                 "IpProtocol": "tcp",
                 "FromPort": "22",
@@ -151,7 +151,7 @@
             "Type": "AWS::EC2::SecurityGroupEgress",
             "Properties": {
                 "GroupId": {
-                    "Ref": "SGCityData"
+                    "Ref": "SGKERData"
                 },
                 "IpProtocol": "tcp",
                 "FromPort": "80",
@@ -163,9 +163,11 @@
             "Type": "AWS::EC2::SecurityGroupEgress",
             "Properties": {
                 "GroupId": {
-                    "Ref": "SGCityData"
+                    "Ref": "SGKERData"
                 },
-                "IpProtocol": "-1",
+                "IpProtocol": "tcp",
+                "FromPort": "443",
+                "ToPort": "443",
                 "CidrIp": "0.0.0.0/0"
             }
         },

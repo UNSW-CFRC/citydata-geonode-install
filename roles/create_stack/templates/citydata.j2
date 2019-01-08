@@ -1,26 +1,30 @@
 {
-    "Description": "CityData",
+    "Description": "{{ project }}",
     "AWSTemplateFormatVersion": "2010-09-09",
     "Outputs" : {
-        "CityDataPrvIp" : {
-          "Value" : { "Fn::GetAtt" : [ "CityData", "PrivateIp" ]},
-          "Description" : "Citydata server's Private IP Address"
-        }
+        "{{ project }}PrvIp" : {
+          "Value" : { "Fn::GetAtt" : [ "{{ project }}", "PrivateIp" ]},
+          "Description" : "{{ project }} server's Private IP Address"
+        },
+        "{{ project }}PubIp" : {
+          "Value" : { "Fn::GetAtt" : [ "{{ project }}", "PublicIp" ]},
+          "Description" : "{{ project }} server's Public IP Address"
+        },
     },
     "Resources": {
-        "CityData": {
+        "{{ project }}": {
             "Type": "AWS::EC2::Instance",
             "Properties": {
                 "DisableApiTermination": "false",
                 "InstanceInitiatedShutdownBehavior": "stop",
-                "ImageId": "ami-963cecf4",
-                "InstanceType": "t2.xlarge",
-                "KeyName": "CityData",
+                "ImageId": "{{ ec2_image }}",
+                "InstanceType": "{{ ec2_type }}",
+                "KeyName": "{{ project }}",
                 "Monitoring": "false",
                 "Tags": [
                     {
                         "Key": "Name",
-                        "Value": "CityData{{ envt_suffix }}"
+                        "Value": "{{ project }}{{ envt_suffix }}"
                     },
                     {
                         "Key": "Owner",
@@ -50,7 +54,7 @@
                         {{ assign_prv_ip }}
                         "GroupSet": [
                             {
-                                "Ref": "SGCityData"
+                                "Ref": "SG{{ project }}"
                             }
                         ]
                     }
@@ -65,7 +69,7 @@
         "volData": {
             "Type": "AWS::EC2::Volume",
             "Properties": {
-                "AvailabilityZone": "ap-southeast-2a",
+                "AvailabilityZone": "{{ aws_zone }}",
                 "Size": "{{ big_disk_size }}",
                 "VolumeType": "gp2"
             },
@@ -78,7 +82,7 @@
         "volGWC": {
             "Type": "AWS::EC2::Volume",
             "Properties": {
-                "AvailabilityZone": "ap-southeast-2a",
+                "AvailabilityZone": "{{ aws_zone }}",
                 "Size": "{{ gwc_disk_size }}",
                 "VolumeType": "gp2"
             },
@@ -88,11 +92,11 @@
                 }
             }
         },
-        "SGCityData": {
+        "SG{{ project }}": {
             "Type": "AWS::EC2::SecurityGroup",
             "Properties": {
-                "GroupName": "CityData{{ envt_suffix }}",
-                "GroupDescription": "CityData SG",
+                "GroupName": "{{ project }}{{ envt_suffix }}",
+                "GroupDescription": "{{ project }} SG",
                 "VpcId": "{{ vpc_id }}",
                 "Tags": [
                     {
@@ -101,7 +105,7 @@
                     },
                     {
                         "Key": "Name",
-                        "Value": "CityData{{ envt_suffix }}"
+                        "Value": "{{ project }}{{ envt_suffix }}"
                     }
                 ]
             },
@@ -115,7 +119,7 @@
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "GroupId": {
-                    "Ref": "SGCityData"
+                    "Ref": "SG{{ project }}"
                 },
                 "IpProtocol": "tcp",
                 "FromPort": "80",
@@ -127,7 +131,7 @@
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "GroupId": {
-                    "Ref": "SGCityData"
+                    "Ref": "SG{{ project }}"
                 },
                 "IpProtocol": "tcp",
                 "FromPort": "22",
@@ -139,7 +143,7 @@
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "GroupId": {
-                    "Ref": "SGCityData"
+                    "Ref": "SG{{ project }}"
                 },
                 "IpProtocol": "tcp",
                 "FromPort": "22",
@@ -151,23 +155,11 @@
             "Type": "AWS::EC2::SecurityGroupEgress",
             "Properties": {
                 "GroupId": {
-                    "Ref": "SGCityData"
+                    "Ref": "SG{{ project }}"
                 },
-                "IpProtocol": "tcp",
-                "FromPort": "80",
-                "ToPort": "80",
-                "CidrIp": "0.0.0.0/0"
-            }
-        },
-        "egress2": {
-            "Type": "AWS::EC2::SecurityGroupEgress",
-            "Properties": {
-                "GroupId": {
-                    "Ref": "SGCityData"
-                },
-                "IpProtocol": "tcp",
-                "FromPort": "443",
-                "ToPort": "443",
+                "IpProtocol": "-1",
+                "FromPort": "-1",
+                "ToPort": "-1",
                 "CidrIp": "0.0.0.0/0"
             }
         },

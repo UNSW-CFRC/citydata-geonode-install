@@ -6,7 +6,7 @@
 
 - name: Delete any stack from a previous run
   cloudformation:
-    stack_name: CityData-{{ envt | upper }}
+    stack_name: '{{ project }}-{{ envt | upper }}'
     region: '{{ aws_region }}'
     aws_access_key: '{{ aws_access_key }}'
     aws_secret_key: '{{ aws_secret_key }}'
@@ -14,26 +14,23 @@
 
 - name: Create stack
   cloudformation:
-    stack_name: CityData-{{ envt | upper }}
+    stack_name: '{{ project }}-{{ envt | upper }}'
     template_body: "{{ lookup('template', 'citydata.j2') }}"
     region: '{{ aws_region }}'
     aws_access_key: '{{ aws_access_key }}'
     aws_secret_key: '{{ aws_secret_key }}'
     state: present
   register: stack_result
-  # ignore_errors: True
-  # when: mode | lower == 'create'
 
 - name: Delete stack if failed
   cloudformation:
-    stack_name: CityData-{{ envt | upper }}
+    stack_name: '{{ project }}-{{ envt | upper }}'
     region: '{{ aws_region }}'
     aws_access_key: '{{ aws_access_key }}'
     aws_secret_key: '{{ aws_secret_key }}'
     state: absent
   when: stack_result is failed
 
-- name: print private IPs
+- name: print IP address(es)
   debug:
     msg: '{{ stack_result.stack_outputs }}'
-  # when: mode | lower == 'create'

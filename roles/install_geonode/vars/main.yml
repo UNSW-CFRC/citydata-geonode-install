@@ -1,0 +1,14 @@
+---
+gnhome: '{{ big_disk_mount_point }}/geonode'
+gsdata: '{{ big_disk_mount_point }}/geoserver_data'
+tmp: '{{ big_disk_mount_point }}/tmp'
+dbhome: '{{ big_disk_mount_point }}'
+
+gwc: '{{ mount_point }}/geowebcache'
+
+old_dbhome: /var/lib/postgresql
+postgres_version: 9.5
+db_conf_dir: /etc/postgresql/{{ postgres_version }}/main
+dbconf: '{{ db_conf_dir }}/'
+
+geoserver_version: 2.7.4

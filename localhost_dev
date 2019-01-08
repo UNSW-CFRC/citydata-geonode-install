@@ -2,3 +2,6 @@ localhost envt=dev ansible_connection=local ansible_python_interpreter=/usr/bin/
 
 [dev]
 localhost
+
+[asu]
+localhost

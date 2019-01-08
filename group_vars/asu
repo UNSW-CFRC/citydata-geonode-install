@@ -1,0 +1,35 @@
+---
+project: KERData
+orgname: Arizona State University
+city: Phoenix
+postcode: 85287
+state: Arizona
+country: America
+country_code: US
+timezone: '{{ country }}/{{ city }}'
+
+admin_email: citydata@unsw.edu.au
+
+tmp_sitename_short: '{{ project }} ({{ envt }})'
+sitename_short: "{{ tmp_sitename_short | replace(' (prod)','') }}"
+sitename: '{{ sitename_short }} | {{ orgname }}'
+bing_key: AirNFUX63U0RgdpDPrc6jrTWGce1I-QOF-Z2GeCJ3q558EZXDt8Eh4VcdTxHYjEW
+
+google_key: AIzaSyDD2vgGXTnLr53NeeC0h2_JErwG9KL92fU
+
+ows_abstract: "Knowledge Exchange for Resilience."
+ows_keywords: "cities | city | city analytics | smart cities | smart city | urban | urban research"
+
+ows_title: '{{ project }}: {{ orgname }}'
+wms_title: "{{ ows_title }} Web Map Service"
+wfs_title: "{{ ows_title }} Web Feature Service"
+wcs_title: "{{ ows_title }} Web Coverage Service"
+
+ows_addressCity: '{{ city }}'
+ows_addressCountry: '{{ country }}'
+ows_addressElectronicMailAddress: '{{ admin_email }}'
+ows_addressPostalCode: '{{ postcode }}'
+ows_addressState: '{{ state }}'
+ows_contactEmail: '{{ admin_email }}'
+ows_contactOrganization: '{{ orgname }}'
+ows_contactPosition: '{{ project }} Admin'
