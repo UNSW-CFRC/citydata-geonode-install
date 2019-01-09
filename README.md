@@ -84,14 +84,18 @@ vpc_id: vpc-12345678
 subnet_id: subnet-12345678
 ```
 
-Comment out the prv_ip and assign_prv_ip variables:
+Comment out the IP variable values in the group_vars/ENV file:
 
 ```yml
-prv_ip: # Private IP address of api server
+prv_ip: # Private IP address of server
+pub_ip: # Public IP address of server
+```
 
-# Leave these blank for first time stack creation.
-# Then store IP addresses above and uncomment the assignment below
+Comment out `assign_p**_ip` variable values in roles/create_stack/vars/main.yml.
+
+```yml
 assign_prv_ip: # '"PrivateIpAddress": "{{ prv_ip }}",'
+assign_pub_ip: # '"PublicIpAddress": "{{ pub_ip }}",'
 ```
 
 ## Create stack

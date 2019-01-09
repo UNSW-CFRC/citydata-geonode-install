@@ -1,7 +1,5 @@
 ---
 envt_suffix: -{{ envt }}
-cloud_resource_owner: Jonathan Doig
-ec2_type: t2.xlarge
 
 # Assumes host has small system disk so big things should be moved to /mnt/...
 

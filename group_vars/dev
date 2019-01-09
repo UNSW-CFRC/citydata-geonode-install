@@ -1,13 +1,10 @@
 ---
-vpc_id: vpc-cbfbd7ac
-subnet_id: subnet-75cfd012
-hostname: '{{ project }}-dev'
-prv_ip: 172.31.25.68 # 10.116.2.15 # 10.116.2.31 # 10.116.2.14 # Private IP address of api server
-pub_ip: 13.57.190.66
-
 # Leave these blank for first time stack creation.
-# Then store IP addresses above and uncomment the assignment below
-assign_prv_ip: '"PrivateIpAddress": "{{ prv_ip }}",'
+# Then store IP addresses above and uncomment
+# assign_p**_ip vars in roles/create_stack/vars/main.yml
+#
+prv_ip: 172.31.25.68 # Private IP address of server
+pub_ip: 13.57.190.66 # Public IP address of server
 
 admin_pass: !vault |
     $ANSIBLE_VAULT;1.1;AES256

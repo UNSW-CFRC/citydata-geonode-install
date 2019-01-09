@@ -2,4 +2,7 @@
 aws_region: us-west-1
 aws_zone: us-west-1a
 
+vpc_id: vpc-cbfbd7ac
+subnet_id: subnet-75cfd012
+
 ec2_image: ami-0ad16744583f21877 # ami-963cecf4 for Sydney

@@ -1,0 +1,6 @@
+---
+cloud_resource_owner: Jonathan Doig
+ec2_type: t2.xlarge
+
+assign_prv_ip: '"PrivateIpAddress": "{{ prv_ip }}",'
+assign_pub_ip: '"PublicIpAddress": "{{ pub_ip }}",'
