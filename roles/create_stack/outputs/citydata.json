@@ -5,7 +5,11 @@
         "KERDataPrvIp" : {
           "Value" : { "Fn::GetAtt" : [ "KERData", "PrivateIp" ]},
           "Description" : "KERData server's Private IP Address"
-        }
+        },
+        "KERDataPubIp" : {
+          "Value" : { "Fn::GetAtt" : [ "KERData", "PublicIp" ]},
+          "Description" : "KERData server's Public IP Address"
+        },
     },
     "Resources": {
         "KERData": {
@@ -13,7 +17,7 @@
             "Properties": {
                 "DisableApiTermination": "false",
                 "InstanceInitiatedShutdownBehavior": "stop",
-                "ImageId": "ami-963cecf4",
+                "ImageId": "ami-0ad16744583f21877",
                 "InstanceType": "t2.xlarge",
                 "KeyName": "KERData",
                 "Monitoring": "false",
@@ -35,6 +39,12 @@
                     }
                   },
                   {
+                    "Device": "/dev/xvdf",
+                    "VolumeId": {
+                      "Ref": "volBackup"
+                    }
+                  },
+                  {
                     "Device": "/dev/xvdg",
                     "VolumeId": {
                       "Ref": "volGWC"
@@ -47,7 +57,7 @@
                         "Description": "Primary network interface",
                         "DeviceIndex": 0,
                         "SubnetId": "subnet-75cfd012",
-                        
+                        "PrivateIpAddress": "172.31.25.68",
                         "GroupSet": [
                             {
                                 "Ref": "SGKERData"
@@ -65,7 +75,7 @@
         "volData": {
             "Type": "AWS::EC2::Volume",
             "Properties": {
-                "AvailabilityZone": "us-west-1",
+                "AvailabilityZone": "us-west-1a",
                 "Size": "100",
                 "VolumeType": "gp2"
             },
@@ -75,10 +85,18 @@
                 }
             }
         },
+        "volBackup": {
+            "Type": "AWS::EC2::Volume",
+            "Properties": {
+                "AvailabilityZone": "us-west-1a",
+                "Size": "200",
+                "VolumeType": "gp2"
+            },
+        },
         "volGWC": {
             "Type": "AWS::EC2::Volume",
             "Properties": {
-                "AvailabilityZone": "us-west-1",
+                "AvailabilityZone": "us-west-1a",
                 "Size": "300",
                 "VolumeType": "gp2"
             },
@@ -144,7 +162,7 @@
                 "IpProtocol": "tcp",
                 "FromPort": "22",
                 "ToPort": "22",
-                "CidrIp": "172.26.192.0/18"
+                "CidrIp": "211.30.23.60/32"
             }
         },
         "egress1": {
@@ -153,21 +171,9 @@
                 "GroupId": {
                     "Ref": "SGKERData"
                 },
-                "IpProtocol": "tcp",
-                "FromPort": "80",
-                "ToPort": "80",
-                "CidrIp": "0.0.0.0/0"
-            }
-        },
-        "egress2": {
-            "Type": "AWS::EC2::SecurityGroupEgress",
-            "Properties": {
-                "GroupId": {
-                    "Ref": "SGKERData"
-                },
-                "IpProtocol": "tcp",
-                "FromPort": "443",
-                "ToPort": "443",
+                "IpProtocol": "-1",
+                "FromPort": "-1",
+                "ToPort": "-1",
                 "CidrIp": "0.0.0.0/0"
             }
         },

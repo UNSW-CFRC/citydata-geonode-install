@@ -1,8 +1,5 @@
 ---
-timezone: America/Phoenix
 aws_region: us-west-1
 aws_zone: us-west-1a
-cloud_resource_owner: Jonathan Doig
 
 ec2_image: ami-0ad16744583f21877 # ami-963cecf4 for Sydney
-ec2_type: t2.xlarge

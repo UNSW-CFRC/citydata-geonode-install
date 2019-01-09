@@ -1,13 +1,13 @@
 ---
 - name: Test if site is available
   uri:
-    url: http://{{ inventory_hostname }}
+    url: http://{{ host_ip }}
 
 - name: Completion message
   vars:
     msg: |
-         Geonode installed on http://{{ inventory_hostname }}
-         Now login to http://{{ inventory_hostname }}/geoserver as admin and change master password:
+         Geonode installed on http://{{ host_ip }}
+         Now login to http://{{ host_ip }}/geoserver as admin and change master password:
          Security > Passwords > Active master password provider > Change password
   debug:
     msg: "{{ msg.split('\n') }}"
@@ -15,4 +15,4 @@
 - name: Print master password if available
   debug:
     msg: "{{ masterpw.stdout }}"
-  when: masterpw.stdout is defined
+  when: masterpw is defined

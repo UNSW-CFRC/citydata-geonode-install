@@ -1,6 +1,4 @@
 ---
-
-
 - name: Exit if localhost and TMP not set
 #  when: "'local' in group_names and ansible_env.TMP is undefined"
 #  when: "ansible_env.TMP is undefined" - is undefined even when TMP is actually defined
@@ -17,7 +15,7 @@
 
 - name: Create folder tmp on big disk with attributes like /tmp
   file:
-    path: '{{ tmp }}'
+    path: '{{ tmp_dir }}'
     owner: root
     group: root
     mode: u=rwx,g=rwx,o=rwx,g+s
@@ -32,7 +30,7 @@
 
 - name: Link back from big disk to /tmp
   file:
-    src: '{{ tmp }}'
+    src: '{{ tmp_dir }}'
     dest: /tmp
     state: link
   become: true

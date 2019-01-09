@@ -1,0 +1,4 @@
+---
+devices: ['{{ big_disk_device }}', '{{ backup_disk_device }}', '{{ gwc_disk_device }}']
+fstypes: ['{{ big_fstype }}', '{{ backup_fstype }}', '{{ gwc_fstype }}']
+paths: ['{{ big_dir }}', '{{ backup_dir }}', '{{ gwc_dir }}']

@@ -39,6 +39,12 @@
                     }
                   },
                   {
+                    "Device": "/dev/{{ backup_disk_device }}",
+                    "VolumeId": {
+                      "Ref": "volBackup"
+                    }
+                  },
+                  {
                     "Device": "/dev/{{ gwc_disk_device }}",
                     "VolumeId": {
                       "Ref": "volGWC"
@@ -78,6 +84,14 @@
                     "id": "1d252d89-effb-4317-b886-6ca4d302f6c0"
                 }
             }
+        },
+        "volBackup": {
+            "Type": "AWS::EC2::Volume",
+            "Properties": {
+                "AvailabilityZone": "{{ aws_zone }}",
+                "Size": "{{ backup_disk_size }}",
+                "VolumeType": "gp2"
+            },
         },
         "volGWC": {
             "Type": "AWS::EC2::Volume",
