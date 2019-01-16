@@ -1,0 +1,22 @@
+---
+- name: Install backup shell script
+  template:
+    src: backupRestoreGeonode.j2
+    dest: ~/backupRestoreGeonode
+    mode: 0700
+
+- name: Install shell script to call backup daily
+  template:
+    src: backupDaily.j2
+    dest: ~/backupDaily
+    mode: 0700
+
+- name: Schedule cron job for just after midnight each weeknight
+  cron:
+    name: 'Backup geonode data'
+    weekday: 2-6
+    minute: 15
+    hour: 0
+    job: ~/backupDaily
+    user: ubuntu
+  become: true

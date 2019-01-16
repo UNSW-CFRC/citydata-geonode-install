@@ -1,0 +1,88 @@
+#!/bin/bash
+
+usage="Usage: $(basename "$0") ACTION [absolute_backup_dir]
+where:
+    ACTION = backup | restore"
+
+if [ $# -eq 0 ]
+  then
+    echo "$usage"
+    exit 0
+fi
+
+option=$1
+geonodeBackup="${2:-{{ backup_dir }}}"
+
+# echo I would $1 to $geonodeBackup
+# echo but I will exit now
+# exit 0
+
+sudo mkdir -p $geonodeBackup
+sudo chown -R $USER $geonodeBackup
+
+function stopServices
+{
+   echo "Stopping services"
+   sudo service apache2 stop
+   sudo service tomcat7 stop
+   sudo service postgresql stop
+}
+
+function startServices
+{
+   echo "Restarting services"
+   sudo service postgresql start
+   sudo service tomcat7 start
+   sudo service apache2 start
+}
+
+case $option in
+backup)
+  echo "$(basename $0): $1 $geonodeBackup started at `date`"
+
+  echo -e "\nSql dump"
+  sudo -u postgres -i pg_dump -c -Fc geonode > $geonodeBackup/geonodedb.backup
+  sudo -u postgres -i pg_dump -c -Fc geonode_data > $geonodeBackup/geonode_data_db.backup
+
+  stopServices
+
+  echo "Making Files/Directory backup"
+  cd $geonodeBackup # go into the folder for backup
+
+  # Backup Geonode project folder
+  tar -czf geonodeConfigBackup.tgz {{ gnhome }}/geonode
+
+  # Backup Geoserver data folder
+  tar -czf geonodeUsrDataBackup.tgz {{ gsdata }}
+
+  startServices
+
+  Message="$(basename $0): $1 $geonodeBackup finished at `date`"
+  ;;
+
+restore)
+  echo "$(basename $0): $1 $geonodeBackup started at `date`"
+  stopServices
+  cd $geonodeBackup
+
+  for i in $(ls *.tgz)
+  do
+   echo "Restoring: $i"
+   sudo tar -C / -xzf $i
+  done
+
+  startServices
+
+  sudo -u postgres dropdb geonode;
+  sudo -u postgres createdb geonode;
+  sudo -u postgres -i pg_restore -Fc -d geonode geonodedb.backup
+  sudo -u postgres -i pg_restore -Fc -d geonode_data $geonodeBackup/geonode_data_db.backup
+
+  Message="$(basename $0): $1 $geonodeBackup finished at `date`"
+  ;;
+*)
+  Message="$usage"
+  ;;
+esac
+
+echo "$Message"
