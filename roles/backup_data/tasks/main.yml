@@ -1,0 +1,28 @@
+---
+- name: Create db backup dir
+  file:
+    path: '{{ backup_dir }}/db/'
+    owner: 'postgres'
+    group: 'postgres'
+    state: directory
+  become: True
+
+- name: Backup Database
+  shell: "pg_dump -Fc {{ item }} > {{ backup_dir }}/db/{{ item }}.dump"
+  with_items:
+    - geonode
+    - geonode_data
+  become_user: postgres
+  become: True
+
+- name: Backup Geoserver Data Dir
+  archive:
+    path: '{{ gsdata }}/*'
+    dest: '{{ backup_dir }}/geoserver_data_dir.tgz'
+  become: True
+
+- name: Backup Geonode installation
+  archive:
+    path: '{{ gnhome }}/geonode'
+    dest: '{{ backup_dir }}/geonode.tgz'
+  become: True
