@@ -1,0 +1,53 @@
+---
+- name: Remove empty OWS contact
+  lineinfile:
+    dest: '{{ gsdata }}/global.xml'
+    regexp: '<contact/>'
+    state: absent
+
+- name: Set OWS contact details
+  blockinfile:
+    dest: '{{ gsdata }}/global.xml'
+    marker: '<!-- {mark} ANSIBLE prodify MANAGED BLOCK -->'
+    insertafter: '<id>'
+    block: |
+      <contact>
+        <addressCity>{{ ows_addressCity }}</addressCity>
+        <addressCountry>{{ ows_addressCountry }}</addressCountry>
+        <addressElectronicMailAddress>{{ ows_addressElectronicMailAddress }}</addressElectronicMailAddress>
+        <addressPostalCode>{{ ows_addressPostalCode }}</addressPostalCode>
+        <addressState>{{ ows_addressState }}</addressState>
+        <contactEmail>{{ ows_contactEmail }}</contactEmail>
+        <contactOrganization>{{ ows_contactOrganization }}</contactOrganization>
+        <contactPosition>{{ ows_contactPosition }}</contactPosition>
+      </contact>
+
+- name: Set OWS capabilities details
+  template:
+    src: '{{ item }}.xml.j2'
+    dest: '{{ gsdata }}/{{ item }}.xml'
+  with_items:
+   - wms
+   - wfs
+   - wcs
+
+- name: Set OWS keywords 1
+  replace:
+    dest: '{{ gsdata }}/{{ item }}.xml'
+    regexp: '\s*\|\s*'
+    replace: '</string> <string>'
+  with_items:
+   - wms
+   - wfs
+   - wcs
+
+- name: Set OWS keywords 2
+  lineinfile:
+    dest: '{{ gsdata }}/{{ item }}.xml'
+    regexp: '\s*OWS_KEYWORDS\s*(.*)$'
+    line: '    <string>\1</string>'
+    backrefs: yes
+  with_items:
+   - wms
+   - wfs
+   - wcs

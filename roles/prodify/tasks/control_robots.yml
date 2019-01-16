@@ -1,0 +1,47 @@
+---
+- name: Update comment for robots.txt
+  replace:
+    dest: '{{ gnhome }}/geonode/geonode/urls.py'
+    regexp: 'Keep out web crawlers: dev and test sites only'
+    replace: 'Keep out web crawlers: production sites only'
+
+- name: Set robots.txt to exclude non-content URLs
+  replace:
+    dest: '{{ gnhome }}/geonode/geonode/urls.py'
+    regexp: '\s*Disallow:[^"]*"'
+    replace: ' Disallow: /catalogue\\n
+               Disallow: /data.json\\n
+               Disallow: /account\\n
+               Disallow: /people\\n
+               Disallow: /avatar\\n
+               Disallow: /comments\\n
+               Disallow: /ratings\\n
+               Disallow: /activity\\n
+               Disallow: /announcements\\n
+               Disallow: /messages\\n
+               Disallow: /social\\n
+               Disallow: /security\\n
+               Disallow: /lang.js\\n
+               Disallow: /jsi18n\\n
+               Disallow: /i18n\\n
+               Disallow: /autocomplete\\n
+               Disallow: /admin\\n
+               Disallow: /groups\\n
+               Disallow: /services\\n
+               Disallow: /dynamic\\n
+               Disallow: /upload\\n
+               Disallow: /gs\\n
+               Disallow: /notifications\\n
+               Disallow: /maps/new\\n
+               Disallow: /geoserver/wfs?*=GetFeature\\n
+               Allow: /geoserver/wfs?*=GetFeature*COUNT=\\n
+               Allow: /geoserver/wfs?*COUNT=*=GetFeature\\n
+               Allow: /geoserver/wfs?*=GetFeature*count=\\n
+               Allow: /geoserver/wfs?*count=*=GetFeature\\n
+               Allow: /geoserver/wfs?*=GetFeature*axFeatures=\\n
+               Allow: /geoserver/wfs?*axFeatures=*=GetFeature\\n
+               Allow: /geoserver/wfs?*=GetFeature*AXFEATURES=\\n
+               Allow: /geoserver/wfs?*AXFEATURES=*=GetFeature\\n
+               Disallow: /geoserver/wms/kml*download\\n
+               Disallow: /geoserver/wms/kml*DOWNLOAD\\n
+               \\nSitemap: https://{{ intended_fqdn }}/sitemap.xml"'

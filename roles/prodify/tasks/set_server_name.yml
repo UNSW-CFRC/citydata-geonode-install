@@ -1,0 +1,39 @@
+---
+- name: Add FQDN to allowed hosts
+  replace:
+    dest: '{{ gnhome }}/geonode/geonode/local_settings.py'
+    regexp: '^(\s*ALLOWED_HOSTS\s*=\s*\[((?!{{ intended_fqdn | default(pub_ip) }})[^\]])*)\]'
+    replace: '\1, \047{{ intended_fqdn | default(pub_ip) }}\047]'
+
+# http://docs.geonode.org/en/master/tutorials/advanced/geonode_production/production.html
+- name: Set the GeoServer Proxy URL & geowebcache dir
+  blockinfile:
+    dest: /var/lib/tomcat7/webapps/geoserver/WEB-INF/web.xml
+    marker: '<!-- {mark} ANSIBLE prodify MANAGED BLOCK -->'
+    insertafter: '<web-app>'
+    block: |
+      <context-param>
+      <param-name>PROXY_BASE_URL</param-name>
+      <param-value>https://{{ intended_fqdn | default(pub_ip) }}/geoserver</param-value>
+      </context-param>
+      <context-param>
+      <param-name>GEOWEBCACHE_CACHE_DIR</param-name>
+      <param-value>{{ gwc_dir }}</param-value>
+      </context-param>
+
+- name: Add host to printing config
+  blockinfile:
+    dest: '{{ gsdata }}/printing/config.yaml'
+    marker: '#====== {mark} ANSIBLE prodify MANAGED BLOCK ======#'
+    insertbefore: 'dnsMatch'
+    block: |
+      blockinfile_deletethisline
+        - !dnsMatch
+          host: {{ intended_fqdn | default(pub_ip) }}
+          port: 80
+
+- name: Delete indentation marker line for printing config
+  lineinfile:
+    path: '{{ gsdata }}/printing/config.yaml'
+    state: absent
+    line: blockinfile_deletethisline
