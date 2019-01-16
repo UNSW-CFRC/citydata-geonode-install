@@ -1,6 +1,6 @@
 ---
 # Assumes AWS instance created with big disk at /dev/{{ big_disk_device }}.
-# Uses XFS for dynamically allocated inodes (necessary as Geowebcache can easily create millions of files).
+# Uses XFS for Geowebcache for dynamically allocated inodes (necessary as Geowebcache can easily create millions of files).
 
 - name: create filesystems
   filesystem:

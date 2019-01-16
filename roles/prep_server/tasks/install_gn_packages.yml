@@ -1,51 +1,21 @@
 ---
 - name: Ensure python-apt is installed
-  command: apt-get install python-apt -y -q
-             creates=/usr/share/doc/python-apt
+  command: apt-get install python-apt -y -q creates=/usr/share/doc/python-apt
+  args:
+    warn: false
   become: true
 
 - name: Install packages
   apt:
-    name: '{{ item }}'
+    name: [python-virtualenv, build-essential, openssh-server, apache2, gcc,
+      gdal-bin, gettext, git-core, libapache2-mod-wsgi, libgeos-dev, libjpeg-dev,
+      libpng-dev, libpq-dev, libproj-dev, libxml2-dev, libxslt-dev, openjdk-8-jre,
+      patch, postgresql, postgis, postgresql-9.5-postgis-scripts, postgresql-contrib,
+      python, python-dev, python-gdal, python-pexpect, python-pycurl, python-imaging,
+      python-pastescript, python-psycopg2, python-urlgrabber, python-virtualenv,
+      tomcat7, unzip, zip, ncdu]
     state: present
     update_cache: yes
-  with_items:
-   - python-virtualenv
-   - build-essential
-   - openssh-server
-   - apache2
-   - gcc
-   - gdal-bin
-   - gettext
-   - git-core
-   - libapache2-mod-wsgi
-   - libgeos-dev
-   - libjpeg-dev
-   - libpng-dev
-   - libpq-dev
-   - libproj-dev
-   - libxml2-dev
-   - libxslt-dev
-   - openjdk-8-jre
-   - patch
-   - postgresql
-   - postgis
-   - postgresql-9.5-postgis-scripts
-   - postgresql-contrib
-   - python
-   - python-dev
-   - python-gdal
-   - python-pexpect
-   - python-pycurl
-   - python-imaging
-   - python-pastescript
-   - python-psycopg2
-   - python-urlgrabber
-   - python-virtualenv
-   - tomcat7
-   - unzip
-   - zip
-   - ncdu
   become: true
 
 - name: Check if python-support is installed

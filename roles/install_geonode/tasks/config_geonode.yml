@@ -13,6 +13,19 @@
 - name: Fix sitename
   command: python '{{ gnhome }}/geonode/manage.py' fixsitename
 
+# Fix error showing in Tomcat log as:
+#   java.lang.UnsatisfiedLinkError: /mnt/sys/tmp/tomcat7-tomcat7-tmp/spatialite-3.7.22.4-libspatialitejdbc.so: libproj.so.0: cannot open shared object file: No such file or directory
+#
+# sudo ln -s /usr/lib/x86_64-linux-gnu/libproj.so.9 /usr/lib/x86_64-linux-gnu/libproj.so.0
+#
+# Solved at https://github.com/GeoNode/geonode/issues/3186
+#
+- name: Fix tomcat logged error
+  file:
+    src: /usr/lib/x86_64-linux-gnu/libproj.so.9
+    path: /usr/lib/x86_64-linux-gnu/libproj.so.0
+    state: link
+
 - name: Display shortname on homepage
   lineinfile:
     dest: '{{ gnhome }}/geonode/geonode/templates/site_index.html'

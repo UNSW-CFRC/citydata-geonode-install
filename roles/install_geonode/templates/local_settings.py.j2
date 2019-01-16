@@ -2,7 +2,7 @@ import os
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
-SITEURL = "http://{{ inventory_hostname }}/"
+SITEURL = "http://{{ pub_ip | default(inventory_hostname) }}/"
 SITENAME_SHORT = "{{ sitename_short }}"
 SITE_ORG = "{{ orgname }}"
 SITENAME = SITENAME_SHORT + " | " + SITE_ORG

@@ -1,5 +1,5 @@
 ---
-hostname: '{{ project }}{{ envt_suffix | replace('-prod','') }}'
+hostname: '{{ project }}{{ envt_suffix | replace("-prod","") }}'
 
 devices: ['{{ big_disk_device }}', '{{ backup_disk_device }}', '{{ gwc_disk_device }}']
 fstypes: ['{{ big_fstype }}', '{{ backup_fstype }}', '{{ gwc_fstype }}']

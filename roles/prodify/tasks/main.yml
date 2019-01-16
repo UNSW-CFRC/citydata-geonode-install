@@ -1,0 +1,36 @@
+---
+- name: Set debug false
+  lineinfile:
+    dest: '{{ gnhome }}/geonode/geonode/local_settings.py'
+    regexp: '^\s*DEBUG\s*=.*$'
+    line: 'DEBUG = TEMPLATE_DEBUG = False'
+
+- include_tasks: set_server_name.yml
+
+- include_tasks: control_robots.yml
+
+- name: Add maxThreads for Java
+  lineinfile:
+    dest: /var/lib/tomcat7/conf/server.xml
+    insertafter: 'proxyName\s*='
+    line: '        maxThreads="50"'
+
+- include_tasks: limit_csw.yml
+
+- include_tasks: set_ows_metadata.yml
+
+- name: Install shell script to seed geowebcache
+  template:
+    src: seed_cache.sh.j2
+    dest: ~/seed_cache.sh
+    mode: 0700
+
+- name: Force Tomcat restart
+  service:
+    name: tomcat7
+    state: restarted
+
+- name: Force Apache restart
+  service:
+    name: apache2
+    state: restarted
