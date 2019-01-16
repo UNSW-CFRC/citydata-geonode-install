@@ -135,6 +135,7 @@
                 "GroupId": {
                     "Ref": "SGKERData"
                 },
+                "Description": "HTTP from Ansible control"
                 "IpProtocol": "tcp",
                 "FromPort": "80",
                 "ToPort": "80",
@@ -147,6 +148,7 @@
                 "GroupId": {
                     "Ref": "SGKERData"
                 },
+                "Description": "SSH from Ansible control"
                 "IpProtocol": "tcp",
                 "FromPort": "22",
                 "ToPort": "22",
@@ -159,10 +161,24 @@
                 "GroupId": {
                     "Ref": "SGKERData"
                 },
+                "Description": "SSH from devops home"
                 "IpProtocol": "tcp",
                 "FromPort": "22",
                 "ToPort": "22",
                 "CidrIp": "211.30.23.60/32"
+            }
+        },
+        "ingress4": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId": {
+                    "Ref": "SGKERData"
+                },
+                "Description": "SSH from devops work"
+                "IpProtocol": "tcp",
+                "FromPort": "22",
+                "ToPort": "22",
+                "CidrIp": "149.171.161.0/24"
             }
         },
         "egress1": {
@@ -171,6 +187,7 @@
                 "GroupId": {
                     "Ref": "SGKERData"
                 },
+                "Description": "Allow all out"
                 "IpProtocol": "-1",
                 "FromPort": "-1",
                 "ToPort": "-1",
