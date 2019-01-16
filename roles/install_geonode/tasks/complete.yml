@@ -15,4 +15,4 @@
 - name: Print master password if available
   debug:
     msg: "{{ masterpw.stdout }}"
-  when: masterpw is defined
+  when: masterpw is defined and masterpw.stdout is defined
