@@ -1,0 +1,305 @@
+# Install GeoNode Application
+# http://docs.geonode.org/en/master/tutorials/install_and_admin/geonode_install/install_geonode_application.html
+
+sudo apt-get update
+
+sudo apt-get install -y python-virtualenv python-dev libxml2 libxml2-dev libxslt1-dev zlib1g-dev libjpeg-dev libpq-dev git default-jdk
+sudo apt-get install -y build-essential openssh-server gettext nano vim unzip zip patch git-core postfix
+
+# No postfix mail configuration
+
+sudo apt-add-repository -y ppa:webupd8team/java
+sudo apt-get update
+sudo apt-get install -y oracle-java8-installer
+
+# Accept the licence
+
+sudo apt-add-repository -y ppa:ubuntugis && sudo apt-get update && sudo apt-get upgrade -y
+
+# grub: accept the package maintainer's version
+
+sudo apt-add-repository -y ppa:ubuntugis/ppa && sudo apt-get update && sudo apt-get upgrade -y
+
+sudo apt-get install -y gcc apache2 libapache2-mod-wsgi libgeos-dev libjpeg-dev libpng-dev libpq-dev libproj-dev libxml2-dev libxslt-dev
+
+sudo apt-add-repository -y ppa:ubuntugis/ubuntugis-testing && sudo apt-get update && sudo apt-get upgrade -y
+
+sudo apt-get install -y gdal-bin libgdal20 libgdal-dev
+
+sudo apt-get install -y python-gdal python-pycurl python-imaging python-pastescript python-psycopg2 python-urlgrabber
+
+sudo apt-get install -y postgresql postgis postgresql-9.5-postgis-scripts postgresql-contrib
+
+sudo apt-get install -y tomcat8
+
+sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get autoremove && sudo apt-get autoclean && sudo apt-get purge && sudo apt-get clean
+
+
+sudo apt-get install -y python-pip
+
+# JD: SKIP THIS:
+# pip install --upgrade pip
+
+pip install --user virtualenv
+
+pip install --user virtualenvwrapper
+# The commands above will install the Python Venv packages
+
+# Repeated from here 16/1 after Alessio fixed https://github.com/GeoNode/geonode/issues/4153
+#
+export WORKON_HOME=~/Envs
+mkdir -p $WORKON_HOME
+source $HOME/.local/bin/virtualenvwrapper.sh
+printf '\n%s\n%s\n%s' '# virtualenv' 'export WORKON_HOME=~/Envs' 'source $HOME/.local/bin/virtualenvwrapper.sh' >> ~/.bashrc
+source ~/.bashrc
+# We have now configured the user environment
+
+mkvirtualenv --no-site-packages geonode
+# Through this command we have created a brand new geonode Virual Environment
+
+sudo useradd -m geonode
+
+# JD: use ubuntu not geo
+# sudo usermod -a -G geonode geo
+sudo usermod -a -G geonode ubuntu
+sudo chmod -Rf 775 /home/geonode/
+# sudo su - geo
+sudo su - ubuntu
+# The commands above are needed only if geo and geonode users have not been already defined
+
+
+
+workon geonode
+
+
+
+pip install Django==1.8.18
+
+# JD: change 2.8.0 to 2.8 because 2.8.0.zip is a 404 and 2.8.zip works :)
+# django-admin.py startproject --template=https://github.com/GeoNode/geonode-project/archive/2.8.0.zip -e py,rst,json,yml my_geonode
+django-admin.py startproject --template=https://github.com/GeoNode/geonode-project/archive/2.8.zip -e py,rst,json,yml my_geonode
+
+
+
+
+cd my_geonode
+
+# Find the closest pygdal version.
+# Example: 2.2.1 ...  2.2.1.3, ...
+gdal-config --version && pip install pygdal==
+
+# JD: found version 2.2.1.3
+
+pip install pygdal==2.2.1.3
+
+vi requirements.txt
+# Make sure requirements contains reference to geonode 2.8 branch
+# and correct gdal version (see above)
+-e git://github.com/GeoNode/geonode.git@2.8.0#egg=geonode
+pygdal==2.2.1.3
+
+# JD: added pygdal==2.2.1.3
+
+pip install -r requirements.txt --upgrade
+
+# JD: red message (error?) but still completed:
+django-filter 2.0.0 has requirement Django>=1.11, but you'll have django 1.8.19 which is incompatible.
+docker 3.1.1 has requirement requests!=2.18.0,>=2.14.2, but you'll have requests 2.11.1 which is incompatible.
+django-haystack 2.8.1 has requirement Django>=1.11, but you'll have django 1.8.19 which is incompatible.
+requests-oauthlib 1.1.0 has requirement oauthlib<3.0.0,>=2.1.0, but you'll have oauthlib 2.0.1 which is incompatible.
+
+pip install -e . --upgrade --no-cache
+
+# Create GeoNode DB & Finalize GeoNode Setup
+# http://docs.geonode.org/en/master/tutorials/install_and_admin/geonode_install/create_geonode_db.html
+
+sudo -u postgres createuser -P geonode
+# enter geonode as Password
+
+sudo -u postgres createdb -O geonode geonode
+sudo -u postgres createdb -O geonode geonode_data
+
+sudo -u postgres psql -d geonode_data -c 'CREATE EXTENSION postgis;'
+
+sudo -u postgres psql -d geonode_data -c 'GRANT ALL ON geometry_columns TO PUBLIC;'
+sudo -u postgres psql -d geonode_data -c 'GRANT ALL ON spatial_ref_sys TO PUBLIC;'
+sudo -u postgres psql -d geonode_data -c 'GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO geonode;'
+
+
+sudo vi /etc/postgresql/9.5/main/pg_hba.conf
+
+# Change 'peer' to 'trust' in:
+
+# "local" is for Unix domain socket connections only
+local   all             all                                     peer
+
+sudo service postgresql restart
+
+# Test with:
+psql -U geonode geonode
+
+# Finalize GeoNode Setup
+# http://docs.geonode.org/en/master/tutorials/install_and_admin/geonode_install/create_geonode_db.html#finalize-geonode-setup
+
+workon geonode
+
+cd /home/geonode
+
+cd my_geonode
+
+cp my_geonode/local_settings.py.sample my_geonode/local_settings.py
+
+vi my_geonode/local_settings.py
+# JD: didn't make any changes - come back to this if needed
+
+
+vi my_geonode/local_settings.py
+
+ALLOWED_HOSTS = {{ pub_ip }}
+
+# fallback to regular list of values separated with misc chars
+ALLOWED_HOSTS = ['54.193.77.84', HOSTNAME, 'localhost', 'django', 'geonode'] if os.getenv('ALLOWED_HOSTS') is None \
+
+# Define email service on GeoNode
+EMAIL_ENABLE = False # True
+
+# TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Phoenix'
+
+# JD: Can make other changes - see doco link above
+
+# Finalize GeoNode Setup & Test
+# http://docs.geonode.org/en/master/tutorials/install_and_admin/geonode_install/create_geonode_db.html#finalize-geonode-setup-test
+
+sudo service apache2 stop
+sudo service tomcat8 stop
+
+# This will delete all data you created until now.
+paver reset_hard
+
+=> NameError: name 'SITE_HOST_NAME' is not defined
+
+vi my_geonode/local_settings.py
+
+# SITEURL = os.getenv('SITEURL', "http://%s:%s/" % (SITE_HOST_NAME, SITE_HOST_PORT))
+SITEURL = "http://54.193.77.84:80/"
+
+paver reset_hard
+
+=> New errors:
+
+[Errno 3] No such process
+---> pavement.stop_qgis_server
+
+[Errno 2] No such file or directory: path('geoserver/data/global.xml')
+[Errno 2] No such file or directory: path('geoserver/data/security/filter/geonode-oauth2/config.xml')
+[Errno 2] No such file or directory: path('geoserver/data/security/role/geonode REST role service/config.xml')
+git clean -dxf
+fatal: Not a git repository (or any of the parent directories): .git
+
+Captured Task Output:
+---------------------
+...
+Build failed running pavement.reset_hard: Subprocess return code: 128
+
+
+
+
+rm -Rf geoserver
+rm -Rf downloaded/*.*
+
+
+# Revert to default site settings
+vi my_geonode/local_settings.py
+
+# Comment the following pieces
+  # SITEURL...
+  # GEOSERVER_LOCATION...
+  # GEOSERVER_PUBLIC_LOCATION ...
+# JD: didn't do that, doesn't make sense to me
+
+
+sudo chown -Rf geonode: my_geonode/uploaded/
+sudo chown -Rf geonode: my_geonode/static*
+
+
+
+paver setup
+# This command downloads and extract the correct GeoServer version
+=> IOError: [Errno 13] Permission denied: '/usr/local/share/GeoIP'
+
+# JD: added this hack:
+sudo chmod 777 /usr/local/share
+
+and reran paver setup
+=> IOError:
+  Requesting http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
+  1KB [00:00, 970.01KB/s]
+   total_size [0] / wrote [162]
+  Writing to /usr/local/share/GeoIP
+  Cannot extract <open file 'output.bin', mode 'r' at 0x7feb76c20d20> and write to /usr/local/share/GeoIP: Not a gzipped file
+
+File is missing. 2 choices:
+1. MaxMind DB binary, gzipped
+https://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz
+2. CSV format, zipped
+https://geolite.maxmind.com/download/geoip/database/GeoLite2-City-CSV.zip
+
+Try #1 coz it's most similar to GeoLiteCity.dat.gz
+
+BUt where to put that URL?
+
+I'll try the manage.py command referenced in the paver setup output:
+python -W ignore manage.py updategeoip -o
+
+=> same error:
+  Requesting http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
+  1KB [00:00, 975.65KB/s]
+   total_size [0] / wrote [162]
+  Writing to /usr/local/share/GeoIP
+  Cannot extract <open file 'output.bin', mode 'r' at 0x7fef7a5c0d20> and write to /usr/local/share/GeoIP: Not a gzipped file
+  Traceback (most recent call last):
+    File "/home/ubuntu/Envs/geonode/src/geonode/geonode/base/management/commands/updategeoip.py", line 126, in handle_old_format
+      tofile.write(zfile.read())
+    File "/usr/lib/python2.7/gzip.py", line 261, in read
+      self._read(readsize)
+    File "/usr/lib/python2.7/gzip.py", line 303, in _read
+      self._read_gzip_header()
+    File "/usr/lib/python2.7/gzip.py", line 197, in _read_gzip_header
+      raise IOError, 'Not a gzipped file'
+  IOError: Not a gzipped file
+
+Try the lines manually in python:
+
+try from python manage.py shell:
+    from django.contrib.gis.geoip2 import GeoIP2 as GeoIP
+    URL = 'http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz'
+    OLD_FORMAT = False
+
+from django.contrib.gis import geoip
+=> OK
+
+from django.contrib.gis import geoip2
+=> ERROR:
+  ---------------------------------------------------------------------------
+  ImportError                               Traceback (most recent call last)
+  <ipython-input-6-383cd228a818> in <module>()
+  ----> 1 from django.contrib.gis import geoip2
+
+  ImportError: cannot import name geoip2
+
+#JD: OK
+1. Old GeoLite-City database is discontinued
+2. New GeoLite2-City database works with geoip2
+3. geoip2 requires Django>=1.9
+4. Geonode 2.8 runs on Django 1.8
+
+Raised issue 4153 with Geonode-dev
+
+HEREIAM:
+
+$ paver sync
+# This command prepares the DB tables and loads initial data
+
+$ paver start
+# This command allows you to start GeoNode in development mode
