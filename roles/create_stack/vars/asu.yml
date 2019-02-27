@@ -5,4 +5,6 @@ aws_zone: us-west-1a
 vpc_id: vpc-cbfbd7ac
 subnet_id: subnet-75cfd012
 
-ec2_image: ami-0ad16744583f21877 # ami-963cecf4 for Sydney
+# ec2_image: ami-0ad16744583f21877 # ami-963cecf4 for Sydney
+ec2_image: ami-0ad16744583f21877 # Ubuntu 16 for uswest region
+# ec2_image: ami-0e3db21f5eaf0cd07 # KERData try 0.2

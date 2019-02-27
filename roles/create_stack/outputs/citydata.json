@@ -57,7 +57,7 @@
                         "Description": "Primary network interface",
                         "DeviceIndex": 0,
                         "SubnetId": "subnet-75cfd012",
-                        "PrivateIpAddress": "172.31.25.68",
+                        "PrivateIpAddress": "172.31.21.146",
                         "GroupSet": [
                             {
                                 "Ref": "SGKERData"

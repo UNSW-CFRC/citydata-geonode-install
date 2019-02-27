@@ -3,8 +3,8 @@
 # Then store IP addresses above and uncomment
 # assign_p**_ip vars in roles/create_stack/vars/main.yml
 #
-prv_ip: 172.31.25.68 # Private IP address of server
-pub_ip: 54.183.143.233 # Public IP address of server
+prv_ip: 172.31.21.146 # Private IP address of server
+pub_ip: 54.215.225.243 # Public IP address of server
 
 admin_pass: !vault |
     $ANSIBLE_VAULT;1.1;AES256

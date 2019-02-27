@@ -4,9 +4,9 @@
 
 - include_tasks: mount_disk.yml
 
-- include_tasks: install_python2.7.yml
+# - include_tasks: install_python2.7.yml
 
-- include_tasks: install_gn_packages.yml
+# - include_tasks: install_gn_packages.yml
 
 - name: Check tmp folder
   stat:
