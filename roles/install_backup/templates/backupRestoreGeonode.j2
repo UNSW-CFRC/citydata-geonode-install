@@ -24,7 +24,7 @@ function stopServices
 {
    echo "Stopping services"
    sudo service apache2 stop
-   sudo service tomcat7 stop
+   sudo service {{ tomcat }} stop
    sudo service postgresql stop
 }
 
@@ -32,7 +32,7 @@ function startServices
 {
    echo "Restarting services"
    sudo service postgresql start
-   sudo service tomcat7 start
+   sudo service {{ tomcat }} start
    sudo service apache2 start
 }
 

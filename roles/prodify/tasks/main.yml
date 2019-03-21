@@ -11,7 +11,7 @@
 
 - name: Add maxThreads for Java
   lineinfile:
-    dest: /var/lib/tomcat7/conf/server.xml
+    dest: /var/lib/{{ tomcat }}/conf/server.xml
     insertafter: 'proxyName\s*='
     line: '        maxThreads="50"'
 
@@ -27,7 +27,7 @@
 
 - name: Force Tomcat restart
   service:
-    name: tomcat7
+    name: {{ tomcat }}
     state: restarted
 
 - name: Force Apache restart

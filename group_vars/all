@@ -36,6 +36,8 @@ ssh_source_ip_devops_home: 211.30.23.60/32 # Home Optusnet
 ssh_source_ip_devops_work: 149.171.161.0/24 # UNSW Uniwide/LAN
 # ssh_source_ip_devops_work2: 129.94.8.197/32 # UNSW Uniwide/LAN
 
+tomcat: tomcat7
+
 github_user: jondoig
 github_passwd: !vault |
     $ANSIBLE_VAULT;1.1;AES256

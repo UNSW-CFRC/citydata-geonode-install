@@ -24,10 +24,10 @@
 # - include_tasks: install_admin_tools.yml
 # - include_tasks: admin_envt.yml
 
-- name: Change owner of GWC dir to tomcat7
+- name: Change owner of GWC dir to {{ tomcat }}
   file:
     path: '{{ gwc_dir }}'
-    owner: tomcat7
+    owner: {{ tomcat }}
     state: directory
   become: true
 

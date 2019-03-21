@@ -12,7 +12,7 @@
       libpng-dev, libpq-dev, libproj-dev, libxml2-dev, libxslt-dev, openjdk-8-jre,
       patch, postgresql, postgis, postgresql-9.5-postgis-scripts, postgresql-contrib,
       python, python-dev, python-gdal, python-pexpect, python-pycurl, python-imaging,
-      python-pastescript, python-psycopg2, python-urlgrabber, tomcat7, unzip, zip, ncdu]
+      python-pastescript, python-psycopg2, python-urlgrabber, {{ tomcat }}, unzip, zip, ncdu]
     state: present
     update_cache: yes
   become: true

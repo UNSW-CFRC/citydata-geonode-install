@@ -8,7 +8,7 @@
 # http://docs.geonode.org/en/master/tutorials/advanced/geonode_production/production.html
 - name: Set the GeoServer Proxy URL & geowebcache dir
   blockinfile:
-    dest: /var/lib/tomcat7/webapps/geoserver/WEB-INF/web.xml
+    dest: /var/lib/{{ tomcat }}/webapps/geoserver/WEB-INF/web.xml
     marker: '<!-- {mark} ANSIBLE prodify MANAGED BLOCK -->'
     insertafter: '<web-app>'
     block: |
