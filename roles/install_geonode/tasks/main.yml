@@ -1,5 +1,4 @@
 ---
-
 - include_tasks: move_postgres.yml
 
 - include_tasks: install_geonode.yml

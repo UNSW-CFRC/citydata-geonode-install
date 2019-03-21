@@ -3,13 +3,55 @@
 # Then store IP addresses above and uncomment
 # assign_p**_ip vars in roles/create_stack/vars/main.yml
 #
-prv_ip: 172.31.21.146 # Private IP address of server
-pub_ip: 54.215.225.243 # Public IP address of server
+private_ip: # Private IP address of server
+# public_ip: 54.215.225.243 # Public IP address of server
+assign_private_ip: # '"PrivateIpAddress": "{{ private_ip }}",'
 
-admin_pass: !vault |
-    $ANSIBLE_VAULT;1.1;AES256
-    63653937613134393531396137656566633137363965626636653066333165313738633334363138
-    3133643864383361366237346533336235303534366231340a333935626336656430373833633039
-    65313930303262356361623866643533653863653464356134613131663338383462306166356362
-    6664646663636636340a366632636164323735396161346531373461393866396365656235306239
-    3038
+ansible_ssh_private_key_file: ~/.ssh/CityData_nonProd.pem
+
+port: 8000 # 8000 for dev, 80 for test/prod
+envt_ingress_rules: |
+        "ingress6": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId": {
+                    "Ref": "SG{{ project }}"
+                },
+                "Description": "Dev: Tomcat HTTP",
+                "IpProtocol": "tcp",
+                "FromPort": "8000",
+                "ToPort": "8000",
+                "CidrIp": "0.0.0.0/0"
+            }
+        },
+        "ingress7": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId": {
+                    "Ref": "SG{{ project }}"
+                },
+                "Description": "Dev: Tomcat HTTP",
+                "IpProtocol": "tcp",
+                "FromPort": "8080",
+                "ToPort": "8080",
+                "CidrIp": "0.0.0.0/0"
+            }
+        },
+        "ingress8": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId": {
+                    "Ref": "SG{{ project }}"
+                },
+                "Description": "Dev: Postgresql",
+                "IpProtocol": "tcp",
+                "FromPort": "5432",
+                "ToPort": "5432",
+                "CidrIp": "0.0.0.0/0"
+            }
+        },
+
+aws_access_key: '{{ aws_access_key_dev }}'
+aws_secret_key: '{{ aws_secret_key_dev }}'
+django_secret_key: '{{ django_secret_key_dev }}'
+admin_pass: '{{ admin_pass_dev }}'

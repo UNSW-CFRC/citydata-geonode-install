@@ -1,0 +1,14 @@
+---
+- name: Apply Geonode PR 4154 part 1/2
+  # HTTP not HTTPS because their certificate is invalid
+  # GeoLite2 databases are free IP geolocation databases
+  replace:
+    path: ~/.virtualenvs/{{ project_dir }}/src/geonode/geonode/base/management/commands/updategeoip.py
+    regexp: http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
+    replace: https://build.geo-solutions.it/geonode/geoserver/latest/GeoLiteCity.dat.gz
+
+- name: Apply Geonode PR 4154 part 2/2
+  replace:
+    path: ~/.virtualenvs/{{ project_dir }}/src/geonode/geonode/base/management/commands/updategeoip.py
+    regexp: 'r = requests.get\(options\[''url''\], stream=True, timeout=10\)'
+    replace: r = requests.get(options['url'], stream=True, timeout=10, verify=False)

@@ -1,4 +1,7 @@
 ---
-- hosts: all
+- name: Prepare server
+  hosts: targets
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
   roles:
   - prep_server

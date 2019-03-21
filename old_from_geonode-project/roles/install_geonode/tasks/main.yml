@@ -1,0 +1,5 @@
+---
+
+- include_tasks: create_geonode_db.yml
+
+- include_tasks: install_geonode.yml

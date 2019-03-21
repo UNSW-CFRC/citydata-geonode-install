@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: targets
   roles:
   - prodify
   become: true

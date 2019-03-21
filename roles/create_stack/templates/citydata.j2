@@ -2,14 +2,11 @@
     "Description": "{{ project }}",
     "AWSTemplateFormatVersion": "2010-09-09",
     "Outputs" : {
-        "{{ project }}PrvIp" : {
+        "PrvIp" : {
           "Value" : { "Fn::GetAtt" : [ "{{ project }}", "PrivateIp" ]},
           "Description" : "{{ project }} server's Private IP Address"
         },
-        "{{ project }}PubIp" : {
-          "Value" : { "Fn::GetAtt" : [ "{{ project }}", "PublicIp" ]},
-          "Description" : "{{ project }} server's Public IP Address"
-        },
+        {{ output_public_ip}}
     },
     "Resources": {
         "{{ project }}": {
@@ -57,7 +54,7 @@
                         "Description": "Primary network interface",
                         "DeviceIndex": 0,
                         "SubnetId": "{{ subnet_id }}",
-                        {{ assign_prv_ip }}
+                        {{ assign_private_ip }}
                         "GroupSet": [
                             {
                                 "Ref": "SG{{ project }}"
@@ -181,6 +178,33 @@
                 "CidrIp": "{{ ssh_source_ip_devops_work }}"
             }
         },
+        "ingress5": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId": {
+                    "Ref": "SG{{ project }}"
+                },
+                "Description": "SSH from devops work 2",
+                "IpProtocol": "tcp",
+                "FromPort": "22",
+                "ToPort": "22",
+                "CidrIp": "{{ ssh_source_ip_devops_work2 }}"
+            }
+        },
+        "ingress6": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId": {
+                    "Ref": "SG{{ project }}"
+                },
+                "Description": "SSH from devops VPN",
+                "IpProtocol": "tcp",
+                "FromPort": "22",
+                "ToPort": "22",
+                "CidrIp": "{{ ssh_source_ip_devops_VPN }}"
+            }
+        },
+        {{ envt_ingress_rules }}
         "egress1": {
             "Type": "AWS::EC2::SecurityGroupEgress",
             "Properties": {

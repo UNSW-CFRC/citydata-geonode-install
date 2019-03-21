@@ -1,0 +1,15 @@
+[targets]
+172.31.21.146 envt=dev
+
+[asu]
+172.31.21.146
+
+[small_sysdisk]
+172.31.21.146
+
+[dev]
+172.31.21.146
+localhost
+
+[local]
+localhost envt=dev org=asu ansible_connection=local ansible_python_interpreter=/usr/bin/python

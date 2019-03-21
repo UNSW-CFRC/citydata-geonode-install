@@ -1,0 +1,4 @@
+---
+
+- include_vars: asu.yml
+- include_tasks: create_stack.yml

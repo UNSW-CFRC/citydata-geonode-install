@@ -6,7 +6,17 @@
 
 # - include_tasks: install_python2.7.yml
 
-# - include_tasks: install_gn_packages.yml
+- include_tasks: install_gn_packages.yml
+
+- include_tasks: install_java.yml
+
+# - name: Rename project
+#   command: mv project_name {{ project_dir }}
+#   args:
+#     creates: '{{ project_dir }}'
+#   delegate_to: localhost
+
+# - include_tasks: install_python_support.yml
 
 - name: Check tmp folder
   stat:
@@ -15,3 +25,9 @@
 
 - include_tasks: mv_tmp_to_big_disk.yml
   when: "tmp_check.stat.islnk is not defined or (tmp_check.stat.islnk is defined and tmp_check.stat.islnk == False) and 'small_sysdisk' in group_names"
+
+- name: Make share folder writeable
+  file:
+    path: /usr/local/share
+    mode: 777
+  become: true

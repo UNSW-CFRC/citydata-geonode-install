@@ -1,0 +1,24 @@
+---
+# Assumes AWS instance created with big disk at /dev/{{ big_disk_device }}.
+# Uses XFS for Geowebcache for dynamically allocated inodes (necessary as Geowebcache can easily create millions of files).
+
+- name: create filesystems
+  filesystem:
+    dev: /dev/{{ item.0 }}
+    fstype: '{{ item.1 }}'
+  with_together:
+    - '{{ devices }}'
+    - '{{ fstypes }}'
+  become: true
+
+- name: Mount disks
+  mount:
+    path: '{{ item.0 }}'
+    src: /dev/{{ item.1 }}
+    state: mounted
+    fstype: '{{ item.2 }}'
+  with_together:
+    - '{{ paths }}'
+    - '{{ devices }}'
+    - '{{ fstypes }}'
+  become: true

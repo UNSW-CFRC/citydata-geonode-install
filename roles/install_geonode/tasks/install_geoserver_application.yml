@@ -1,4 +1,10 @@
 ---
+- name: Download GeoServer web archive
+  shell: export PYTHONHTTPSVERIFY=0 && paver setup
+  args:
+    chdir: '{{ gnhome }}/geonode'
+  become: true
+
 - name: Stop Tomcat
   service:
     name: {{ tomcat }}

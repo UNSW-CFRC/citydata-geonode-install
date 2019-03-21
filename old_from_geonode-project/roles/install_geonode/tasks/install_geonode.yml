@@ -1,0 +1,75 @@
+---
+- name: Get geonode-project from repo
+  git:
+    repo: https://github.com/GeoNode/geonode-project.git
+    dest: ~/geonode-project
+
+- name: Install Django in virtualenv
+  pip:
+    virtualenv: ~/.virtualenvs/{{ project_dir }}
+    name: Django=={{ django_version }}
+
+- name: Create project
+  shell: |
+    source ~/.bashrc && source ~/.virtualenvs/{{ project_dir }}/bin/activate &&
+    django-admin startproject --template=./geonode-project -e py,rst,json,yml,ini,env,sample -n Dockerfile {{ project_dir }}
+  args:
+    creates: "~/{{ project_dir }}"
+    executable: /bin/bash
+
+- name: Install Geonode from requirements
+  pip:
+    virtualenv: ~/.virtualenvs/{{ project_dir }}
+    requirements: requirements.txt
+    state: latest
+  args:
+    chdir: ~/{{ project_dir }}
+
+- name: Install Geonode
+  pip:
+    virtualenv: ~/.virtualenvs/{{ project_dir }}
+    name: .
+    state: latest
+    extra_args: -e
+  args:
+    chdir: ~/{{ project_dir }}
+
+- include_tasks: install_pygdal.yml
+
+- name: Copy local_settings sample
+  command: cp {{ project_dir }}/local_settings.py.sample {{ project_dir }}/local_settings.py
+  args:
+    chdir: ~/{{ project_dir }}
+    creates: ~/{{ project_dir }}/{{ project_dir }}/local_settings.py
+
+- name: Patch GeoLite2 database install
+  include_tasks: patch_4154.yml
+
+- name: Restart Django
+  file:
+    path: ~/{{ project_dir }}//{{ project_dir }}/wsgi.py
+    state:  touch
+
+- name: Paver commands
+  shell: |
+    source ~/.bashrc && source ~/.virtualenvs/{{ project_dir }}/bin/activate &&
+    paver {{ item }}
+  args:
+    executable: /bin/bash
+    chdir: ~/{{ project_dir }}
+  with_items:
+    - reset
+    - setup
+    - sync
+
+- name: Paver start
+  shell: |
+    source ~/.bashrc
+    source ~/.virtualenvs/{{ project_dir }}/bin/activate
+    paver start &
+    disown
+  args:
+    executable: /bin/bash
+    chdir: ~/{{ project_dir }}
+  async: 45
+  poll: 0

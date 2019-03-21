@@ -1,0 +1,34 @@
+---
+- name: Stop postgresql
+  service:
+    name: postgresql
+    state: stopped
+  become: true
+
+- name: Set Postgres data directory
+  lineinfile:
+    dest: '{{ db_conf_dir }}/postgresql.conf'
+    regexp: '^\s*data_directory\s*='
+    line: "data_directory = '{{ db_path }}/postgresql/{{ postgres_version }}/main'"
+  become: true
+
+- name: Check old data dir exists
+  stat: path={{ old_dbhome }}
+  register: datadir_stat
+
+- name: Move database
+  command: mv {{ old_dbhome }} {{ db_path }}
+  when: datadir_stat.stat.exists
+  become: true
+
+- name: Change postgres home
+  user:
+    name: postgres
+    home: '{{ db_path }}/postgresql'
+  become: true
+
+- name: Force postgresql restart
+  service:
+    name: postgresql
+    state: restarted
+  become: true

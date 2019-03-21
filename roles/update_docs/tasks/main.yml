@@ -1,0 +1,5 @@
+---
+- name: Create readme from template
+  template:
+    src: README.md.j2
+    dest: '{{ playbook_dir }}/README.md'

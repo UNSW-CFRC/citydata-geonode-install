@@ -2,11 +2,12 @@
 db_path: '{{ big_dir }}'
 
 old_dbhome: /var/lib/postgresql
-postgres_version: 9.5
 db_conf_dir: /etc/postgresql/{{ postgres_version }}/main
-# dbconf: '{{ db_conf_dir }}/'
 
-geoserver_version: 2.7.4
+# geoserver_version: 2.7.4
 
-geonode_repo_url: https://github.com/UNSW-CFRC/geonode
-geonode_version: 2.4.x
+# geonode_repo_url: https://github.com/{{ repo_owner }}/geonode
+# geonode_version: 2.8.x
+
+# New
+django_version: 1.11.16

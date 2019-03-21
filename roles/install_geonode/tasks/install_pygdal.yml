@@ -1,0 +1,23 @@
+---
+- name: Get GDAL version
+  command: gdal-config --version
+  register: gdal_version
+
+- debug:
+    var: gdal_version.stdout
+
+- name: Get pyGDAL version
+  shell: "pip install pygdal=={{ gdal_version.stdout }} 2>&1 | grep -oP '(?<=: )(.*)(?=\\))' | grep -oh {{ gdal_version.stdout }}\\.[0-9]"
+  register: pygdal_version
+  # no_log: true
+  # ignore_errors: true
+
+- debug:
+    var: pygdal_version.stdout
+
+- name: Install pyGDAL
+  pip:
+    name: pygdal=={{ pygdal_version.stdout }}
+    # virtualenv: ~/.virtualenvs/{{ project_dir }}
+  args:
+    chdir: ~/{{ project_dir }}

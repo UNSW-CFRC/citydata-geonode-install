@@ -1,0 +1,36 @@
+---
+
+- include_tasks: move_postgres.yml
+
+- include_tasks: install_geonode.yml
+
+- include_tasks: create_geonode_db.yml
+
+- include_tasks: setup_httpd.yml
+
+- include_tasks: install_geoserver_application.yml
+
+- include_tasks: config_geonode.yml
+
+- name: Use public IP if defined
+  include_role:
+    name: prodify
+    tasks_from: set_server_name
+    apply:
+      become: true
+  when: pub_ip is defined and pub_ip != ''
+
+# - include_tasks: generate_ssl_csr.yml
+# - include_tasks: install_admin_tools.yml
+# - include_tasks: admin_envt.yml
+
+- name: Change owner of GWC dir to {{ tomcat }}
+  file:
+    path: '{{ gwc_dir }}'
+    owner: {{ tomcat }}
+    state: directory
+  become: true
+
+- include_tasks: complete.yml
+  vars:
+    host_ip: '{{ pub_ip | default(inventory_hostname)}}'

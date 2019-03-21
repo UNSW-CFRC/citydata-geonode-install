@@ -1,4 +1,60 @@
 ---
 
-- include_vars: asu.yml
-- include_tasks: create_stack.yml
+- include_vars: '{{ org }}.yml'
+
+- name: Save post-processed template
+  template:
+    src: citydata.j2
+    dest: '{{ role_path }}/outputs/citydata.json'
+
+- name: Delete any stack from a previous run
+  cloudformation:
+    stack_name: '{{ project }}-{{ envt | upper }}'
+    region: '{{ aws_region }}'
+    aws_access_key: '{{ aws_access_key }}'
+    aws_secret_key: '{{ aws_secret_key }}'
+    state: absent
+
+- name: Create stack
+  cloudformation:
+    stack_name: '{{ project }}-{{ envt | upper }}'
+    template_body: "{{ lookup('template', 'citydata.j2') }}"
+    region: '{{ aws_region }}'
+    aws_access_key: '{{ aws_access_key }}'
+    aws_secret_key: '{{ aws_secret_key }}'
+    state: present
+  register: stack_result
+
+- name: Delete stack if failed
+  cloudformation:
+    stack_name: '{{ project }}-{{ envt | upper }}'
+    region: '{{ aws_region }}'
+    aws_access_key: '{{ aws_access_key }}'
+    aws_secret_key: '{{ aws_secret_key }}'
+    state: absent
+  when: stack_result is failed
+
+- name: Print IP address(es)
+  debug:
+    msg: '{{ stack_result.stack_outputs.PrvIp }}'
+
+- name: Write IP address to inventory
+  replace:
+    path: '{{ playbook_dir }}/{{ envt }}-{{ org }}'
+    regexp: \d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}
+    replace: '{{ stack_result.stack_outputs.PrvIp }}'
+
+- name: Refresh inventory
+  meta: refresh_inventory
+
+- name: Write private IP group variable
+  replace:
+    path: '{{ playbook_dir }}/group_vars/{{ envt }}'
+    regexp: '^\s*private_ip\s*:\s*[^#]*'
+    replace: 'private_ip: {{ stack_result.stack_outputs.PrvIp }} '
+
+- name: Write group variable to assign private IP in stack
+  replace:
+    path: '{{ playbook_dir }}/group_vars/{{ envt }}'
+    regexp: '^\s*assign_private_ip\s*:\s*[^#]*'
+    replace: 'assign_private_ip: ''"PrivateIpAddress": "{{ ''{{ private_ip }}'' }}",'' '

@@ -1,0 +1,7 @@
+---
+- name: Install python2 and both pip versions
+  apt:
+    name: [python2.7, python-pip, python3-pip]
+    state: latest
+    update_cache: yes
+  become: true

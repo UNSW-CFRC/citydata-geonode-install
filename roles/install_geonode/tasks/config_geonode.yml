@@ -20,18 +20,20 @@
 #
 # Solved at https://github.com/GeoNode/geonode/issues/3186
 #
-- name: Fix tomcat logged error
-  file:
-    src: /usr/lib/x86_64-linux-gnu/libproj.so.9
-    path: /usr/lib/x86_64-linux-gnu/libproj.so.0
-    state: link
 
-- name: Display shortname on homepage
-  lineinfile:
-    dest: '{{ gnhome }}/geonode/geonode/templates/site_index.html'
-    regexp: '^\s*<h1 class="page-title">.*</h1>'
-    line: '                    <h1 class="page-title">{{ sitename_short }}</h1>'
-  become: true
+# Commented 21/3/2019
+# - name: Fix tomcat logged error
+#   file:
+#     src: /usr/lib/x86_64-linux-gnu/libproj.so.9
+#     path: /usr/lib/x86_64-linux-gnu/libproj.so.0
+#     state: link
+#
+# - name: Display shortname on homepage
+#   lineinfile:
+#     dest: '{{ gnhome }}/geonode/geonode/templates/site_index.html'
+#     regexp: '^\s*<h1 class="page-title">.*</h1>'
+#     line: '                    <h1 class="page-title">{{ sitename_short }}</h1>'
+#   become: true
 
 - name: Create GeoNode Superuser
   # Will fail if superuser already exists. Ignore this and suppress error log.

@@ -1,0 +1,52 @@
+---
+# - name: Upgrade beautifulsoup
+#   # To avoid bug when running /manage.py fixsitename
+#   # See https://bugs.launchpad.net/beautifulsoup/+bug/1603299
+#   pip:
+#     name: beautifulsoup4
+#     version: 4.5.1
+#   become: true
+
+- name: Initialize the Database
+  command: python '{{ gnhome }}/geonode/manage.py' syncdb --noinput
+
+- name: Fix sitename
+  command: python '{{ gnhome }}/geonode/manage.py' fixsitename
+
+# Fix error showing in Tomcat log as:
+#   java.lang.UnsatisfiedLinkError: /mnt/sys/tmp/{{ tomcat }}-{{ tomcat }}-tmp/spatialite-3.7.22.4-libspatialitejdbc.so: libproj.so.0: cannot open shared object file: No such file or directory
+#
+# sudo ln -s /usr/lib/x86_64-linux-gnu/libproj.so.9 /usr/lib/x86_64-linux-gnu/libproj.so.0
+#
+# Solved at https://github.com/GeoNode/geonode/issues/3186
+#
+- name: Fix tomcat logged error
+  file:
+    src: /usr/lib/x86_64-linux-gnu/libproj.so.9
+    path: /usr/lib/x86_64-linux-gnu/libproj.so.0
+    state: link
+
+- name: Display shortname on homepage
+  lineinfile:
+    dest: '{{ gnhome }}/geonode/geonode/templates/site_index.html'
+    regexp: '^\s*<h1 class="page-title">.*</h1>'
+    line: '                    <h1 class="page-title">{{ sitename_short }}</h1>'
+  become: true
+
+- name: Create GeoNode Superuser
+  # Will fail if superuser already exists. Ignore this and suppress error log.
+  command: python '{{ gnhome }}/geonode/manage.py' createsuperuser --noinput --username=admin --email='{{ admin_email }}'
+  ignore_errors: yes
+  no_log: true
+
+- name: Change superuser password
+  # Separating this task from previous one (createsuperuser) allows playbook to be idempotent.
+  # I.e. password can be changed on an existing superuser account.
+  expect:
+    command: python '{{ gnhome }}/geonode/manage.py' changepassword admin
+    responses:
+      Password: '{{ admin_pass }}'
+      Password (again): '{{ admin_pass }}'
+  notify:
+    - Restart Apache
+    - Restart Tomcat

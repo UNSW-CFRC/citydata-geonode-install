@@ -1,0 +1,31 @@
+---
+- name: Create virtualenv dir
+  file:
+    path: "~/.virtualenvs"
+    state: directory
+
+- name: Install virtualenv and wrapper
+  pip:
+    name:
+      - virtualenv
+      - virtualenvwrapper
+  become: true
+
+- name: Trigger virtualenv from user's bash run commands
+  blockinfile:
+    path: "~/.bashrc"
+    block: |
+      export WORKON_HOME=$HOME/.virtualenvs
+      source /usr/local/bin/virtualenvwrapper.sh
+      export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
+      export VIRTUALENVWRAPPER_VIRTUALENV=/usr/local/bin/virtualenv
+      export SITE_HOST_NAME={{ inventory_hostname }}
+      export SITE_NAME={{ project }}
+      export SITE_HOST_PORT={{ port }}
+      export PATH=$PATH:$HOME/.virtualenvs/bin
+      export DJANGO_SETTINGS_MODULE={{ project_dir }}.settings
+      export AVATAR_DEFAULT_URL='http://localhost:8000/static/img/avatar.png'
+      alias activate="source ~/.virtualenvs/{{ project_dir }}/bin/activate"
+
+# export PROJECT_HOME=$HOME/
+# export VIRTUALENVWRAPPER_VIRTUALENV_ARGS='--no-site-packages'

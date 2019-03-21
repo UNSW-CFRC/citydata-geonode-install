@@ -24,9 +24,3 @@
     src: local_settings.py.j2
     dest: '{{ gnhome }}/geonode/geonode/local_settings.py'
   become: true
-
-- name: Download GeoServer web archive
-  shell: export PYTHONHTTPSVERIFY=0 && paver setup
-  args:
-    chdir: '{{ gnhome }}/geonode'
-  become: true
