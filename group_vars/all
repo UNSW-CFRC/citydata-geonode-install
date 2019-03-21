@@ -3,6 +3,11 @@ envt_suffix: -{{ envt }}
 
 # Assumes host has small system disk so big things should be moved to /mnt/...
 
+tmp_sitename_short: '{{ project }} ({{ envt }})'
+sitename_short: "{{ tmp_sitename_short | replace(' (prod)','') }}"
+# Commented because this variable is never used
+# sitename: '{{ sitename_short }} | {{ orgname }}'
+
 mount_point: /data # /mnt
 
 big_disk_device: xvdb
