@@ -1,27 +1,27 @@
 {
-    "Description": "{{ project }}",
+    "Description": "{{ project_id }}",
     "AWSTemplateFormatVersion": "2010-09-09",
     "Outputs" : {
         "PrvIp" : {
-          "Value" : { "Fn::GetAtt" : [ "{{ project }}", "PrivateIp" ]},
-          "Description" : "{{ project }} server's Private IP Address"
+          "Value" : { "Fn::GetAtt" : [ "{{ project_id }}", "PrivateIp" ]},
+          "Description" : "{{ project_id }} server's Private IP Address"
         },
         {{ output_public_ip}}
     },
     "Resources": {
-        "{{ project }}": {
+        "{{ project_id }}": {
             "Type": "AWS::EC2::Instance",
             "Properties": {
                 "DisableApiTermination": "false",
                 "InstanceInitiatedShutdownBehavior": "stop",
                 "ImageId": "{{ ec2_image }}",
                 "InstanceType": "{{ ec2_type }}",
-                "KeyName": "{{ project }}",
+                "KeyName": "{{ aws_keypair }}",
                 "Monitoring": "false",
                 "Tags": [
                     {
                         "Key": "Name",
-                        "Value": "{{ project }}{{ envt_suffix }}"
+                        "Value": "{{ project_id }}{{ envt_suffix }}"
                     },
                     {
                         "Key": "Owner",
@@ -57,7 +57,7 @@
                         {{ assign_private_ip }}
                         "GroupSet": [
                             {
-                                "Ref": "SG{{ project }}"
+                                "Ref": "SG{{ project_id }}"
                             }
                         ]
                     }
@@ -103,11 +103,11 @@
                 }
             }
         },
-        "SG{{ project }}": {
+        "SG{{ project_id }}": {
             "Type": "AWS::EC2::SecurityGroup",
             "Properties": {
-                "GroupName": "{{ project }}{{ envt_suffix }}",
-                "GroupDescription": "{{ project }} SG",
+                "GroupName": "{{ project_id }}{{ envt_suffix }}",
+                "GroupDescription": "{{ project_id }} SG",
                 "VpcId": "{{ vpc_id }}",
                 "Tags": [
                     {
@@ -116,7 +116,7 @@
                     },
                     {
                         "Key": "Name",
-                        "Value": "{{ project }}{{ envt_suffix }}"
+                        "Value": "{{ project_id }}{{ envt_suffix }}"
                     }
                 ]
             },
@@ -130,7 +130,7 @@
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "GroupId": {
-                    "Ref": "SG{{ project }}"
+                    "Ref": "SG{{ project_id }}"
                 },
                 "Description": "HTTP from public",
                 "IpProtocol": "tcp",
@@ -143,7 +143,7 @@
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "GroupId": {
-                    "Ref": "SG{{ project }}"
+                    "Ref": "SG{{ project_id }}"
                 },
                 "Description": "SSH from Ansible control",
                 "IpProtocol": "tcp",
@@ -156,7 +156,7 @@
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "GroupId": {
-                    "Ref": "SG{{ project }}"
+                    "Ref": "SG{{ project_id }}"
                 },
                 "Description": "SSH from devops home",
                 "IpProtocol": "tcp",
@@ -169,7 +169,7 @@
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "GroupId": {
-                    "Ref": "SG{{ project }}"
+                    "Ref": "SG{{ project_id }}"
                 },
                 "Description": "SSH from devops work",
                 "IpProtocol": "tcp",
@@ -182,7 +182,7 @@
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "GroupId": {
-                    "Ref": "SG{{ project }}"
+                    "Ref": "SG{{ project_id }}"
                 },
                 "Description": "SSH from devops work 2",
                 "IpProtocol": "tcp",
@@ -195,7 +195,7 @@
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "GroupId": {
-                    "Ref": "SG{{ project }}"
+                    "Ref": "SG{{ project_id }}"
                 },
                 "Description": "SSH from devops VPN",
                 "IpProtocol": "tcp",
@@ -209,7 +209,7 @@
             "Type": "AWS::EC2::SecurityGroupEgress",
             "Properties": {
                 "GroupId": {
-                    "Ref": "SG{{ project }}"
+                    "Ref": "SG{{ project_id }}"
                 },
                 "Description": "Allow all out",
                 "IpProtocol": "-1",

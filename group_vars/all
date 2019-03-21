@@ -1,7 +1,8 @@
 ---
 envt_suffix: -{{ envt }}
 
-project_dir: '{{ project | lower | regex_replace(' ', '') }}'
+project_id: "{{ project | regex_replace(' ', '') }}"
+project_dir: '{{ project_id | lower }'
 
 tmp_sitename_short: '{{ project }} ({{ envt }})'
 sitename_short: "{{ tmp_sitename_short | replace(' (prod)','') }}"

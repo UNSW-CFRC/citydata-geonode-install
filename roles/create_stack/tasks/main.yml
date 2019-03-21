@@ -9,7 +9,7 @@
 
 - name: Delete any stack from a previous run
   cloudformation:
-    stack_name: '{{ project }}-{{ envt | upper }}'
+    stack_name: '{{ project_id }}-{{ envt | upper }}'
     region: '{{ aws_region }}'
     aws_access_key: '{{ aws_access_key }}'
     aws_secret_key: '{{ aws_secret_key }}'
@@ -17,7 +17,7 @@
 
 - name: Create stack
   cloudformation:
-    stack_name: '{{ project }}-{{ envt | upper }}'
+    stack_name: '{{ project_id }}-{{ envt | upper }}'
     template_body: "{{ lookup('template', 'citydata.j2') }}"
     region: '{{ aws_region }}'
     aws_access_key: '{{ aws_access_key }}'
@@ -27,7 +27,7 @@
 
 - name: Delete stack if failed
   cloudformation:
-    stack_name: '{{ project }}-{{ envt | upper }}'
+    stack_name: '{{ project_id }}-{{ envt | upper }}'
     region: '{{ aws_region }}'
     aws_access_key: '{{ aws_access_key }}'
     aws_secret_key: '{{ aws_secret_key }}'

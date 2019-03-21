@@ -15,7 +15,7 @@ envt_ingress_rules: |
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "GroupId": {
-                    "Ref": "SG{{ project }}"
+                    "Ref": "SG{{ project_id }}"
                 },
                 "Description": "Dev: Tomcat HTTP",
                 "IpProtocol": "tcp",
@@ -28,7 +28,7 @@ envt_ingress_rules: |
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "GroupId": {
-                    "Ref": "SG{{ project }}"
+                    "Ref": "SG{{ project_id }}"
                 },
                 "Description": "Dev: Tomcat HTTP",
                 "IpProtocol": "tcp",
@@ -41,7 +41,7 @@ envt_ingress_rules: |
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "GroupId": {
-                    "Ref": "SG{{ project }}"
+                    "Ref": "SG{{ project_id }}"
                 },
                 "Description": "Dev: Postgresql",
                 "IpProtocol": "tcp",
