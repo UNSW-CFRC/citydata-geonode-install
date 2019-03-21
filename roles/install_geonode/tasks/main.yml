@@ -26,7 +26,7 @@
 - name: Change owner of GWC dir to {{ tomcat }}
   file:
     path: '{{ gwc_dir }}'
-    owner: {{ tomcat }}
+    owner: '{{ tomcat }}'
     state: directory
   become: true
 
