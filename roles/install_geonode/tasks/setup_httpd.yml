@@ -69,10 +69,9 @@
   become: true
 
 - name: Copy GeoNode data to be served by Apache
-  expect:
-    command: python '{{ gnhome }}/geonode/manage.py' collectstatic
-    responses:
-      'Type .yes. to continue, or .no. to cancel:': 'yes'
+  django_manage:
+    app_path: '{{ gnhome }}/geonode'
+    command: collectstatic
   become: true
   notify:
     - Restart Apache

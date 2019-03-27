@@ -16,8 +16,9 @@
     var: pygdal_version.stdout
 
 - name: Install pyGDAL
-  pip:
-    name: pygdal=={{ pygdal_version.stdout }}
+  command: pip install pygdal=={{ pygdal_version.stdout }}
+  become: true
+    # executable: /usr/bin/pip
     # virtualenv: ~/.virtualenvs/{{ project_dir }}
-  args:
-    chdir: ~/{{ project_dir }}
+  # args:
+    # chdir: ~/{{ project_dir }}

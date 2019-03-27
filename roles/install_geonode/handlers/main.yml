@@ -1,0 +1,12 @@
+---
+- name: Restart Apache
+  service:
+    name: apache2
+    state: restarted
+  become: true
+
+- name: Restart Tomcat
+  service:
+    name: '{{ tomcat }}'
+    state: restarted
+  become: true

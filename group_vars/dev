@@ -3,13 +3,13 @@
 # Then store IP addresses above and uncomment
 # assign_p**_ip vars in roles/create_stack/vars/main.yml
 #
-private_ip: # Private IP address of server
+private_ip: 172.31.30.222 # Private IP address of server
 # public_ip: 54.215.225.243 # Public IP address of server
-assign_private_ip: # '"PrivateIpAddress": "{{ private_ip }}",'
+assign_private_ip: '"PrivateIpAddress": "{{ private_ip }}",' # '"PrivateIpAddress": "{{ private_ip }}",'
 
 ansible_ssh_private_key_file: ~/.ssh/CityData_nonProd.pem
 
-port: 8000 # 8000 for dev, 80 for test/prod
+port: 80 # 8000 for dev, 80 for test/prod
 envt_ingress_rules: |
         "ingress6": {
             "Type": "AWS::EC2::SecurityGroupIngress",

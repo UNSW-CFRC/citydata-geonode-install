@@ -1,13 +1,15 @@
 ---
 - include_tasks: move_postgres.yml
 
+- include_tasks: install_pygdal.yml
+
 - include_tasks: install_geonode.yml
 
 - include_tasks: create_geonode_db.yml
 
 - include_tasks: setup_httpd.yml
 
-- include_tasks: install_geoserver_application.yml
+- include_tasks: install_geoserver.yml
 
 - include_tasks: config_geonode.yml
 

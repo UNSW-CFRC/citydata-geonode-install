@@ -2,48 +2,47 @@
 - name: Install packages
   apt:
     name:
-      - libgdal-dev
-      - libgeos-dev
-      - libjpeg-dev
-      - libxml2-dev
-      - libxslt-dev
-      - postgis
-      - postgresql-{{ postgres_version }}
-      - postgresql-contrib-{{ postgres_version }}
-      - postgis
-      - python
-      - python-oauthlib
-      - python-pip
-      - python-psycopg2
-      - zlib1g-dev
-      # - build-essential
-      # - openssh-server
-      # - apache2
-      # - gcc
-      # - gdal-bin
-
-      # - gettext
-      # - git-core
-      # - libapache2-mod-wsgi
-      # - libpng-dev
-      # - libpq-dev
-      # - libproj-dev
-      # - ncdu
-      # - openjdk-8-jre
-      # - patch
-      # - postgresql-{{ postgres_version }}-postgis-{{ postgis_version }}-scripts
-      # - python-dev
-      # - python-gdal
-      # - python-pexpect
-      # - python3-pip
-      # - python-pycurl
-      # - python-imaging
-      # - python-pastescript
-      # - python-urlgrabber
-      # - python-virtualenv
-      # - tomcat8
-      # - unzip
-      # - zip
+    - apache2
+    - libapache2-mod-wsgi
+    - libgdal-dev
+    - libgeos-dev
+    - libjpeg-dev
+    - libxml2-dev
+    - libxslt-dev
+    - postgis
+    - postgresql-{{ postgres_version }}
+    - postgresql-contrib-{{ postgres_version }}
+    - postgis
+    - python
+    - python-oauthlib
+    - python-pip
+    - python-psycopg2
+    - tomcat8
+    - zlib1g-dev
+    # - build-essential
+    # - openssh-server
+    # - gcc
+    # - gdal-bin
+    # - gettext
+    # - git-core
+    # - libpng-dev
+    # - libpq-dev
+    # - libproj-dev
+    # - ncdu
+    # - openjdk-8-jre
+    # - patch
+    # - postgresql-{{ postgres_version }}-postgis-{{ postgis_version }}-scripts
+    # - python-dev
+    # - python-gdal
+    # - python-pexpect
+    # - python3-pip
+    # - python-pycurl
+    # - python-imaging
+    # - python-pastescript
+    # - python-urlgrabber
+    # - python-virtualenv
+    # - unzip
+    # - zip
     state: present
     update_cache: yes
   become: true

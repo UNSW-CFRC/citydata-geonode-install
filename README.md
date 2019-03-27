@@ -165,7 +165,7 @@ Make sure your inventory file (dev, test or prod) contains the IP addresses of t
 Run the playbook with:
 
 ```bash
-ansible-playbook prep.yml -i ENV_py3
+ansible-playbook prep.yml -i ENV-ORG
 ```
 
 where ENV = dev, test or prod.
@@ -203,7 +203,7 @@ where ENV is your target environment: dev, test or prod.
 ## Install CityData
 
 ```bash
-ansible-playbook geonode.yml -i ENV_py2 --ask-vault-pass
+ansible-playbook geonode.yml -i ENV-ORG --ask-vault-pass
 ```
 where:  
 * ENV = dev, test or prod

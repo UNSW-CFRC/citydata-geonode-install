@@ -42,17 +42,17 @@
     path: '{{ gsdata }}'
   register: new_gsdata
 
-- name: Move Geoserver data directory to data disk if not already there
-  command: mv /var/lib/{{ tomcat }}/webapps/geoserver/data '{{ gsdata }}'
-  become: true
-  when: "new_gsdata.stat.exists == False and 'small_sysdisk' in group_names"
-
 - name: Delete new empty Geoserver data directory if old one exists on data disk
   file:
     path: /var/lib/{{ tomcat }}/webapps/geoserver/data
     state: absent
   become: true
   when: "new_gsdata.stat.exists == True and 'small_sysdisk' in group_names"
+
+- name: Move Geoserver data directory to data disk if not already there
+  command: mv /var/lib/{{ tomcat }}/webapps/geoserver/data '{{ gsdata }}'
+  become: true
+  when: "new_gsdata.stat.exists == False and 'small_sysdisk' in group_names"
 
 - name: Check link to geoserver data folder
   stat:
@@ -79,7 +79,7 @@
       </context-param>
   become: true
 
-- name: add Cross-Origin Resource Sharing (CORS) on geoserver
+- name: Add Cross-Origin Resource Sharing (CORS) on geoserver
   blockinfile:
     dest: /var/lib/{{ tomcat }}/conf/web.xml
     insertbefore: </web-app>

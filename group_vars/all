@@ -2,13 +2,15 @@
 envt_suffix: -{{ envt }}
 
 project_id: "{{ project | regex_replace(' ', '') }}"
-project_dir: '{{ project_id | lower }'
+project_dir: '{{ project_id | lower }}'
 
 tmp_sitename_short: '{{ project }} ({{ envt }})'
 sitename_short: "{{ tmp_sitename_short | replace(' (prod)','') }}"
 sitename: '{{ sitename_short }} | {{ orgname }}'
 
 # Assumes host has small system disk so big things should be moved to /mnt/...
+
+repo_owner: GeoNode
 
 mount_point: /data # /mnt
 
@@ -29,6 +31,8 @@ gwc_disk_device: xvdg
 gwc_disk_size: 300
 gwc_dir: '{{ mount_point }}/geowebcache'
 gwc_fstype: xfs
+
+tomcat: tomcat8
 
 postgres_version: 9.5
 

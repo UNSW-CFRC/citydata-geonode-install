@@ -4,10 +4,10 @@ db_path: '{{ big_dir }}'
 old_dbhome: /var/lib/postgresql
 db_conf_dir: /etc/postgresql/{{ postgres_version }}/main
 
-# geoserver_version: 2.7.4
+geoserver_version: 2.14.x
 
-# geonode_repo_url: https://github.com/{{ repo_owner }}/geonode
-# geonode_version: 2.8.x
+geonode_repo_url: https://github.com/{{ repo_owner }}/geonode
+geonode_version: 2.10rc4
 
 # New
 django_version: 1.11.16

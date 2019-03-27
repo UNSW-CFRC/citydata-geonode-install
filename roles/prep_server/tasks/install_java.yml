@@ -1,6 +1,8 @@
 ---
-- name: Install add-apt-repostory
-  apt: name=software-properties-common state=latest
+- name: Install add-apt-repository
+  apt:
+    name: software-properties-common
+    state: latest
   become: true
 
 - name: Add Oracle Java Repository
@@ -12,9 +14,10 @@
   become: true
 
 - name: Install Oracle Java 8
-  apt: name={{item}} state=latest
-  with_items:
-    - oracle-java8-installer
-    - ca-certificates
-    - oracle-java8-set-default
+  apt:
+    name:
+      - oracle-java8-installer
+      - ca-certificates
+      - oracle-java8-set-default
+    state: latest
   become: true

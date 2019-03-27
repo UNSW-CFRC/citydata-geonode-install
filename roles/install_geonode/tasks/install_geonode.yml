@@ -10,8 +10,14 @@
     clone: yes
     force: yes
     repo: '{{ geonode_repo_url }}'
-    version: '{{ geonode_version }}'
+    # version: '{{ geonode_version }}' # This got the wrong version, as shown in dev_config.yml
     dest: '{{ gnhome }}/geonode'
+  become: true
+
+- name: Delete old pyc file
+  file:
+    name: '{{ gnhome }}/geonode/geonode/client/admin.pyc'
+    state: absent
   become: true
 
 - name: Install geonode
@@ -19,8 +25,13 @@
     name: '{{ gnhome }}/geonode'
   become: true
 
-- name: Install local settings
-  template:
-    src: local_settings.py.j2
-    dest: '{{ gnhome }}/geonode/geonode/local_settings.py'
+- name: Set system-wide environment variables
+  blockinfile:
+    path: /etc/environment
+    block: |
+      SITE_HOST_NAME={{ inventory_hostname }}
+      SITENAME="{{ project }}"
+      SITE_HOST_PORT={{ port }}
+      DJANGO_SETTINGS_MODULE=geonode.settings
+      AVATAR_DEFAULT_URL="http://localhost:{{ port }}/static/img/avatar.png"
   become: true
