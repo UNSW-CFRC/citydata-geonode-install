@@ -1,0 +1,4 @@
+localhost envt=dev2-4 ansible_connection=local ansible_python_interpreter=/usr/bin/python
+
+[dev2-4]
+localhost

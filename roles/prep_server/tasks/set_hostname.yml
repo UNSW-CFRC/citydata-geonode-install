@@ -1,8 +1,9 @@
 ---
 - name: Set hostname
   hostname:
-    name: "{{ hostname }}"
+    name: '{{ hostname }}'
   become: true
+  when: ansible_hostname != hostname
 
 - name: Write hostname into hosts
   lineinfile:
@@ -10,3 +11,4 @@
     insertafter: 127.0.0.1 localhost
     line: 127.0.1.1 {{ hostname }}
   become: true
+  when: ansible_hostname != hostname

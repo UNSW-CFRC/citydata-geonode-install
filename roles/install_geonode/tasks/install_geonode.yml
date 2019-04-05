@@ -16,10 +16,18 @@
   # no_log: true
   become: true
 
+  - name: Print time before
+    debug:
+      var=ansible_date_time.date
+
 - name: Install geonode
   pip:
     name: '{{ gnhome }}/geonode'
   become: true
+
+  - name: Print time after
+    debug:
+      var=ansible_date_time.date
 
 - name: Install local settings
   template:

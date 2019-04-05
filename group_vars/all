@@ -1,5 +1,6 @@
 ---
 envt_suffix: -{{ envt }}
+hostname: '{{ project }}-{{ envt }}'
 
 region: ap-southeast-2a
 cloud_resource_owner: Jonathan Doig
