@@ -4,6 +4,10 @@
              creates=/usr/share/doc/python-apt
   become: true
 
+- name: Print time before
+  debug:
+    var=ansible_date_time.date
+
 - name: Install packages
   apt:
     name: '{{ item }}'
@@ -47,6 +51,10 @@
    - zip
    - ncdu
   become: true
+
+- name: Print time after
+  debug:
+    var=ansible_date_time.date
 
 - name: Check if python-support is installed
   command: dpkg-query -W python-support
