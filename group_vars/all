@@ -17,6 +17,8 @@ mount_point: /mnt
 big_disk_mount_point: '{{ mount_point }}/data'
 backup_disk_mount_point: '{{ mount_point }}/data2'
 
+backup_dir: '{{ mount_point }}/data_backup'
+
 gnhome: '{{ big_disk_mount_point }}/geonode'
 gsdata: '{{ big_disk_mount_point }}/geoserver_data'
 tmp: '{{ big_disk_mount_point }}/tmp'
