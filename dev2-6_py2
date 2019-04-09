@@ -1,0 +1,10 @@
+10.116.2.232 envt=dev2-6 ansible_python_interpreter=/usr/bin/python2
+
+[cityfutures]
+10.116.2.232
+
+[small_sysdisk]
+10.116.2.232
+
+[dev2-6]
+10.116.2.232
