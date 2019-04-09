@@ -1,11 +1,11 @@
 ---
 vpc_id: vpc-57c87032
 subnet_id: subnet-1823467d
-prv_ip: # 10.116.2.68 # 10.116.2.8 # 10.116.2.15 # 10.116.2.31 # 10.116.2.14 # Private IP address of api server
+prv_ip: 10.116.2.232 # 10.116.2.68 # 10.116.2.8 # 10.116.2.15 # 10.116.2.31 # 10.116.2.14 # Private IP address of api server
 
 # Leave these blank for first time stack creation.
 # Then store IP addresses above and uncomment the assignments below
-assign_prv_ip: # '"PrivateIpAddress": "{{ prv_ip }}",'
+assign_prv_ip: '"PrivateIpAddress": "{{ prv_ip }}",'
 
 admin_pass: !vault |
   $ANSIBLE_VAULT;1.1;AES256

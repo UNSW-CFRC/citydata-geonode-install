@@ -1,26 +1,27 @@
 {
-    "Description": "CityData",
+    "Description": "{{ project }}",
     "AWSTemplateFormatVersion": "2010-09-09",
     "Outputs" : {
-        "CityDataPrvIp" : {
-          "Value" : { "Fn::GetAtt" : [ "CityData", "PrivateIp" ]},
-          "Description" : "Citydata server's Private IP Address"
-        }
+        "PrvIp" : {
+          "Value" : { "Fn::GetAtt" : [ "{{ project_id }}", "PrivateIp" ]},
+          "Description" : "{{ project_id }} server's Private IP Address"
+        },
+        {{ output_public_ip }}
     },
     "Resources": {
-        "CityData": {
+        "{{ project_id }}": {
             "Type": "AWS::EC2::Instance",
             "Properties": {
                 "DisableApiTermination": "false",
                 "InstanceInitiatedShutdownBehavior": "stop",
-                "ImageId": "ami-963cecf4",
-                "InstanceType": "t2.xlarge",
-                "KeyName": "CityData",
+                "ImageId": "{{ ec2_image }}",
+                "InstanceType": "{{ ec2_type }}",
+                "KeyName": "{{ aws_keypair }}",
                 "Monitoring": "false",
                 "Tags": [
                     {
                         "Key": "Name",
-                        "Value": "CityData{{ envt_suffix }}"
+                        "Value": "{{ project_id }}{{ envt_suffix }}"
                     },
                     {
                         "Key": "Owner",
@@ -32,6 +33,12 @@
                     "Device": "/dev/{{ big_disk_device }}",
                     "VolumeId": {
                       "Ref": "volData"
+                    }
+                  },
+                  {
+                    "Device": "/dev/{{ backup_disk_device }}",
+                    "VolumeId": {
+                      "Ref": "volBackup"
                     }
                   },
                   {
@@ -47,10 +54,10 @@
                         "Description": "Primary network interface",
                         "DeviceIndex": 0,
                         "SubnetId": "{{ subnet_id }}",
-                        {{ assign_prv_ip }}
+                        {{ assign_private_ip }}
                         "GroupSet": [
                             {
-                                "Ref": "SGCityData"
+                                "Ref": "SG{{ project_id }}"
                             }
                         ]
                     }
@@ -65,7 +72,7 @@
         "volData": {
             "Type": "AWS::EC2::Volume",
             "Properties": {
-                "AvailabilityZone": "ap-southeast-2a",
+                "AvailabilityZone": "{{ aws_zone }}",
                 "Size": "{{ big_disk_size }}",
                 "VolumeType": "gp2"
             },
@@ -75,10 +82,18 @@
                 }
             }
         },
+        "volBackup": {
+            "Type": "AWS::EC2::Volume",
+            "Properties": {
+                "AvailabilityZone": "{{ aws_zone }}",
+                "Size": "{{ backup_disk_size }}",
+                "VolumeType": "gp2"
+            },
+        },
         "volGWC": {
             "Type": "AWS::EC2::Volume",
             "Properties": {
-                "AvailabilityZone": "ap-southeast-2a",
+                "AvailabilityZone": "{{ aws_zone }}",
                 "Size": "{{ gwc_disk_size }}",
                 "VolumeType": "gp2"
             },
@@ -88,11 +103,11 @@
                 }
             }
         },
-        "SGCityData": {
+        "SG{{ project_id }}": {
             "Type": "AWS::EC2::SecurityGroup",
             "Properties": {
-                "GroupName": "CityData{{ envt_suffix }}",
-                "GroupDescription": "CityData SG",
+                "GroupName": "{{ project_id }}{{ envt_suffix }}",
+                "GroupDescription": "{{ project_id }} SG",
                 "VpcId": "{{ vpc_id }}",
                 "Tags": [
                     {
@@ -101,7 +116,7 @@
                     },
                     {
                         "Key": "Name",
-                        "Value": "CityData{{ envt_suffix }}"
+                        "Value": "{{ project_id }}{{ envt_suffix }}"
                     }
                 ]
             },
@@ -115,20 +130,22 @@
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "GroupId": {
-                    "Ref": "SGCityData"
+                    "Ref": "SG{{ project_id }}"
                 },
+                "Description": "HTTP from public",
                 "IpProtocol": "tcp",
                 "FromPort": "80",
                 "ToPort": "80",
-                "CidrIp": "10.116.2.68/0"
+                "CidrIp": "0.0.0.0/0"
             }
         },
         "ingress2": {
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "GroupId": {
-                    "Ref": "SGCityData"
+                    "Ref": "SG{{ project_id }}"
                 },
+                "Description": "SSH from Ansible control",
                 "IpProtocol": "tcp",
                 "FromPort": "22",
                 "ToPort": "22",
@@ -139,36 +156,66 @@
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "GroupId": {
-                    "Ref": "SGCityData"
+                    "Ref": "SG{{ project_id }}"
                 },
+                "Description": "SSH from devops home",
                 "IpProtocol": "tcp",
                 "FromPort": "22",
                 "ToPort": "22",
-                "CidrIp": "{{ dev_ssh_source_ip_range }}"
+                "CidrIp": "{{ ssh_source_ip_devops_home }}"
             }
         },
+        "ingress4": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId": {
+                    "Ref": "SG{{ project_id }}"
+                },
+                "Description": "SSH from devops work",
+                "IpProtocol": "tcp",
+                "FromPort": "22",
+                "ToPort": "22",
+                "CidrIp": "{{ ssh_source_ip_devops_work }}"
+            }
+        },
+        "ingress5": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId": {
+                    "Ref": "SG{{ project_id }}"
+                },
+                "Description": "SSH from devops work 2",
+                "IpProtocol": "tcp",
+                "FromPort": "22",
+                "ToPort": "22",
+                "CidrIp": "{{ ssh_source_ip_devops_work2 }}"
+            }
+        },
+        "ingress6": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId": {
+                    "Ref": "SG{{ project_id }}"
+                },
+                "Description": "SSH from devops VPN",
+                "IpProtocol": "tcp",
+                "FromPort": "22",
+                "ToPort": "22",
+                "CidrIp": "{{ ssh_source_ip_devops_VPN }}"
+            }
+        },
+        {{ envt_ingress_rules }}
         "egress1": {
             "Type": "AWS::EC2::SecurityGroupEgress",
             "Properties": {
                 "GroupId": {
-                    "Ref": "SGCityData"
+                    "Ref": "SG{{ project_id }}"
                 },
-                "IpProtocol": "tcp",
-                "FromPort": "80",
-                "ToPort": "80",
-                "CidrIp": "10.116.2.68/0"
-            }
-        },
-        "egress2": {
-            "Type": "AWS::EC2::SecurityGroupEgress",
-            "Properties": {
-                "GroupId": {
-                    "Ref": "SGCityData"
-                },
-                "IpProtocol": "tcp",
-                "FromPort": "443",
-                "ToPort": "443",
-                "CidrIp": "10.116.2.68/0"
+                "Description": "Allow all out",
+                "IpProtocol": "-1",
+                "FromPort": "-1",
+                "ToPort": "-1",
+                "CidrIp": "0.0.0.0/0"
             }
         },
     }
